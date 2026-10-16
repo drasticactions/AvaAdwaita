@@ -8,6 +8,9 @@ Using libadwaita's stylesheet (`gtk.css`) through a managed GTK CSS engine,
 it draws Avalonia's stock controls from its CSS node trees. Along with
 mapping from GTK, it helps Avalonia apps match to Adwaita designs.
 
+To see it live, go to [live gallery demo](https://drasticactions.github.io/AvaAdwaita),
+or download the [AppImage](https://github.com/drasticactions/AvaAdwaita/actions/workflows/appimage.yml).
+
 ## Packages
 
 | Package | |
