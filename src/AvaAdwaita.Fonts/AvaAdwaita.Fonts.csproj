@@ -4,7 +4,7 @@
     <RootNamespace>AvaAdwaita.Fonts</RootNamespace>
     <PackageId>AvaAdwaita.Fonts</PackageId>
     <Description>Adwaita fonts for Avalonia applications.</Description>
-    <PackageLicenseExpression>LGPL-2.1-or-later AND OFL-1.1</PackageLicenseExpression>
+    <PackageLicenseExpression>LGPL-2.1-or-later</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

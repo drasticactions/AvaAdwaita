@@ -4,8 +4,7 @@
     <RootNamespace>AvaAdwaita</RootNamespace>
     <PackageId>AvaAdwaita.Theme</PackageId>
     <Description>libadwaita CSS integration for Avalonia applications.</Description>
-    <!-- The bundled icons: adwaita-icon-theme's under CC-BY-SA-3.0, libadwaita's under CC0-1.0 (LICENSE.icons). -->
-    <PackageLicenseExpression>LGPL-2.1-or-later AND CC-BY-SA-3.0 AND CC0-1.0</PackageLicenseExpression>
+    <PackageLicenseExpression>LGPL-2.1-or-later</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
