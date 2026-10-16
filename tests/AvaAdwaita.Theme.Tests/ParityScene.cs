@@ -95,11 +95,11 @@ internal static class ParityScene
             // A time picker's minute column against a vertical GtkSpinButton at 30.
             "vspinbutton" => new TimePickerPresenter { Time = new System.TimeSpan(12, 30, 0), MinuteIncrement = 1 },
 
-            // GTK's C locale starts the week on Sunday.
+            // GTK's C locale starts the week on Sunday. A past month keeps the real today off the grid.
             "calendar" => new Calendar
             {
-                DisplayDate = new System.DateTime(2026, 10, 15),
-                SelectedDate = new System.DateTime(2026, 10, 15),
+                DisplayDate = new System.DateTime(2015, 10, 15),
+                SelectedDate = new System.DateTime(2015, 10, 15),
                 FirstDayOfWeek = System.DayOfWeek.Sunday,
             },
             "paned" => new Grid

@@ -428,7 +428,7 @@ build (JsonObject *spec)
     }
   else if (g_str_equal (type, "calendar"))
     {
-      GDateTime *date = g_date_time_new_local (2026, 10, 15, 0, 0, 0);
+      GDateTime *date = g_date_time_new_local (2015, 10, 15, 0, 0, 0);
       w = gtk_calendar_new ();
       gtk_calendar_set_date (GTK_CALENDAR (w), date);
       gtk_calendar_set_show_week_numbers (GTK_CALENDAR (w), bool_member (spec, "active"));
