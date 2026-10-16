@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:col="clr-namespace:System.Collections;assembly=System.Runtime"
+             x:Class="AvaAdwaita.Gallery.Pages.TextPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Text" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Entries" />
+      <TextBox PlaceholderText="Placeholder" />
+      <TextBox Text="Some text" />
+      <TextBox Text="Password" PasswordChar="•" />
+      <TextBox Text="Disabled" IsEnabled="False" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="States" />
+      <TextBox Classes="error" Text="Error" />
+      <TextBox Classes="warning" Text="Warning" />
+      <TextBox Classes="success" Text="Success" />
+      <TextBox Classes="flat" Text="Flat" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Completion" />
+      <AutoCompleteBox PlaceholderText="Type a fruit" Width="240" HorizontalAlignment="Left">
+        <AutoCompleteBox.ItemsSource>
+          <col:ArrayList>
+            <x:String>Apple</x:String>
+            <x:String>Apricot</x:String>
+            <x:String>Avocado</x:String>
+            <x:String>Banana</x:String>
+            <x:String>Blackberry</x:String>
+            <x:String>Cherry</x:String>
+          </col:ArrayList>
+        </AutoCompleteBox.ItemsSource>
+      </AutoCompleteBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Spin buttons" />
+      <WrapPanel Classes="gallery-row">
+        <NumericUpDown Minimum="0" Maximum="100" Value="40" Increment="1" />
+        <NumericUpDown Minimum="0" Maximum="1" Value="0.5" Increment="0.1" FormatString="0.0" />
+        <NumericUpDown Value="3" IsEnabled="False" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Combo boxes" />
+      <WrapPanel Classes="gallery-row">
+        <ComboBox SelectedIndex="1" MinWidth="160">
+          <x:String>Small</x:String>
+          <x:String>Medium</x:String>
+          <x:String>Large</x:String>
+        </ComboBox>
+        <ComboBox SelectedIndex="0" IsEnabled="False" MinWidth="160">
+          <x:String>Disabled</x:String>
+        </ComboBox>
+      </WrapPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

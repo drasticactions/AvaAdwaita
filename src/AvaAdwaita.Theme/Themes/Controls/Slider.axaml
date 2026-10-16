@@ -1,0 +1,83 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <ControlTheme x:Key="AdwSliderHighlight" TargetType="RepeatButton">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="adw:Css.Node" Value="highlight" />
+    <Setter Property="adw:Css.Classes" Value="top" />
+    <Setter Property="adw:Css.StateSource" Value="None" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwSliderRest" TargetType="RepeatButton">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="Transparent" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwSliderThumb" TargetType="Thumb">
+    <Setter Property="adw:Css.Node" Value="slider" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="adw:Css.StateSource" Value="Self" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- scale.horizontal > [marks.top] + trough > highlight + slider + [marks.bottom]; the highlight is the
+       track's decrease part. Ticks before the trough (TopLeft) are marks.top, after it (BottomRight) marks.bottom. -->
+  <ControlTheme x:Key="{x:Type Slider}" TargetType="Slider">
+    <Setter Property="adw:Css.Node" Value="scale" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <DockPanel>
+          <adw:AdwScaleMarks Name="PART_MarksBefore" IsBefore="True" DockPanel.Dock="Top" adw:Css.Node="marks" adw:Css.Classes="top" />
+          <adw:AdwScaleMarks Name="PART_MarksAfter" DockPanel.Dock="Bottom" adw:Css.Node="marks" adw:Css.Classes="bottom" />
+          <adw:AdwBox Name="PART_Trough" adw:Css.Node="trough" adw:Css.StateSource="TemplatedParent">
+            <adw:AdwRangeTrack Name="PART_Track"
+                   Minimum="{TemplateBinding Minimum}"
+                   Maximum="{TemplateBinding Maximum}"
+                   Value="{TemplateBinding Value, Mode=TwoWay}"
+                   IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                   Orientation="{TemplateBinding Orientation}"
+                   ClipToBounds="False">
+              <adw:AdwRangeTrack.DecreaseButton>
+                <RepeatButton Name="PART_DecreaseButton" Theme="{StaticResource AdwSliderHighlight}" />
+              </adw:AdwRangeTrack.DecreaseButton>
+              <adw:AdwRangeTrack.IncreaseButton>
+                <RepeatButton Name="PART_IncreaseButton" Theme="{StaticResource AdwSliderRest}" />
+              </adw:AdwRangeTrack.IncreaseButton>
+              <Thumb Theme="{StaticResource AdwSliderThumb}" />
+            </adw:AdwRangeTrack>
+          </adw:AdwBox>
+          </DockPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:horizontal /template/ adw|AdwBox#PART_Trough">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="^:vertical /template/ adw|AdwScaleMarks#PART_MarksBefore">
+      <Setter Property="DockPanel.Dock" Value="Left" />
+    </Style>
+    <Style Selector="^:vertical /template/ adw|AdwScaleMarks#PART_MarksAfter">
+      <Setter Property="DockPanel.Dock" Value="Right" />
+    </Style>
+    <Style Selector="^:vertical /template/ adw|AdwBox#PART_Trough">
+      <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

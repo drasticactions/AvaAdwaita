@@ -1,0 +1,140 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- A toolbar: box.toolbar > button.flat, separator; the overflow is a menubutton with a popover.menu. -->
+  <ControlTheme x:Key="{x:Type CommandBarButton}" TargetType="CommandBarButton">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="adw:Css.Classes" Value="flat" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwStack Name="PART_LayoutRoot" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ContentPresenter Name="PART_IconPresenter" Content="{TemplateBinding Icon}" HorizontalAlignment="Center"
+                              IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <adw:AdwLabel Name="PART_Label" Text="{TemplateBinding Label}" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"
+                          IsVisible="{TemplateBinding Label, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          </adw:AdwStack>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^[IsCompact=True] /template/ adw|AdwLabel#PART_Label">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^[LabelPosition=Right] /template/ adw|AdwStack#PART_LayoutRoot">
+      <Setter Property="Orientation" Value="Horizontal" />
+    </Style>
+    <Style Selector="^[LabelPosition=Collapsed] /template/ adw|AdwLabel#PART_Label">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <!-- In the overflow menu a command is a popover menu's modelbutton. -->
+    <Style Selector="^[IsInOverflow=True]">
+      <Setter Property="adw:Css.Node" Value="modelbutton" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+    <Style Selector="^[IsInOverflow=True] /template/ adw|AdwStack#PART_LayoutRoot">
+      <Setter Property="Orientation" Value="Horizontal" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+    </Style>
+    <Style Selector="^[IsInOverflow=True] /template/ adw|AdwLabel#PART_Label">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type CommandBarToggleButton}" TargetType="CommandBarToggleButton">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="adw:Css.Classes" Value="flat toggle" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwStack Name="PART_LayoutRoot" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ContentPresenter Name="PART_IconPresenter" Content="{TemplateBinding Icon}" HorizontalAlignment="Center"
+                              IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <adw:AdwLabel Name="PART_Label" Text="{TemplateBinding Label}" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"
+                          IsVisible="{TemplateBinding Label, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          </adw:AdwStack>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^[IsCompact=True] /template/ adw|AdwLabel#PART_Label">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^[LabelPosition=Right] /template/ adw|AdwStack#PART_LayoutRoot">
+      <Setter Property="Orientation" Value="Horizontal" />
+    </Style>
+    <Style Selector="^[LabelPosition=Collapsed] /template/ adw|AdwLabel#PART_Label">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <!-- In the overflow menu a command is a popover menu's modelbutton. -->
+    <Style Selector="^[IsInOverflow=True]">
+      <Setter Property="adw:Css.Node" Value="modelbutton" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+    <Style Selector="^[IsInOverflow=True] /template/ adw|AdwStack#PART_LayoutRoot">
+      <Setter Property="Orientation" Value="Horizontal" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+    </Style>
+    <Style Selector="^[IsInOverflow=True] /template/ adw|AdwLabel#PART_Label">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type CommandBarSeparator}" TargetType="CommandBarSeparator">
+    <Setter Property="adw:Css.Node" Value="separator" />
+    <Setter Property="adw:Css.Classes" Value="vertical" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox />
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^[IsInOverflow=True]">
+      <Setter Property="adw:Css.Classes" Value="horizontal" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type CommandBar}" TargetType="CommandBar">
+    <Setter Property="adw:Css.Node" Value="box" />
+    <Setter Property="adw:Css.Classes" Value="toolbar horizontal" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <Panel>
+            <DockPanel KeyboardNavigation.TabNavigation="Cycle">
+              <adw:AdwBox DockPanel.Dock="Right" adw:Css.Node="menubutton" IsVisible="{TemplateBinding IsOverflowButtonVisible}">
+                <Button Name="PART_OverflowButton" Classes="flat" ToolTip.Tip="More">
+                  <adw:AdwIcon IconName="view-more-symbolic" />
+                </Button>
+              </adw:AdwBox>
+              <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" DockPanel.Dock="Left" VerticalAlignment="Center" />
+              <ItemsControl Name="PART_PrimaryCommands" HorizontalAlignment="Right" VerticalAlignment="Stretch" ClipToBounds="True"
+                            ItemsSource="{Binding VisiblePrimaryCommands, RelativeSource={RelativeSource TemplatedParent}}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <adw:AdwStack Orientation="Horizontal" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+              </ItemsControl>
+            </DockPanel>
+            <Popup Name="PART_OverflowPopup" IsOpen="{TemplateBinding IsOpen, Mode=TwoWay}" PlacementTarget="{Binding #PART_OverflowButton}"
+                   Placement="Bottom" IsLightDismissEnabled="True" WindowManagerAddShadowHint="False">
+              <Decorator>
+                <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="menu background">
+                  <adw:PopoverFrame>
+                    <adw:PopoverContents>
+                      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                        <ItemsControl Name="PART_OverflowPresenter" ItemsSource="{Binding OverflowItems, RelativeSource={RelativeSource TemplatedParent}}" />
+                      </adw:AdwBox>
+                    </adw:PopoverContents>
+                  </adw:PopoverFrame>
+                </adw:AdwBox>
+              </Decorator>
+            </Popup>
+          </Panel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

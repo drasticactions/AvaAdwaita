@@ -1,0 +1,95 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- window.background.csd > dialog-host > widget > widget > toolbarview > revealer.top-bar > windowhandle > box.vertical > headerbar,
+       as AdwWindow with AdwToolbarView and AdwHeaderBar builds it. -->
+  <ControlTheme x:Key="{x:Type Window}" TargetType="Window">
+    <Setter Property="adw:Css.Node" Value="window" />
+    <Setter Property="adw:Css.Classes" Value="background" />
+    <Setter Property="adw:WindowChrome.IsEnabled" Value="True" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="TransparencyLevelHint" Value="Transparent" />
+    <Setter Property="ExtendClientAreaToDecorationsHint" Value="True" />
+    <!-- libadwaita always draws its own decorations: the header bar is the title bar, so the platform draws only the
+         border, shadow and resize grips, and a Wayland compositor is asked for client-side decorations. -->
+    <Setter Property="WindowDecorations" Value="BorderOnly" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <VisualLayerManager Name="PART_VisualLayerManager">
+          <adw:WindowFrame Name="PART_Frame" Margin="{TemplateBinding adw:WindowChrome.FrameMargin}">
+            <Panel adw:Css.Node="dialog-host">
+              <Panel adw:Css.Node="widget">
+                <Panel adw:Css.Node="widget">
+                  <DockPanel adw:Css.Node="toolbarview">
+                    <adw:AdwBox DockPanel.Dock="Top" adw:Css.Node="revealer" adw:Css.Classes="top-bar"
+                                IsVisible="{TemplateBinding adw:HeaderBar.IsVisible}">
+                      <adw:HeaderBarHandle>
+                        <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                          <adw:AdwBox Name="PART_HeaderBar" adw:Css.Node="headerbar" adw:Css.Classes="{TemplateBinding adw:HeaderBar.Classes}">
+                            <adw:HeaderBarHandle>
+                              <adw:AdwBox adw:Css.Node="box">
+                                <Grid ColumnDefinitions="*,Auto,*">
+                                  <!-- AdwHeaderBar shows its start and end boxes only while they hold something. -->
+                                  <adw:AdwBox Grid.Column="0" adw:Css.Node="widget" HorizontalAlignment="Left">
+                                    <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal start">
+                                      <adw:AdwBox.IsVisible>
+                                        <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                          <Binding ElementName="PART_StartControls" Path="IsVisible" />
+                                          <Binding ElementName="PART_StartContent" Path="IsVisible" />
+                                        </MultiBinding>
+                                      </adw:AdwBox.IsVisible>
+                                      <!-- AdwHeaderBar's start and end boxes: gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6). -->
+                                      <adw:AdwStack Orientation="Horizontal" BoxSpacing="6">
+                                        <adw:WindowControls Name="PART_StartControls" IsStart="True" VerticalAlignment="Center" />
+                                        <ContentPresenter Name="PART_StartContent" Content="{TemplateBinding adw:HeaderBar.Start}" VerticalAlignment="Center"
+                                                          IsVisible="{TemplateBinding adw:HeaderBar.Start, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                      </adw:AdwStack>
+                                    </adw:AdwBox>
+                                  </adw:AdwBox>
+                                  <adw:AdwBox Grid.Column="1" adw:Css.Node="widget">
+                                    <Panel>
+                                      <ContentPresenter Content="{TemplateBinding adw:HeaderBar.Title}" VerticalAlignment="Center"
+                                                        IsVisible="{TemplateBinding adw:HeaderBar.Title, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                      <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="title" Text="{TemplateBinding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                                                    IsVisible="{TemplateBinding adw:HeaderBar.Title, Converter={x:Static ObjectConverters.IsNull}}" />
+                                    </Panel>
+                                  </adw:AdwBox>
+                                  <adw:AdwBox Grid.Column="2" adw:Css.Node="widget" HorizontalAlignment="Right">
+                                    <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal end">
+                                      <adw:AdwBox.IsVisible>
+                                        <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                          <Binding ElementName="PART_EndControls" Path="IsVisible" />
+                                          <Binding ElementName="PART_EndContent" Path="IsVisible" />
+                                        </MultiBinding>
+                                      </adw:AdwBox.IsVisible>
+                                      <adw:AdwStack Orientation="Horizontal" BoxSpacing="6">
+                                        <ContentPresenter Name="PART_EndContent" Content="{TemplateBinding adw:HeaderBar.End}" VerticalAlignment="Center"
+                                                          IsVisible="{TemplateBinding adw:HeaderBar.End, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                        <adw:WindowControls Name="PART_EndControls" IsStart="False" VerticalAlignment="Center" />
+                                      </adw:AdwStack>
+                                    </adw:AdwBox>
+                                  </adw:AdwBox>
+                                </Grid>
+                              </adw:AdwBox>
+                            </adw:HeaderBarHandle>
+                          </adw:AdwBox>
+                        </adw:AdwBox>
+                      </adw:HeaderBarHandle>
+                    </adw:AdwBox>
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Content="{TemplateBinding Content}"
+                                      Margin="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                  </DockPanel>
+                </Panel>
+              </Panel>
+            </Panel>
+          </adw:WindowFrame>
+        </VisualLayerManager>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

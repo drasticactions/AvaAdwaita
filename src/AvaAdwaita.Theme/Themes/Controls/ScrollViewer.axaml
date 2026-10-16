@@ -1,0 +1,72 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- scrolledwindow > viewport + scrollbar.bottom.horizontal + scrollbar.right.vertical (+ undershoot, overshoot).
+       The scroll bars are libadwaita's overlay indicators, drawn over the content and shown as GtkScrolledWindow
+       shows them; with AllowAutoHide off they are classic scroll bars beside the content. -->
+  <ControlTheme x:Key="{x:Type ScrollViewer}" TargetType="ScrollViewer">
+    <!-- A scrolled window takes the wheel anywhere inside it, over empty space too, as GTK's does. -->
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="adw:Css.Node" Value="scrolledwindow" />
+    <Setter Property="adw:OverlayIndicators.IsEnabled" Value="True" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <Grid ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
+            <Panel Name="PART_Viewport" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <ScrollContentPresenter Name="PART_ContentPresenter" adw:Css.Node="viewport"
+                                    Background="{TemplateBinding Background}"
+                                    HorizontalSnapPointsType="{TemplateBinding HorizontalSnapPointsType}"
+                                    VerticalSnapPointsType="{TemplateBinding VerticalSnapPointsType}"
+                                    HorizontalSnapPointsAlignment="{TemplateBinding HorizontalSnapPointsAlignment}"
+                                    VerticalSnapPointsAlignment="{TemplateBinding VerticalSnapPointsAlignment}"
+                                    Padding="{TemplateBinding Padding}"
+                                    ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}">
+              <ScrollContentPresenter.GestureRecognizers>
+                <ScrollGestureRecognizer CanHorizontallyScroll="{Binding CanHorizontallyScroll, ElementName=PART_ContentPresenter}"
+                                         CanVerticallyScroll="{Binding CanVerticallyScroll, ElementName=PART_ContentPresenter}"
+                                         IsScrollInertiaEnabled="{Binding (ScrollViewer.IsScrollInertiaEnabled), ElementName=PART_ContentPresenter}"
+                                         Offset="{Binding Offset, ElementName=PART_ContentPresenter}"
+                                         Viewport="{Binding Viewport, ElementName=PART_ContentPresenter}"
+                                         Extent="{Binding Extent, ElementName=PART_ContentPresenter}" />
+              </ScrollContentPresenter.GestureRecognizers>
+            </ScrollContentPresenter>
+            </Panel>
+            <ScrollBar Name="PART_HorizontalScrollBar" Orientation="Horizontal" VerticalAlignment="Bottom" adw:Css.Classes="bottom"
+                       Grid.ColumnSpan="2" Grid.RowSpan="2" />
+            <ScrollBar Name="PART_VerticalScrollBar" Orientation="Vertical" HorizontalAlignment="Right" adw:Css.Classes="right"
+                       Grid.ColumnSpan="2" Grid.RowSpan="2" />
+            <!-- After the scroll bars, as GTK creates them; drawn over the viewport's edges. -->
+            <Panel Name="PART_Undershoots" Grid.ColumnSpan="2" Grid.RowSpan="2" IsHitTestVisible="False">
+              <adw:AdwBox adw:Css.Node="undershoot" adw:Css.Classes="left" adw:Undershoots.Edge="Left" />
+              <adw:AdwBox adw:Css.Node="undershoot" adw:Css.Classes="right" adw:Undershoots.Edge="Right" />
+              <adw:AdwBox adw:Css.Node="undershoot" adw:Css.Classes="top" adw:Undershoots.Edge="Top" />
+              <adw:AdwBox adw:Css.Node="undershoot" adw:Css.Classes="bottom" adw:Undershoots.Edge="Bottom" />
+            </Panel>
+          </Grid>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+
+    <!-- Classic scroll bars take their space beside the viewport, which ends where they start. -->
+    <Style Selector="^[AllowAutoHide=False] /template/ Panel#PART_Viewport, ^[AllowAutoHide=False] /template/ Panel#PART_Undershoots">
+      <Setter Property="Grid.ColumnSpan" Value="1" />
+      <Setter Property="Grid.RowSpan" Value="1" />
+    </Style>
+    <Style Selector="^[AllowAutoHide=False] /template/ ScrollBar#PART_HorizontalScrollBar">
+      <Setter Property="Grid.Row" Value="1" />
+      <Setter Property="Grid.ColumnSpan" Value="1" />
+      <Setter Property="Grid.RowSpan" Value="1" />
+    </Style>
+    <Style Selector="^[AllowAutoHide=False] /template/ ScrollBar#PART_VerticalScrollBar">
+      <Setter Property="Grid.Column" Value="1" />
+      <Setter Property="Grid.ColumnSpan" Value="1" />
+      <Setter Property="Grid.RowSpan" Value="1" />
+    </Style>
+    <!-- A child that scrolls itself, as GtkListView or GtkColumnView, sits right in the scrolledwindow: no viewport. -->
+    <Style Selector="^.adw-scrollable-child /template/ ScrollContentPresenter#PART_ContentPresenter">
+      <Setter Property="adw:Css.Node" Value="{x:Null}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

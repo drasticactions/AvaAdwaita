@@ -1,0 +1,35 @@
+name: Gallery AppImage
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  appimage:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: linux-x64
+            runner: ubuntu-24.04
+          - rid: linux-arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Install the NativeAOT toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang zlib1g-dev
+      - name: Build the AppImage
+        run: tools/build-appimage.sh --rid ${{ matrix.rid }} --revision ${{ github.run_number }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gallery-appimage-${{ matrix.rid }}
+          path: artifacts/appimage/*.AppImage
+          if-no-files-found: error

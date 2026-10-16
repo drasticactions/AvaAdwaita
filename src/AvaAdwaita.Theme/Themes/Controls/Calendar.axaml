@@ -1,0 +1,162 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- GtkCalendar: calendar.view > header.horizontal > button.image-button + stack.month + button.image-button +
+       button.image-button + label.year + button.image-button; grid.horizontal (homogeneous) > label.day-name,
+       label.day-number (.other-month, .today, :selected). The month stack is Avalonia's header button, which still
+       opens its year view; its year view's months are day-number labels too. -->
+  <ControlTheme x:Key="{x:Type Calendar}" TargetType="Calendar">
+    <Setter Property="adw:Css.Node" Value="calendar" />
+    <Setter Property="adw:Css.Classes" Value="view" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <!-- GtkCalendar takes the focus and its keys; a date entry's popover focuses it, so Escape closes it. -->
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <StackPanel Name="PART_Root">
+            <CalendarItem Name="PART_CalendarItem" />
+          </StackPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwCalendarArrow" TargetType="Button" BasedOn="{StaticResource AdwButtonBase}">
+    <Setter Property="Focusable" Value="False" />
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwCalendarHeader" TargetType="Button">
+    <Setter Property="adw:Css.Node" Value="stack" />
+    <Setter Property="adw:Css.Classes" Value="month" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <Grid>
+            <!-- A stack of every month's label is as wide as the widest. -->
+            <ItemsControl ItemsSource="{x:Static adw:CalendarYears.MonthNames}" Opacity="0" IsHitTestVisible="False">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <Grid />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                  <adw:AdwLabel Text="{Binding}" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <adw:AdwLabel adw:Css.Node="label" TextAlignment="Center"
+                          Text="{Binding $parent[Calendar].DisplayDate, Converter={x:Static adw:CalendarYears.MonthName}}" />
+          </Grid>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type CalendarItem}" TargetType="CalendarItem">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DockPanel>
+          <adw:AdwBox DockPanel.Dock="Top" adw:Css.Node="header" adw:Css.Classes="horizontal">
+            <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto">
+              <Button Name="PART_PreviousButton" Theme="{StaticResource AdwCalendarArrow}">
+                <adw:AdwIcon IconName="pan-start-symbolic" />
+              </Button>
+              <Button Name="PART_HeaderButton" Grid.Column="1" Theme="{StaticResource AdwCalendarHeader}" />
+              <Button Name="PART_NextButton" Grid.Column="2" Theme="{StaticResource AdwCalendarArrow}">
+                <adw:AdwIcon IconName="pan-end-symbolic" />
+              </Button>
+              <Button Grid.Column="3" HorizontalAlignment="Right" Theme="{StaticResource AdwCalendarArrow}" adw:CalendarYears.Step="-1">
+                <adw:AdwIcon IconName="pan-start-symbolic" />
+              </Button>
+              <!-- GtkCalendar widens the year label by 10 px so changing the year does not widen the calendar. -->
+              <adw:AdwLabel Grid.Column="4" adw:Css.Node="label" adw:Css.Classes="year" TextAlignment="Center" VerticalAlignment="Stretch" Padding="5,0"
+                            Text="{Binding $parent[Calendar].DisplayDate, Converter={x:Static adw:CalendarYears.YearName}}" />
+              <Button Grid.Column="5" Theme="{StaticResource AdwCalendarArrow}" adw:CalendarYears.Step="1">
+                <adw:AdwIcon IconName="pan-end-symbolic" />
+              </Button>
+            </Grid>
+          </adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="grid" adw:Css.Classes="horizontal">
+            <Panel>
+              <!-- GtkCalendar's grid is homogeneous in both directions, and asks room for its hidden week numbers. -->
+              <adw:AdwHomogeneousGrid Name="PART_MonthView" MeasuredColumns="8" IsVisible="False" ColumnDefinitions="*,*,*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*" />
+              <Grid Name="PART_YearView" IsVisible="False" RowDefinitions="*,*,*" ColumnDefinitions="*,*,*,*" />
+            </Panel>
+          </adw:AdwBox>
+        </DockPanel>
+      </ControlTemplate>
+    </Setter>
+    <Setter Property="DayTitleTemplate">
+      <Template x:DataType="x:String">
+        <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="day-name" TextAlignment="Center" VerticalAlignment="Stretch" Text="{Binding Converter={x:Static adw:CalendarYears.DayName}}" />
+      </Template>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type CalendarDayButton}" TargetType="CalendarDayButton">
+    <Setter Property="adw:Css.Node" Value="label" />
+    <Setter Property="adw:Css.Classes" Value="day-number" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Content="{TemplateBinding Content}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <ContentPresenter.DataTemplates>
+              <adw:LabelTemplate Node="" TextAlignment="Center" />
+            </ContentPresenter.DataTemplates>
+          </ContentPresenter>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type CalendarButton}" TargetType="CalendarButton" BasedOn="{StaticResource {x:Type CalendarDayButton}}" />
+
+  <!-- box.linked > entry + menubutton > button; the calendar opens in a popover. -->
+  <ControlTheme x:Key="{x:Type CalendarDatePicker}" TargetType="CalendarDatePicker">
+    <Setter Property="adw:Css.Node" Value="box" />
+    <Setter Property="adw:Css.Classes" Value="linked horizontal" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <Panel>
+            <adw:AdwDockLast Dock="Right">
+              <TextBox Name="PART_TextBox"
+                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                       PlaceholderText="{TemplateBinding PlaceholderText}"
+                       DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}" />
+              <adw:AdwBox adw:Css.Node="menubutton">
+                <Button Name="PART_Button" Theme="{StaticResource AdwButtonBase}" Focusable="False" adw:Css.Classes="toggle">
+                  <adw:AdwIcon IconName="x-office-calendar-symbolic" />
+                </Button>
+              </adw:AdwBox>
+            </adw:AdwDockLast>
+            <Popup Name="PART_Popup" PlacementTarget="{TemplateBinding}" Placement="Bottom" IsLightDismissEnabled="True" WindowManagerAddShadowHint="False">
+              <Decorator>
+                <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="background">
+                  <adw:PopoverFrame>
+                    <adw:PopoverContents>
+                      <Calendar Name="PART_Calendar"
+                                DisplayDate="{TemplateBinding DisplayDate}"
+                                DisplayDateEnd="{TemplateBinding DisplayDateEnd}"
+                                DisplayDateStart="{TemplateBinding DisplayDateStart}"
+                                FirstDayOfWeek="{TemplateBinding FirstDayOfWeek}"
+                                IsTodayHighlighted="{TemplateBinding IsTodayHighlighted}"
+                                SelectedDate="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedDate, Mode=TwoWay}" />
+                    </adw:PopoverContents>
+                  </adw:PopoverFrame>
+                </adw:AdwBox>
+              </Decorator>
+            </Popup>
+          </Panel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,30 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- GtkPopoverMenu: popover.menu > arrow + contents > scrolledwindow > viewport > stack > box.vertical >
+       box.vertical (a section) > modelbutton; a button's menu points at the button. -->
+  <ControlTheme x:Key="{x:Type MenuFlyoutPresenter}" TargetType="MenuFlyoutPresenter">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <!-- The popover node sits inside, so the presenter (the popup's child) can hold the shadow as its margin. -->
+        <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="menu background">
+          <adw:PopoverFrame>
+            <adw:PopoverContents>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+              <adw:AdwBox adw:Css.Node="stack">
+                <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                  <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                    <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    KeyboardNavigation.TabNavigation="Continue" Grid.IsSharedSizeScope="True" />
+                  </adw:AdwBox>
+                </adw:AdwBox>
+              </adw:AdwBox>
+            </ScrollViewer>
+            </adw:PopoverContents>
+          </adw:PopoverFrame>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

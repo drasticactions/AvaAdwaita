@@ -1,0 +1,80 @@
+<Project>
+  <PropertyGroup>
+    <AvaAdwaitaThemeNamespace Condition="'$(AvaAdwaitaThemeNamespace)' == ''">$(RootNamespace).Themes</AvaAdwaitaThemeNamespace>
+    <AvaAdwaitaControlsDir Condition="'$(AvaAdwaitaControlsDir)' == ''">Themes/Controls</AvaAdwaitaControlsDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AvaAdwaitaMergeDir>$(MSBuildProjectDirectory)/obj/ControlThemes</AvaAdwaitaMergeDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Remove="Themes/_Controls.axaml" />
+    <AvaloniaXaml Include="$(AvaAdwaitaMergeDir)/_Controls.axaml" Link="Themes/_Controls.axaml" />
+  </ItemGroup>
+
+  <UsingTask TaskName="AvaAdwaitaMergeControlThemes" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <ProjectDir ParameterType="System.String" Required="true" />
+      <ControlsDir ParameterType="System.String" Required="true" />
+      <AssemblyName ParameterType="System.String" Required="true" />
+      <Namespace ParameterType="System.String" Required="true" />
+      <OutputDir ParameterType="System.String" Required="true" />
+      <Merged ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Collections.Generic" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        var names = new SortedSet<string>(StringComparer.Ordinal);
+        var dir = Path.Combine(ProjectDir, ControlsDir);
+        if (Directory.Exists(dir))
+        {
+            foreach (var f in Directory.GetFiles(dir, "*.axaml"))
+            {
+                names.Add(Path.GetFileName(f));
+            }
+        }
+
+        var ordered = new List<string>();
+        foreach (var n in names) { if (n.StartsWith("_")) ordered.Add(n); }
+        foreach (var n in names) { if (!n.StartsWith("_")) ordered.Add(n); }
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append("<ResourceDictionary xmlns=\"https://github.com/avaloniaui\"\n");
+        sb.Append("                    xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\n");
+        sb.Append("                    x:Class=\"" + Namespace + ".ControlThemes\"\n");
+        sb.Append("                    x:ClassModifier=\"internal\">\n");
+        sb.Append("\n");
+        sb.Append("  <ResourceDictionary.MergedDictionaries>\n    <ResourceDictionary>\n      <ResourceDictionary.MergedDictionaries>\n");
+        foreach (var n in ordered)
+        {
+            sb.Append("        <MergeResourceInclude Source=\"avares://" + AssemblyName + "/" + ControlsDir + "/" + n + "\" />\n");
+        }
+
+        sb.Append("      </ResourceDictionary.MergedDictionaries>\n    </ResourceDictionary>\n  </ResourceDictionary.MergedDictionaries>\n</ResourceDictionary>\n");
+        var target = Path.Combine(OutputDir, "_Controls.axaml");
+        Directory.CreateDirectory(OutputDir);
+        var text = sb.ToString();
+        if (!File.Exists(target) || File.ReadAllText(target) != text)
+        {
+            File.WriteAllText(target, text);
+        }
+
+        var item = new Microsoft.Build.Utilities.TaskItem(target);
+        item.SetMetadata("Link", "Themes/_Controls.axaml");
+        Merged = new Microsoft.Build.Framework.ITaskItem[] { item };
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="AvaAdwaitaMergeControlThemes" BeforeTargets="BeforeBuild;_GenerateAvaloniaResourcesDependencyCache;GenerateAvaloniaResources;_InjectAvaloniaAdditionalFiles">
+    <AvaAdwaitaMergeControlThemes ProjectDir="$(MSBuildProjectDirectory)" ControlsDir="$(AvaAdwaitaControlsDir)" AssemblyName="$(AssemblyName)" Namespace="$(AvaAdwaitaThemeNamespace)" OutputDir="$(AvaAdwaitaMergeDir)">
+      <Output TaskParameter="Merged" ItemName="_AvaAdwaitaMergedThemes" />
+    </AvaAdwaitaMergeControlThemes>
+    <ItemGroup>
+      <FileWrites Include="@(_AvaAdwaitaMergedThemes)" />
+    </ItemGroup>
+  </Target>
+</Project>

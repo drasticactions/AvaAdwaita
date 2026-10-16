@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Headless.XUnit" />
+    <PackageReference Include="Avalonia.Skia" />
+    <PackageReference Include="Avalonia.HarfBuzz" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AvaAdwaita.Theme\AvaAdwaita.Theme.csproj" />
+    <ProjectReference Include="..\..\src\AvaAdwaita.Fonts\AvaAdwaita.Fonts.csproj" />
+    <ProjectReference Include="..\..\src\AvaAdwaita.DataGrid\AvaAdwaita.DataGrid.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Data\**\*" Link="Data\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

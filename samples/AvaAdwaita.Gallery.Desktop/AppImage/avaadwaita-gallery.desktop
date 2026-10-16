@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=AvaAdwaita Gallery
+Comment=Avalonia controls styled by libadwaita
+Exec=AvaAdwaita.Gallery.Desktop
+Icon=avaadwaita-gallery
+Categories=Development;
+Terminal=false

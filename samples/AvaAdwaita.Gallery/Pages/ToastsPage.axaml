@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
+             x:Class="AvaAdwaita.Gallery.Pages.ToastsPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Toasts &amp; More" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Toasts" />
+      <WrapPanel Classes="gallery-row">
+        <Button Content="Show Toast" Click="OnShowToast" />
+        <Button Classes="destructive-action" Content="Show Error" Click="OnShowError" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Spinner" />
+      <WrapPanel Classes="gallery-row">
+        <adw:AdwSpinner Width="16" Height="16" />
+        <adw:AdwSpinner Width="32" Height="32" />
+        <adw:AdwSpinner Width="64" Height="64" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Carousel" />
+      <Carousel Height="120" SelectedIndex="{Binding #Pips.SelectedPageIndex}">
+        <Label Content="First page" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+        <Label Content="Second page" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+        <Label Content="Third page" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+      </Carousel>
+      <PipsPager Name="Pips" NumberOfPages="3" HorizontalAlignment="Center" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Toolbar" />
+      <CommandBar>
+        <CommandBar.PrimaryCommands>
+          <CommandBarButton Label="Open">
+            <CommandBarButton.Icon><adw:AdwIcon IconName="document-open-symbolic" /></CommandBarButton.Icon>
+          </CommandBarButton>
+          <CommandBarButton Label="Save">
+            <CommandBarButton.Icon><adw:AdwIcon IconName="document-save-symbolic" /></CommandBarButton.Icon>
+          </CommandBarButton>
+          <CommandBarSeparator />
+          <CommandBarToggleButton Label="Grid">
+            <CommandBarToggleButton.Icon><adw:AdwIcon IconName="view-grid-symbolic" /></CommandBarToggleButton.Icon>
+          </CommandBarToggleButton>
+        </CommandBar.PrimaryCommands>
+        <CommandBar.SecondaryCommands>
+          <CommandBarButton Label="Preferences" />
+          <CommandBarButton Label="About" />
+        </CommandBar.SecondaryCommands>
+      </CommandBar>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

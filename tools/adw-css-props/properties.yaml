@@ -1,0 +1,177 @@
+# The CSS properties AvaAdwaita supports, written from GTK 4.24's
+# gtk/gtkcssstylepropertyimpl.c and gtk/gtkcssshorthandpropertyimpl.c.
+#
+# Groups follow GTK's GtkCss*Values structs, so equal groups are shared
+# between computed styles. Within a group, order is GTK's order, which is
+# also compute order: color, -gtk-dpi and font-size come first, and every
+# border-*-width comes after its border-*-style.
+#
+#   kind      the parser and computer (Css/Properties/Kinds)
+#   type      the C# type of the computed value
+#   initial   the initial value, as CSS
+#   inherit   inherited
+#   animate   animatable
+#
+# Run: dotnet run tools/adw-css-props/adw-css-props.cs [-- --check]
+
+groups:
+  - name: Core
+    properties:
+      - { name: color, kind: Color, type: CssColor, initial: white, inherit: true, animate: true }
+      - { name: -gtk-dpi, kind: Dpi, type: double, initial: "96", inherit: true, animate: true }
+      - { name: font-size, kind: FontSize, type: double, initial: medium, inherit: true, animate: true }
+      - { name: -gtk-icon-palette, kind: Palette, type: CssPalette, initial: default, inherit: true, animate: true }
+
+  - name: Background
+    properties:
+      - { name: background-color, kind: Color, type: CssColor, initial: transparent, animate: true }
+      - { name: box-shadow, kind: BoxShadow, type: CssList<CssShadow>, initial: none, animate: true }
+      - { name: background-clip, kind: AreaList, type: CssList<CssArea>, initial: border-box }
+      - { name: background-origin, kind: AreaList, type: CssList<CssArea>, initial: padding-box }
+      - { name: background-size, kind: BackgroundSize, type: CssList<CssBackgroundSize>, initial: auto, animate: true }
+      - { name: background-position, kind: BackgroundPosition, type: CssList<CssPosition>, initial: 0 0, animate: true }
+      - { name: background-repeat, kind: BackgroundRepeat, type: CssList<CssBackgroundRepeat>, initial: repeat }
+      - { name: background-image, kind: BackgroundImage, type: CssList<CssImage?>, initial: none, animate: true }
+      - { name: background-blend-mode, kind: BlendModeList, type: CssList<string>, initial: normal }
+
+  - name: Border
+    properties:
+      - { name: border-top-style, kind: BorderStyle, type: CssBorderStyle, initial: none }
+      - { name: border-top-width, kind: BorderWidth, type: double, initial: "0", animate: true }
+      - { name: border-left-style, kind: BorderStyle, type: CssBorderStyle, initial: none }
+      - { name: border-left-width, kind: BorderWidth, type: double, initial: "0", animate: true }
+      - { name: border-bottom-style, kind: BorderStyle, type: CssBorderStyle, initial: none }
+      - { name: border-bottom-width, kind: BorderWidth, type: double, initial: "0", animate: true }
+      - { name: border-right-style, kind: BorderStyle, type: CssBorderStyle, initial: none }
+      - { name: border-right-width, kind: BorderWidth, type: double, initial: "0", animate: true }
+      - { name: border-top-left-radius, kind: Corner, type: CssCorner, initial: "0", animate: true }
+      - { name: border-top-right-radius, kind: Corner, type: CssCorner, initial: "0", animate: true }
+      - { name: border-bottom-right-radius, kind: Corner, type: CssCorner, initial: "0", animate: true }
+      - { name: border-bottom-left-radius, kind: Corner, type: CssCorner, initial: "0", animate: true }
+      - { name: border-top-color, kind: Color, type: CssColor, initial: currentcolor, animate: true }
+      - { name: border-right-color, kind: Color, type: CssColor, initial: currentcolor, animate: true }
+      - { name: border-bottom-color, kind: Color, type: CssColor, initial: currentcolor, animate: true }
+      - { name: border-left-color, kind: Color, type: CssColor, initial: currentcolor, animate: true }
+      - { name: border-image-source, kind: Image, type: CssImage?, initial: none, animate: true }
+      - { name: border-image-repeat, kind: BorderImageRepeat, type: CssBackgroundRepeat, initial: stretch }
+      - { name: border-image-slice, kind: BorderImageSlice, type: CssBoxValues, initial: 100% }
+      - { name: border-image-width, kind: BorderImageWidth, type: CssBoxValues, initial: "1" }
+
+  - name: Icon
+    properties:
+      - { name: -gtk-icon-size, kind: IconSize, type: double, initial: 16px, inherit: true, animate: true }
+      - { name: -gtk-icon-shadow, kind: TextShadow, type: CssList<CssShadow>, initial: none, inherit: true, animate: true }
+      - { name: -gtk-icon-style, kind: IconStyle, type: string, initial: requested, inherit: true }
+      - { name: -gtk-icon-weight, kind: FontWeight, type: double, initial: normal, inherit: true, animate: true }
+
+  - name: Outline
+    properties:
+      - { name: outline-style, kind: BorderStyle, type: CssBorderStyle, initial: none }
+      - { name: outline-width, kind: BorderWidth, type: double, initial: "0", animate: true }
+      - { name: outline-offset, kind: Length, type: double, initial: "0", animate: true }
+      - { name: outline-color, kind: Color, type: CssColor, initial: currentcolor, animate: true }
+
+  - name: Font
+    properties:
+      - { name: font-family, kind: FontFamily, type: CssList<string>, initial: Sans, inherit: true }
+      - { name: font-style, kind: FontStyle, type: string, initial: normal, inherit: true }
+      - { name: font-weight, kind: FontWeight, type: double, initial: normal, inherit: true, animate: true }
+      - { name: font-width, kind: FontWidth, type: string, initial: normal, inherit: true }
+      - { name: letter-spacing, kind: LetterSpacing, type: double, initial: "0", inherit: true, animate: true }
+      - { name: text-shadow, kind: TextShadow, type: CssList<CssShadow>, initial: none, inherit: true, animate: true }
+      - { name: caret-color, kind: Color, type: CssColor, initial: currentcolor, inherit: true, animate: true }
+      - { name: -gtk-secondary-caret-color, kind: Color, type: CssColor, initial: currentcolor, inherit: true, animate: true }
+      - { name: font-feature-settings, kind: FontFeatures, type: CssList<CssFontSetting>, initial: normal, inherit: true, animate: true }
+      - { name: font-variation-settings, kind: FontVariations, type: CssList<CssFontSetting>, initial: normal, inherit: true, animate: true }
+      - { name: line-height, kind: LineHeight, type: CssLineHeight, initial: normal, inherit: true, animate: true }
+
+  - name: TextDecoration
+    properties:
+      - { name: text-decoration-line, kind: TextDecorationLine, type: string, initial: none }
+      - { name: text-decoration-color, kind: Color, type: CssColor, initial: currentcolor, animate: true }
+      - { name: text-decoration-style, kind: TextDecorationStyle, type: string, initial: solid }
+
+  - name: FontVariant
+    properties:
+      - { name: text-transform, kind: TextTransform, type: string, initial: none, inherit: true }
+      - { name: font-kerning, kind: FontKerning, type: string, initial: auto, inherit: true }
+      - { name: font-variant-ligatures, kind: FontVariantLigatures, type: string, initial: normal, inherit: true }
+      - { name: font-variant-position, kind: FontVariantPosition, type: string, initial: normal, inherit: true }
+      - { name: font-variant-caps, kind: FontVariantCaps, type: string, initial: normal, inherit: true }
+      - { name: font-variant-numeric, kind: FontVariantNumeric, type: string, initial: normal, inherit: true }
+      - { name: font-variant-alternates, kind: FontVariantAlternates, type: string, initial: normal, inherit: true }
+      - { name: font-variant-east-asian, kind: FontVariantEastAsian, type: string, initial: normal, inherit: true }
+
+  - name: Animation
+    properties:
+      - { name: animation-name, kind: AnimationName, type: CssList<string>, initial: none }
+      - { name: animation-duration, kind: TimeList, type: CssList<double>, initial: 0s }
+      - { name: animation-timing-function, kind: TimingList, type: CssList<CssEasing>, initial: ease }
+      - { name: animation-iteration-count, kind: IterationCountList, type: CssList<double>, initial: "1" }
+      - { name: animation-direction, kind: AnimationDirectionList, type: CssList<string>, initial: normal }
+      - { name: animation-play-state, kind: PlayStateList, type: CssList<string>, initial: running }
+      - { name: animation-delay, kind: TimeList, type: CssList<double>, initial: 0s }
+      - { name: animation-fill-mode, kind: FillModeList, type: CssList<string>, initial: none }
+
+  - name: Transition
+    properties:
+      - { name: transition-property, kind: TransitionProperty, type: CssList<string>, initial: all }
+      - { name: transition-duration, kind: TimeList, type: CssList<double>, initial: 0s }
+      - { name: transition-timing-function, kind: TimingList, type: CssList<CssEasing>, initial: ease }
+      - { name: transition-delay, kind: TimeList, type: CssList<double>, initial: 0s }
+
+  - name: Size
+    properties:
+      - { name: margin-top, kind: Length, type: double, initial: "0", animate: true }
+      - { name: margin-left, kind: Length, type: double, initial: "0", animate: true }
+      - { name: margin-bottom, kind: Length, type: double, initial: "0", animate: true }
+      - { name: margin-right, kind: Length, type: double, initial: "0", animate: true }
+      - { name: padding-top, kind: PositiveLength, type: double, initial: "0", animate: true }
+      - { name: padding-left, kind: PositiveLength, type: double, initial: "0", animate: true }
+      - { name: padding-bottom, kind: PositiveLength, type: double, initial: "0", animate: true }
+      - { name: padding-right, kind: PositiveLength, type: double, initial: "0", animate: true }
+      - { name: border-spacing, kind: BorderSpacing, type: CssPosition, initial: "0", animate: true }
+      - { name: min-width, kind: PositiveLength, type: double, initial: "0", animate: true }
+      - { name: min-height, kind: PositiveLength, type: double, initial: "0", animate: true }
+
+  - name: Other
+    properties:
+      - { name: -gtk-icon-source, kind: Image, type: CssImage?, initial: none, animate: true }
+      - { name: -gtk-icon-transform, kind: Transform, type: CssList<CssTransformFunction>, initial: none, animate: true }
+      - { name: -gtk-icon-filter, kind: Filter, type: CssList<CssFilterFunction>, initial: none, animate: true }
+      - { name: transform, kind: Transform, type: CssList<CssTransformFunction>, initial: none, animate: true }
+      - { name: transform-origin, kind: Position, type: CssPosition, initial: center, animate: true }
+      - { name: opacity, kind: Opacity, type: double, initial: "1", animate: true }
+      - { name: backdrop-filter, kind: Filter, type: CssList<CssFilterFunction>, initial: none, animate: true }
+      - { name: filter, kind: Filter, type: CssList<CssFilterFunction>, initial: none, animate: true }
+
+# Shorthands, as gtkcssshorthandpropertyimpl.c. The parser names are
+# methods of CssShorthandParsers.
+shorthands:
+  - { name: font, parser: Font, longhands: [font-family, font-style, font-variant-caps, font-weight, font-width, font-size] }
+  - { name: margin, parser: Box, longhands: [margin-top, margin-right, margin-bottom, margin-left] }
+  - { name: padding, parser: Box, longhands: [padding-top, padding-right, padding-bottom, padding-left] }
+  - { name: border-width, parser: Box, longhands: [border-top-width, border-right-width, border-bottom-width, border-left-width] }
+  - { name: border-radius, parser: BorderRadius, longhands: [border-top-left-radius, border-top-right-radius, border-bottom-right-radius, border-bottom-left-radius] }
+  - { name: border-color, parser: Box, longhands: [border-top-color, border-right-color, border-bottom-color, border-left-color] }
+  - { name: border-style, parser: Box, longhands: [border-top-style, border-right-style, border-bottom-style, border-left-style] }
+  - { name: border-image, parser: BorderImage, longhands: [border-image-source, border-image-slice, border-image-width, border-image-repeat] }
+  - { name: border-top, parser: BorderSide, longhands: [border-top-width, border-top-style, border-top-color] }
+  - { name: border-right, parser: BorderSide, longhands: [border-right-width, border-right-style, border-right-color] }
+  - { name: border-bottom, parser: BorderSide, longhands: [border-bottom-width, border-bottom-style, border-bottom-color] }
+  - { name: border-left, parser: BorderSide, longhands: [border-left-width, border-left-style, border-left-color] }
+  - { name: border, parser: Border, longhands: [border-top-width, border-right-width, border-bottom-width, border-left-width, border-top-style, border-right-style, border-bottom-style, border-left-style, border-top-color, border-right-color, border-bottom-color, border-left-color, border-image-source, border-image-slice, border-image-width, border-image-repeat] }
+  - { name: outline, parser: BorderSide, longhands: [outline-width, outline-style, outline-color] }
+  - { name: background, parser: Background, longhands: [background-image, background-position, background-size, background-repeat, background-clip, background-origin, background-color] }
+  - { name: transition, parser: Transition, longhands: [transition-property, transition-duration, transition-delay, transition-timing-function] }
+  - { name: animation, parser: Animation, longhands: [animation-name, animation-iteration-count, animation-duration, animation-delay, animation-timing-function, animation-direction, animation-fill-mode] }
+  - { name: text-decoration, parser: TextDecoration, longhands: [text-decoration-line, text-decoration-style, text-decoration-color] }
+  - { name: font-variant, parser: FontVariant, longhands: [font-variant-ligatures, font-variant-position, font-variant-caps, font-variant-numeric, font-variant-alternates, font-variant-east-asian] }
+  - { name: font-stretch, parser: FontStretch, longhands: [font-width] }
+  - { name: all, parser: All, longhands: ["*"] }
+
+# For docs/css-support.md: the rest of the language the engine supports.
+functions: [calc(), min(), max(), clamp(), var(), rgb(), rgba(), hsl(), hsla(), hwb(), oklab(), oklch(), color(), color-mix(), "relative colors (from)", shade(), alpha(), mix(), lighter(), darker(), linear-gradient(), repeating-linear-gradient(), radial-gradient(), repeating-radial-gradient(), image(), cross-fade(), url(), -gtk-icontheme(), -gtk-recolor(), cubic-bezier(), steps(), translate(), translateX(), translateY(), scale(), scaleX(), scaleY(), rotate(), skew(), skewX(), skewY(), matrix(), opacity(), drop-shadow(), blur(), brightness(), contrast(), grayscale(), hue-rotate(), invert(), saturate(), sepia()]
+at-rules: ["@define-color", "@media", "@keyframes", "@import"]
+media-features: ["prefers-color-scheme: light | dark", "prefers-contrast: no-preference | more | less", "prefers-reduced-motion: no-preference | reduce"]
+pseudo-classes: [":active", ":hover", ":selected", ":disabled", ":indeterminate", ":focus", ":focus-visible", ":focus-within", ":backdrop", ":link", ":visited", ":checked", ":dir(ltr)", ":dir(rtl)", ":drop(active)", ":first-child", ":last-child", ":only-child", ":nth-child()", ":nth-last-child()", ":root", ":not()"]

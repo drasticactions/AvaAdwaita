@@ -1,0 +1,61 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- menubar > item, as GtkPopoverMenuBar; an open item is :selected. -->
+  <ControlTheme x:Key="AdwMenuBarItem" TargetType="MenuItem">
+    <Setter Property="adw:Css.Node" Value="item" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <adw:AdwBox>
+            <ContentPresenter Name="PART_HeaderPresenter"
+                              Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              RecognizesAccessKey="True"
+                              VerticalAlignment="Center">
+              <ContentPresenter.DataTemplates>
+                <adw:LabelTemplate RecognizesAccessKey="True" />
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+          </adw:AdwBox>
+          <Popup Name="PART_Popup"
+                 WindowManagerAddShadowHint="False"
+                 Placement="BottomEdgeAlignedLeft"
+                 IsLightDismissEnabled="True"
+                 OverlayInputPassThroughElement="{Binding $parent[Menu]}"
+                 IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
+            <Decorator>
+              <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="menu background">
+                <adw:PopoverContents>
+                  <!-- GtkPopoverMenu: contents > scrolledwindow > viewport > stack > box.vertical > box.vertical. -->
+                  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <adw:AdwBox adw:Css.Node="stack">
+                      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                        <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                          <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Grid.IsSharedSizeScope="True" />
+                        </adw:AdwBox>
+                      </adw:AdwBox>
+                    </adw:AdwBox>
+                  </ScrollViewer>
+                </adw:PopoverContents>
+              </adw:AdwBox>
+            </Decorator>
+          </Popup>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type Menu}" TargetType="Menu">
+    <Setter Property="adw:Css.Node" Value="menubar" />
+    <Setter Property="ItemContainerTheme" Value="{StaticResource AdwMenuBarItem}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" KeyboardNavigation.TabNavigation="Continue" />
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

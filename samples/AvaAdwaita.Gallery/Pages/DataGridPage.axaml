@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:AvaAdwaita.Gallery.Pages"
+             x:Class="AvaAdwaita.Gallery.Pages.DataGridPage">
+  <UserControl.Styles>
+    <Style Selector="DataGrid">
+      <Setter Property="Height" Value="220" />
+      <Setter Property="CanUserReorderColumns" Value="True" />
+      <Setter Property="CanUserSortColumns" Value="True" />
+    </Style>
+  </UserControl.Styles>
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Data Grid" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Column view" />
+      <DataGrid Name="Plain" GridLinesVisibility="None" x:DataType="local:FileRow">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+          <DataGridTextColumn Header="Kind" Binding="{Binding Kind}" />
+          <DataGridTextColumn Header="Size" Binding="{Binding Size}" IsReadOnly="True" />
+          <DataGridCheckBoxColumn Header="Starred" Binding="{Binding Starred}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Data table with separators" />
+      <DataGrid Name="Table" Classes="data-table" GridLinesVisibility="All" x:DataType="local:FileRow">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+          <DataGridTextColumn Header="Kind" Binding="{Binding Kind}" />
+          <DataGridTextColumn Header="Size" Binding="{Binding Size}" IsReadOnly="True" />
+          <DataGridCheckBoxColumn Header="Starred" Binding="{Binding Starred}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Grouped" />
+      <DataGrid Name="Grouped" GridLinesVisibility="None" x:DataType="local:FileRow">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+          <DataGridTextColumn Header="Kind" Binding="{Binding Kind}" />
+          <DataGridTextColumn Header="Size" Binding="{Binding Size}" IsReadOnly="True" />
+          <DataGridCheckBoxColumn Header="Starred" Binding="{Binding Starred}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

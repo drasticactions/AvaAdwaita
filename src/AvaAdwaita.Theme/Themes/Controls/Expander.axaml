@@ -1,0 +1,57 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- GtkExpander: expander-widget > box.vertical > title.horizontal > expander.horizontal + label; content -->
+  <ControlTheme x:Key="AdwExpanderTitle" TargetType="ToggleButton">
+    <Setter Property="adw:Css.Node" Value="title" />
+    <Setter Property="adw:Css.Classes" Value="horizontal" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwStack Orientation="Horizontal">
+            <adw:AdwIcon adw:Css.Node="expander" adw:Css.Classes="horizontal" />
+            <ContentPresenter Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              VerticalContentAlignment="Stretch"
+                              RecognizesAccessKey="True">
+              <ContentPresenter.DataTemplates>
+                <adw:LabelTemplate RecognizesAccessKey="True" />
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+          </adw:AdwStack>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type Expander}" TargetType="Expander">
+    <Setter Property="adw:Css.Node" Value="expander-widget" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+            <DockPanel>
+              <ToggleButton Name="PART_toggle" DockPanel.Dock="Top" Theme="{StaticResource AdwExpanderTitle}" Classes="adw-no-auto-class"
+                            Content="{TemplateBinding Header}"
+                            ContentTemplate="{TemplateBinding HeaderTemplate}"
+                            IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" />
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                IsVisible="{TemplateBinding IsExpanded}">
+                <ContentPresenter.DataTemplates>
+                  <adw:LabelTemplate />
+                </ContentPresenter.DataTemplates>
+              </ContentPresenter>
+            </DockPanel>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

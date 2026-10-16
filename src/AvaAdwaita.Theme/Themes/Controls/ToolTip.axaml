@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- GtkTooltipWindow: tooltip.background > box.horizontal > label (its image shows only for an icon). -->
+  <ControlTheme x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+    <Setter Property="adw:Css.Node" Value="tooltip" />
+    <Setter Property="adw:Css.Classes" Value="background" />
+    <Setter Property="MaxWidth" Value="360" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}">
+              <ContentPresenter.DataTemplates>
+                <adw:LabelTemplate />
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

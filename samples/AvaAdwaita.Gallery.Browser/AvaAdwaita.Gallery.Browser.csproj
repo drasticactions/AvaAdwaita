@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
+
+  <PropertyGroup>
+    <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>AvaAdwaita.Gallery.Browser</RootNamespace>
+    <TrimmerSingleWarn>true</TrimmerSingleWarn>
+    <!-- Avalonia.Controls.DataGrid is not marked trimmable and reflects over item types (auto-generated
+         columns, property paths, the collection view), so the linker reports it as one IL2104/IL3053
+         summary. Every other assembly here is trimmable and reports warnings individually, which stay
+         errors; only the summary for assemblies that are not marked trimmable is silenced. -->
+    <NoWarn>$(NoWarn);IL2104;IL3053</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Fonts\*.otf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AvaAdwaita.Gallery\AvaAdwaita.Gallery.csproj" />
+  </ItemGroup>
+
+</Project>

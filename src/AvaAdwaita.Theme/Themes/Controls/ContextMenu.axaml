@@ -1,0 +1,30 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- popover.menu > contents, with no arrow, as a context menu. -->
+  <ControlTheme x:Key="{x:Type ContextMenu}" TargetType="ContextMenu">
+    <Setter Property="WindowManagerAddShadowHint" Value="False" />
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <!-- The popover node sits inside, so the presenter (the popup's child) can hold the shadow as its margin. -->
+        <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="menu background">
+          <adw:PopoverContents>
+            <!-- GtkPopoverMenu: contents > scrolledwindow > viewport > stack > box.vertical > box.vertical. -->
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+              <adw:AdwBox adw:Css.Node="stack">
+                <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                  <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                    <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    KeyboardNavigation.TabNavigation="Continue" Grid.IsSharedSizeScope="True" />
+                  </adw:AdwBox>
+                </adw:AdwBox>
+              </adw:AdwBox>
+            </ScrollViewer>
+          </adw:PopoverContents>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

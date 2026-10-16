@@ -1,0 +1,185 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- A view switcher (Classes="view-switcher"): AdwToggleGroup's toggle-group > toggle.text-button.toggle > label, with a
+       separator between toggles. The item itself is no node; its separator and toggle are the group's children. -->
+  <ControlTheme x:Key="AdwViewSwitcherToggle" TargetType="TabItem">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal">
+          <adw:AdwToggleSeparator />
+          <adw:AdwBox adw:Css.Node="toggle" adw:Css.Classes="text-button toggle" adw:Css.StateSource="TemplatedParent">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                              RecognizesAccessKey="True">
+              <ContentPresenter.DataTemplates>
+                <adw:LabelTemplate RecognizesAccessKey="True" TextAlignment="Center" />
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+          </adw:AdwBox>
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- GtkNotebook: notebook.frame > header.top.horizontal > tabs > tab:checked > label; stack > page -->
+  <ControlTheme x:Key="{x:Type TabControl}" TargetType="TabControl">
+    <Setter Property="adw:Css.Node" Value="notebook" />
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal" />
+      </ItemsPanelTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <DockPanel>
+            <adw:AdwBox Name="PART_Header" DockPanel.Dock="{TemplateBinding TabStripPlacement}" adw:Css.Node="header" adw:Css.Classes="{TemplateBinding TabStripPlacement, Converter={x:Static adw:CssConverters.NotebookHeaderClasses}}">
+              <adw:AdwBox adw:Css.Node="tabs">
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </adw:AdwBox>
+            </adw:AdwBox>
+            <adw:AdwBox adw:Css.Node="stack">
+              <Panel>
+                <ContentPresenter Name="PART_SelectedContentHost2" IsVisible="False"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <ContentPresenter Name="PART_SelectedContentHost"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                  <!-- A text page is a GtkLabel filling the page, its text centered by the default xalign. -->
+                  <ContentPresenter.DataTemplates>
+                    <adw:LabelTemplate TextAlignment="Center" />
+                  </ContentPresenter.DataTemplates>
+                </ContentPresenter>
+              </Panel>
+            </adw:AdwBox>
+          </DockPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <!-- GtkNotebook puts the stack's node before the header's when the tabs are at the bottom or the right. -->
+    <Style Selector="^[TabStripPlacement=Bottom], ^[TabStripPlacement=Right]">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <adw:AdwBox>
+            <adw:AdwDockLast Dock="{TemplateBinding TabStripPlacement}">
+              <adw:AdwBox adw:Css.Node="stack">
+              <Panel>
+                <ContentPresenter Name="PART_SelectedContentHost2" IsVisible="False"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <ContentPresenter Name="PART_SelectedContentHost"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                  <!-- A text page is a GtkLabel filling the page, its text centered by the default xalign. -->
+                  <ContentPresenter.DataTemplates>
+                    <adw:LabelTemplate TextAlignment="Center" />
+                  </ContentPresenter.DataTemplates>
+                </ContentPresenter>
+              </Panel>
+            </adw:AdwBox>
+              <adw:AdwBox Name="PART_Header" DockPanel.Dock="{TemplateBinding TabStripPlacement}" adw:Css.Node="header" adw:Css.Classes="{TemplateBinding TabStripPlacement, Converter={x:Static adw:CssConverters.NotebookHeaderClasses}}">
+              <adw:AdwBox adw:Css.Node="tabs">
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </adw:AdwBox>
+            </adw:AdwBox>
+            </adw:AdwDockLast>
+          </adw:AdwBox>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="^.view-switcher">
+      <Setter Property="adw:Css.Node" Value="stack" />
+      <Setter Property="ItemContainerTheme" Value="{StaticResource AdwViewSwitcherToggle}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <DockPanel>
+            <adw:AdwBox DockPanel.Dock="Top" adw:Css.Node="toggle-group" HorizontalAlignment="Center">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </adw:AdwBox>
+            <Panel>
+              <ContentPresenter Name="PART_SelectedContentHost2" IsVisible="False" />
+              <ContentPresenter Name="PART_SelectedContentHost"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                <ContentPresenter.DataTemplates>
+                  <adw:LabelTemplate />
+                </ContentPresenter.DataTemplates>
+              </ContentPresenter>
+            </Panel>
+          </DockPanel>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="^[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
+      <Setter Property="Orientation" Value="Vertical" />
+    </Style>
+    <Style Selector="^[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
+      <Setter Property="Orientation" Value="Vertical" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TabItem}" TargetType="TabItem">
+    <Setter Property="adw:Css.Node" Value="tab" />
+    <Setter Property="adw:Css.Position" Value="Item" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Header}"
+                            ContentTemplate="{TemplateBinding HeaderTemplate}"
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                            RecognizesAccessKey="True">
+            <ContentPresenter.DataTemplates>
+              <adw:LabelTemplate RecognizesAccessKey="True" TextAlignment="Center" />
+            </ContentPresenter.DataTemplates>
+          </ContentPresenter>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- TabStrip: notebook > header > tabs > tab -->
+  <ControlTheme x:Key="{x:Type TabStrip}" TargetType="TabStrip">
+    <Setter Property="adw:Css.Node" Value="notebook" />
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal" />
+      </ItemsPanelTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="header" adw:Css.Classes="top horizontal">
+            <adw:AdwBox adw:Css.Node="tabs">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </adw:AdwBox>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TabStripItem}" TargetType="TabStripItem">
+    <Setter Property="adw:Css.Node" Value="tab" />
+    <Setter Property="adw:Css.Position" Value="Item" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <ContentPresenter.DataTemplates>
+              <adw:LabelTemplate TextAlignment="Center" />
+            </ContentPresenter.DataTemplates>
+          </ContentPresenter>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

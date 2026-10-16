@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             x:Class="AvaAdwaita.Gallery.Pages.PickersPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Calendar &amp; Pickers" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Calendar" />
+      <Calendar SelectedDate="{x:Static sys:DateTime.Today}" DisplayDate="{x:Static sys:DateTime.Today}" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Date entry" />
+      <CalendarDatePicker SelectedDate="{x:Static sys:DateTime.Today}" Width="220" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Date and time" />
+      <WrapPanel Classes="gallery-row">
+        <DatePicker SelectedDate="{x:Static sys:DateTimeOffset.Now}" />
+        <TimePicker Name="Time" />
+      </WrapPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

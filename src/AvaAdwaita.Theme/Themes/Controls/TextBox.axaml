@@ -1,0 +1,149 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- A scroll viewer with no node, for the text inside an entry. -->
+  <ControlTheme x:Key="AdwPlainScrollViewer" TargetType="ScrollViewer">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ScrollContentPresenter Name="PART_ContentPresenter" Padding="{TemplateBinding Padding}" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- A multi-line text box's scroll viewer: no node of its own, as the text box is the scrolled window, and
+       its overlay scroll bars are the scrolled window's. -->
+  <ControlTheme x:Key="AdwTextViewScrollViewer" TargetType="ScrollViewer">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <ScrollContentPresenter Name="PART_ContentPresenter" Padding="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+          <ScrollBar Name="PART_HorizontalScrollBar" Orientation="Horizontal" VerticalAlignment="Bottom" adw:Css.Classes="bottom" />
+          <ScrollBar Name="PART_VerticalScrollBar" Orientation="Vertical" HorizontalAlignment="Right" adw:Css.Classes="right" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- entry > text (> placeholder, selection); multi-line: scrolledwindow.frame > textview.view > text -->
+  <ControlTheme x:Key="{x:Type TextBox}" TargetType="TextBox">
+    <Setter Property="adw:Css.Node" Value="entry" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="CaretBrush" Value="{adw:Css CaretColor}" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <adw:AdwBox>
+            <DockPanel>
+              <ContentPresenter DockPanel.Dock="Left" Content="{TemplateBinding InnerLeftContent}" VerticalAlignment="Center" />
+              <ContentPresenter DockPanel.Dock="Right" Content="{TemplateBinding InnerRightContent}" VerticalAlignment="Center" />
+              <adw:AdwBox Name="PART_Text" adw:Css.Node="text" adw:Css.StateSource="TemplatedParent">
+                <Panel>
+                  <Panel Name="PART_Selection" adw:Css.Node="selection" IsVisible="False" />
+                  <adw:AdwEntryWidth Placeholder="{Binding #PART_Placeholder}">
+                    <ScrollViewer Name="PART_ScrollViewer"
+                                  Theme="{StaticResource AdwPlainScrollViewer}"
+                                  HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                  VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                                  VerticalContentAlignment="Stretch">
+                      <Panel>
+                        <adw:AdwLabel Name="PART_Placeholder" adw:Css.Node="placeholder"
+                                      Text="{TemplateBinding PlaceholderText}"
+                                      TextAlignment="{TemplateBinding TextAlignment}"
+                                      TextWrapping="{TemplateBinding TextWrapping}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                        <TextPresenter Name="PART_TextPresenter"
+                                       Text="{TemplateBinding Text, Mode=TwoWay}"
+                                       CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                       CaretIndex="{TemplateBinding CaretIndex}"
+                                       SelectionStart="{TemplateBinding SelectionStart}"
+                                       SelectionEnd="{TemplateBinding SelectionEnd}"
+                                       TextAlignment="{TemplateBinding TextAlignment}"
+                                       TextWrapping="{TemplateBinding TextWrapping}"
+                                       LineHeight="{TemplateBinding LineHeight}"
+                                       LetterSpacing="{TemplateBinding LetterSpacing}"
+                                       PasswordChar="{TemplateBinding PasswordChar}"
+                                       RevealPassword="{TemplateBinding RevealPassword}"
+                                       SelectionBrush="{adw:Css BackgroundColor, Node=PART_Selection}"
+                                       CaretBrush="{TemplateBinding CaretBrush}"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                          <TextPresenter.SelectionForegroundBrush>
+                            <MultiBinding Converter="{x:Static adw:CssConverters.SelectedText}">
+                              <Binding Path="Foreground" RelativeSource="{RelativeSource Self}" />
+                              <Binding Path="(adw:Css.Style)" ElementName="PART_Selection" />
+                            </MultiBinding>
+                          </TextPresenter.SelectionForegroundBrush>
+                        </TextPresenter>
+                      </Panel>
+                    </ScrollViewer>
+                  </adw:AdwEntryWidth>
+                </Panel>
+              </adw:AdwBox>
+            </DockPanel>
+          </adw:AdwBox>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+
+    <!-- GtkTextView in a framed GtkScrolledWindow. -->
+    <Style Selector="^[AcceptsReturn=True]">
+      <Setter Property="adw:Css.Node" Value="scrolledwindow" />
+      <Setter Property="adw:Css.Classes" Value="frame" />
+      <Setter Property="VerticalContentAlignment" Value="Top" />
+      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <DataValidationErrors>
+            <adw:AdwBox>
+              <ScrollViewer Name="PART_ScrollViewer"
+                            Theme="{StaticResource AdwTextViewScrollViewer}"
+                            HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                            VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                            AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+                <adw:AdwBox adw:Css.Node="textview" adw:Css.Classes="view" adw:Css.StateSource="TemplatedParent">
+                  <adw:AdwBox Name="PART_Text" adw:Css.Node="text" adw:Css.StateSource="TemplatedParent">
+                    <Panel>
+                      <Panel Name="PART_Selection" adw:Css.Node="selection" IsVisible="False" />
+                      <adw:AdwLabel Name="PART_Placeholder" adw:Css.Node="placeholder"
+                                    Text="{TemplateBinding PlaceholderText}"
+                                    TextAlignment="{TemplateBinding TextAlignment}"
+                                    TextWrapping="{TemplateBinding TextWrapping}"
+                                    IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                      <TextPresenter Name="PART_TextPresenter"
+                                     Text="{TemplateBinding Text, Mode=TwoWay}"
+                                     CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                     CaretIndex="{TemplateBinding CaretIndex}"
+                                     SelectionStart="{TemplateBinding SelectionStart}"
+                                     SelectionEnd="{TemplateBinding SelectionEnd}"
+                                     TextAlignment="{TemplateBinding TextAlignment}"
+                                     TextWrapping="{TemplateBinding TextWrapping}"
+                                     LineHeight="{TemplateBinding LineHeight}"
+                                     LetterSpacing="{TemplateBinding LetterSpacing}"
+                                     SelectionBrush="{adw:Css BackgroundColor, Node=PART_Selection}"
+                                     CaretBrush="{TemplateBinding CaretBrush}"
+                                     TextElement.Foreground="{Binding $self.(adw:Css.Style), Converter={x:Static adw:CssConverters.PangoForeground}}"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Top" >
+                        <TextPresenter.SelectionForegroundBrush>
+                          <MultiBinding Converter="{x:Static adw:CssConverters.SelectedText}">
+                            <Binding Path="Foreground" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="(adw:Css.Style)" ElementName="PART_Selection" />
+                          </MultiBinding>
+                        </TextPresenter.SelectionForegroundBrush>
+                      </TextPresenter>
+                    </Panel>
+                  </adw:AdwBox>
+                </adw:AdwBox>
+              </ScrollViewer>
+            </adw:AdwBox>
+          </DataValidationErrors>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,1 @@
+# Scenes known to fail the pixel gate against GTK at scale 2, one id per line; GoldenTests keeps this list exact.

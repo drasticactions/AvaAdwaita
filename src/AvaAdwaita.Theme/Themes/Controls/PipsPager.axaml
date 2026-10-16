@@ -1,0 +1,35 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- AdwCarouselIndicatorDots: carouselindicatordots, its dots drawn as libadwaita draws them. -->
+  <ControlTheme x:Key="{x:Type PipsPager}" TargetType="PipsPager">
+    <Setter Property="adw:Css.Node" Value="carouselindicatordots" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <StackPanel Name="PART_RootPanel" Orientation="{TemplateBinding Orientation}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Name="PART_PreviousButton" Classes="flat circular" IsVisible="{TemplateBinding IsPreviousButtonVisible}" VerticalAlignment="Center">
+              <adw:AdwIcon IconName="go-previous-symbolic" />
+            </Button>
+            <adw:AdwCarouselDots Count="{TemplateBinding NumberOfPages}" Orientation="{TemplateBinding Orientation}"
+                                 Position="{Binding SelectedPageIndex, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                 VerticalAlignment="Center" />
+            <Button Name="PART_NextButton" Classes="flat circular" IsVisible="{TemplateBinding IsNextButtonVisible}" VerticalAlignment="Center">
+              <adw:AdwIcon IconName="go-next-symbolic" />
+            </Button>
+          </StackPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:first-page /template/ Button#PART_PreviousButton">
+      <Setter Property="Opacity" Value="0" />
+      <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+    <Style Selector="^:last-page /template/ Button#PART_NextButton">
+      <Setter Property="Opacity" Value="0" />
+      <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

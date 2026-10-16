@@ -1,0 +1,18 @@
+using Avalonia.Metadata;
+
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Animation")]
+[assembly: XmlnsPrefix("https://github.com/avaadwaita", "adw")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Sources")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Nodes")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.CssEngine.Cascade")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.CssEngine.Computed")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.CssEngine.Selectors")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.CssEngine.Syntax")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.CssEngine.Values")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Presenters")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Chrome")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Markup")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Icons")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Resources")]
+[assembly: XmlnsDefinition("https://github.com/avaadwaita", "AvaAdwaita.Settings")]

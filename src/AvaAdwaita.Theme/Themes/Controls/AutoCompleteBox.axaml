@@ -1,0 +1,40 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- An entry whose suggestions are popover.menu > contents > listview > row, without an arrow. -->
+  <ControlTheme x:Key="{x:Type AutoCompleteBox}" TargetType="AutoCompleteBox">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <TextBox Name="PART_TextBox"
+                   CaretIndex="{TemplateBinding CaretIndex, Mode=TwoWay}"
+                   ClearSelectionOnLostFocus="{TemplateBinding ClearSelectionOnLostFocus}"
+                   DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}"
+                   PlaceholderText="{TemplateBinding PlaceholderText}"
+                   MaxLength="{TemplateBinding MaxLength}"
+                   InnerLeftContent="{TemplateBinding InnerLeftContent}"
+                   InnerRightContent="{TemplateBinding InnerRightContent}" />
+          <Popup Name="PART_Popup"
+                 IsLightDismissEnabled="True"
+                 PlacementTarget="{TemplateBinding}"
+                 WindowManagerAddShadowHint="False">
+            <Decorator>
+              <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="menu background">
+                <adw:PopoverFrame HasArrow="False">
+                  <adw:PopoverContents MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}">
+                    <ListBox Name="PART_SelectingItemsControl" adw:Css.Node="listview" MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                             ItemTemplate="{TemplateBinding ItemTemplate}"
+                             ScrollViewer.IsScrollChainingEnabled="False"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                  </adw:PopoverContents>
+                </adw:PopoverFrame>
+              </adw:AdwBox>
+            </Decorator>
+          </Popup>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

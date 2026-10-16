@@ -1,0 +1,320 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- A selector's items are plain text in the spin button's text node. -->
+  <ControlTheme x:Key="AdwPickerItem" TargetType="ListBoxItem">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Name="PART_ContentPresenter" Background="Transparent"
+                          Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                          HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch">
+          <ContentPresenter.DataTemplates>
+            <adw:LabelTemplate Node="" TextAlignment="Center" />
+          </ContentPresenter.DataTemplates>
+        </ContentPresenter>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- The button that opens a picker: menubutton > button.toggle -->
+  <ControlTheme x:Key="AdwPickerButton" TargetType="Button">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="adw:Css.Classes" Value="toggle" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Content="{TemplateBinding Content}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwPickerAction" TargetType="Button" BasedOn="{StaticResource AdwButtonBase}">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+  </ControlTheme>
+  <!-- menubutton > button.toggle showing the day, month and year; the presenter opens in a popover. -->
+  <ControlTheme x:Key="{x:Type DatePicker}" TargetType="DatePicker">
+    <Setter Property="adw:Css.Node" Value="menubutton" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <adw:AdwBox>
+            <Panel>
+              <Button Name="PART_FlyoutButton" Theme="{StaticResource AdwPickerButton}" TemplatedControl.IsTemplateFocusTarget="True"
+                      IsEnabled="{TemplateBinding IsEnabled}">
+                <Grid Name="PART_ButtonContentGrid" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
+                  <adw:AdwLabel Name="PART_DayTextBlock" Text="day" HorizontalAlignment="Center" />
+                  <adw:AdwLabel Name="PART_MonthTextBlock" Text="month" TextAlignment="Start" />
+                  <adw:AdwLabel Name="PART_YearTextBlock" Text="year" HorizontalAlignment="Center" />
+                  <Rectangle Name="PART_FirstSpacer" Grid.Column="1" Width="6" Fill="Transparent" />
+                  <Rectangle Name="PART_SecondSpacer" Grid.Column="3" Width="6" Fill="Transparent" />
+                </Grid>
+              </Button>
+              <Popup Name="PART_Popup" IsLightDismissEnabled="True" Placement="Bottom" PlacementTarget="{TemplateBinding}" WindowManagerAddShadowHint="False">
+                <Decorator>
+                  <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="background">
+                    <adw:PopoverFrame>
+                      <adw:PopoverContents>
+                        <DatePickerPresenter Name="PART_PickerPresenter" />
+                      </adw:PopoverContents>
+                    </adw:PopoverFrame>
+                  </adw:AdwBox>
+                </Decorator>
+              </Popup>
+            </Panel>
+          </adw:AdwBox>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:hasnodate /template/ adw|AdwLabel">
+      <Setter Property="Opacity" Value="0.55" />
+    </Style>
+  </ControlTheme>
+  <!-- GTK has no tumbler: each column is a vertical spin button in a popover's box. -->
+  <ControlTheme x:Key="{x:Type DatePickerPresenter}" TargetType="DatePickerPresenter">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+          <DockPanel>
+            <adw:AdwBox DockPanel.Dock="Bottom" adw:Css.Node="box" adw:Css.Classes="horizontal" Margin="0,6,0,0">
+              <UniformGrid Columns="2">
+                <Button Name="PART_DismissButton" Theme="{StaticResource AdwPickerAction}" Content="{DynamicResource AdwStringCancel}" Margin="0,0,3,0" />
+                <Button Name="PART_AcceptButton" Theme="{StaticResource AdwPickerAction}" Classes="suggested-action" Content="{DynamicResource AdwStringSelect}" Margin="3,0,0,0" />
+              </UniformGrid>
+            </adw:AdwBox>
+            <Grid Name="PART_PickerContainer">
+              <Grid.Styles>
+                <Style Selector="DateTimePickerPanel > ListBoxItem">
+                  <Setter Property="Theme" Value="{StaticResource AdwPickerItem}" />
+                </Style>
+              </Grid.Styles>
+              <Panel Name="PART_MonthHost">
+                <adw:AdwBox adw:Css.Node="spinbutton" adw:Css.Classes="vertical" adw:Css.StateSource="Self" HorizontalAlignment="Center">
+                  <!-- GtkSpinButton, vertical: up, text, down. Avalonia's down part steps forward, so it is the + button. -->
+                  <Grid RowDefinitions="Auto,*,Auto">
+                    <RepeatButton Name="PART_MonthDownButton" Grid.Row="0" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up">
+                      <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                    <adw:AdwBox Grid.Row="1" adw:Css.Node="text">
+                      <adw:AdwPickerColumn>
+                      <ScrollViewer Height="30" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"
+                                    Theme="{StaticResource AdwPlainScrollViewer}">
+                        <DateTimePickerPanel Name="PART_MonthSelector" ItemHeight="30" PanelType="Month" ShouldLoop="True" />
+                      </ScrollViewer>
+                      </adw:AdwPickerColumn>
+                    </adw:AdwBox>
+                    <RepeatButton Name="PART_MonthUpButton" Grid.Row="2" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down">
+                      <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                  </Grid>
+                </adw:AdwBox>
+              </Panel>
+              <Panel Name="PART_DayHost">
+                <adw:AdwBox adw:Css.Node="spinbutton" adw:Css.Classes="vertical" adw:Css.StateSource="Self" HorizontalAlignment="Center">
+                  <!-- GtkSpinButton, vertical: up, text, down. Avalonia's down part steps forward, so it is the + button. -->
+                  <Grid RowDefinitions="Auto,*,Auto">
+                    <RepeatButton Name="PART_DayDownButton" Grid.Row="0" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up">
+                      <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                    <adw:AdwBox Grid.Row="1" adw:Css.Node="text">
+                      <adw:AdwPickerColumn>
+                      <ScrollViewer Height="30" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"
+                                    Theme="{StaticResource AdwPlainScrollViewer}">
+                        <DateTimePickerPanel Name="PART_DaySelector" ItemHeight="30" PanelType="Day" ShouldLoop="True" />
+                      </ScrollViewer>
+                      </adw:AdwPickerColumn>
+                    </adw:AdwBox>
+                    <RepeatButton Name="PART_DayUpButton" Grid.Row="2" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down">
+                      <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                  </Grid>
+                </adw:AdwBox>
+              </Panel>
+              <Panel Name="PART_YearHost">
+                <adw:AdwBox adw:Css.Node="spinbutton" adw:Css.Classes="vertical" adw:Css.StateSource="Self" HorizontalAlignment="Center">
+                  <!-- GtkSpinButton, vertical: up, text, down. Avalonia's down part steps forward, so it is the + button. -->
+                  <Grid RowDefinitions="Auto,*,Auto">
+                    <RepeatButton Name="PART_YearDownButton" Grid.Row="0" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up">
+                      <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                    <adw:AdwBox Grid.Row="1" adw:Css.Node="text">
+                      <adw:AdwPickerColumn>
+                      <ScrollViewer Height="30" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"
+                                    Theme="{StaticResource AdwPlainScrollViewer}">
+                        <DateTimePickerPanel Name="PART_YearSelector" ItemHeight="30" PanelType="Year" ShouldLoop="False" />
+                      </ScrollViewer>
+                      </adw:AdwPickerColumn>
+                    </adw:AdwBox>
+                    <RepeatButton Name="PART_YearUpButton" Grid.Row="2" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down">
+                      <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                  </Grid>
+                </adw:AdwBox>
+              </Panel>
+              <Rectangle Name="PART_FirstSpacer" Width="6" Fill="Transparent" />
+              <Rectangle Name="PART_SecondSpacer" Width="6" Fill="Transparent" />
+            </Grid>
+          </DockPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+  <!-- menubutton > button.toggle showing the hour, minute, second and period; the presenter opens in a popover. -->
+  <ControlTheme x:Key="{x:Type TimePicker}" TargetType="TimePicker">
+    <Setter Property="adw:Css.Node" Value="menubutton" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <adw:AdwBox>
+            <Panel>
+              <Button Name="PART_FlyoutButton" Theme="{StaticResource AdwPickerButton}" TemplatedControl.IsTemplateFocusTarget="True"
+                      IsEnabled="{TemplateBinding IsEnabled}">
+                <Grid Name="PART_FlyoutButtonContentGrid">
+                  <Border Name="PART_FirstPickerHost" Grid.Column="0"><adw:AdwLabel Name="PART_HourTextBlock" Text="hour" HorizontalAlignment="Center" /></Border>
+                  <Rectangle Name="PART_FirstColumnDivider" Grid.Column="1" Width="6" Fill="Transparent" />
+                  <Border Name="PART_SecondPickerHost" Grid.Column="2"><adw:AdwLabel Name="PART_MinuteTextBlock" Text="minute" HorizontalAlignment="Center" /></Border>
+                  <Rectangle Name="PART_SecondColumnDivider" Grid.Column="3" Width="6" Fill="Transparent" />
+                  <Border Name="PART_ThirdPickerHost" Grid.Column="4"><adw:AdwLabel Name="PART_SecondTextBlock" Text="second" HorizontalAlignment="Center" /></Border>
+                  <Rectangle Name="PART_ThirdColumnDivider" Grid.Column="5" Width="6" Fill="Transparent" />
+                  <Border Name="PART_FourthPickerHost" Grid.Column="6"><adw:AdwLabel Name="PART_PeriodTextBlock" HorizontalAlignment="Center" /></Border>
+                </Grid>
+              </Button>
+              <Popup Name="PART_Popup" IsLightDismissEnabled="True" Placement="Bottom" PlacementTarget="{TemplateBinding}" WindowManagerAddShadowHint="False">
+                <Decorator>
+                  <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="background">
+                    <adw:PopoverFrame>
+                      <adw:PopoverContents>
+                        <TimePickerPresenter Name="PART_PickerPresenter" />
+                      </adw:PopoverContents>
+                    </adw:PopoverFrame>
+                  </adw:AdwBox>
+                </Decorator>
+              </Popup>
+            </Panel>
+          </adw:AdwBox>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:hasnotime /template/ adw|AdwLabel">
+      <Setter Property="Opacity" Value="0.55" />
+    </Style>
+  </ControlTheme>
+  <!-- GTK has no tumbler: each column is a vertical spin button in a popover's box. -->
+  <ControlTheme x:Key="{x:Type TimePickerPresenter}" TargetType="TimePickerPresenter">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+          <DockPanel>
+            <adw:AdwBox DockPanel.Dock="Bottom" adw:Css.Node="box" adw:Css.Classes="horizontal" Margin="0,6,0,0">
+              <UniformGrid Columns="2">
+                <Button Name="PART_DismissButton" Theme="{StaticResource AdwPickerAction}" Content="{DynamicResource AdwStringCancel}" Margin="0,0,3,0" />
+                <Button Name="PART_AcceptButton" Theme="{StaticResource AdwPickerAction}" Classes="suggested-action" Content="{DynamicResource AdwStringSelect}" Margin="3,0,0,0" />
+              </UniformGrid>
+            </adw:AdwBox>
+            <Grid Name="PART_PickerContainer">
+              <Grid.Styles>
+                <Style Selector="DateTimePickerPanel > ListBoxItem">
+                  <Setter Property="Theme" Value="{StaticResource AdwPickerItem}" />
+                </Style>
+              </Grid.Styles>
+              <Panel Name="PART_HourHost">
+                <adw:AdwBox adw:Css.Node="spinbutton" adw:Css.Classes="vertical" adw:Css.StateSource="Self" HorizontalAlignment="Center">
+                  <!-- GtkSpinButton, vertical: up, text, down. Avalonia's down part steps forward, so it is the + button. -->
+                  <Grid RowDefinitions="Auto,*,Auto">
+                    <RepeatButton Name="PART_HourDownButton" Grid.Row="0" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up">
+                      <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                    <adw:AdwBox Grid.Row="1" adw:Css.Node="text">
+                      <adw:AdwPickerColumn>
+                      <ScrollViewer Height="30" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"
+                                    Theme="{StaticResource AdwPlainScrollViewer}">
+                        <DateTimePickerPanel Name="PART_HourSelector" ItemHeight="30" PanelType="Hour" ShouldLoop="True" />
+                      </ScrollViewer>
+                      </adw:AdwPickerColumn>
+                    </adw:AdwBox>
+                    <RepeatButton Name="PART_HourUpButton" Grid.Row="2" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down">
+                      <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                  </Grid>
+                </adw:AdwBox>
+              </Panel>
+              <Panel Name="PART_MinuteHost" Grid.Column="2">
+                <adw:AdwBox adw:Css.Node="spinbutton" adw:Css.Classes="vertical" adw:Css.StateSource="Self" HorizontalAlignment="Center">
+                  <!-- GtkSpinButton, vertical: up, text, down. Avalonia's down part steps forward, so it is the + button. -->
+                  <Grid RowDefinitions="Auto,*,Auto">
+                    <RepeatButton Name="PART_MinuteDownButton" Grid.Row="0" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up">
+                      <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                    <adw:AdwBox Grid.Row="1" adw:Css.Node="text">
+                      <adw:AdwPickerColumn>
+                      <ScrollViewer Height="30" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"
+                                    Theme="{StaticResource AdwPlainScrollViewer}">
+                        <DateTimePickerPanel Name="PART_MinuteSelector" ItemHeight="30" PanelType="Minute" ShouldLoop="True" />
+                      </ScrollViewer>
+                      </adw:AdwPickerColumn>
+                    </adw:AdwBox>
+                    <RepeatButton Name="PART_MinuteUpButton" Grid.Row="2" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down">
+                      <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                  </Grid>
+                </adw:AdwBox>
+              </Panel>
+              <Panel Name="PART_SecondHost">
+                <adw:AdwBox adw:Css.Node="spinbutton" adw:Css.Classes="vertical" adw:Css.StateSource="Self" HorizontalAlignment="Center">
+                  <!-- GtkSpinButton, vertical: up, text, down. Avalonia's down part steps forward, so it is the + button. -->
+                  <Grid RowDefinitions="Auto,*,Auto">
+                    <RepeatButton Name="PART_SecondDownButton" Grid.Row="0" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up">
+                      <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                    <adw:AdwBox Grid.Row="1" adw:Css.Node="text">
+                      <adw:AdwPickerColumn>
+                      <ScrollViewer Height="30" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"
+                                    Theme="{StaticResource AdwPlainScrollViewer}">
+                        <DateTimePickerPanel Name="PART_SecondSelector" ItemHeight="30" PanelType="Second" ShouldLoop="True" />
+                      </ScrollViewer>
+                      </adw:AdwPickerColumn>
+                    </adw:AdwBox>
+                    <RepeatButton Name="PART_SecondUpButton" Grid.Row="2" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down">
+                      <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                  </Grid>
+                </adw:AdwBox>
+              </Panel>
+              <Panel Name="PART_PeriodHost">
+                <adw:AdwBox adw:Css.Node="spinbutton" adw:Css.Classes="vertical" adw:Css.StateSource="Self" HorizontalAlignment="Center">
+                  <!-- GtkSpinButton, vertical: up, text, down. Avalonia's down part steps forward, so it is the + button. -->
+                  <Grid RowDefinitions="Auto,*,Auto">
+                    <RepeatButton Name="PART_PeriodDownButton" Grid.Row="0" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up">
+                      <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                    <adw:AdwBox Grid.Row="1" adw:Css.Node="text">
+                      <adw:AdwPickerColumn>
+                      <ScrollViewer Height="30" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"
+                                    Theme="{StaticResource AdwPlainScrollViewer}">
+                        <DateTimePickerPanel Name="PART_PeriodSelector" ItemHeight="30" PanelType="TimePeriod" ShouldLoop="False" />
+                      </ScrollViewer>
+                      </adw:AdwPickerColumn>
+                    </adw:AdwBox>
+                    <RepeatButton Name="PART_PeriodUpButton" Grid.Row="2" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down">
+                      <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+                    </RepeatButton>
+                  </Grid>
+                </adw:AdwBox>
+              </Panel>
+              <!-- The presenter places the seconds and period; the hour and minute columns are fixed. -->
+              <Rectangle Name="PART_FirstSpacer" Grid.Column="1" Width="6" Fill="Transparent" />
+              <Rectangle Name="PART_SecondSpacer" Width="6" Fill="Transparent" />
+              <Rectangle Name="PART_ThirdSpacer" Width="6" Fill="Transparent" />
+            </Grid>
+          </DockPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

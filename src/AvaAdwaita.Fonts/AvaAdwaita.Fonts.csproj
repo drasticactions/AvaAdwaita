@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>AvaAdwaita.Fonts</RootNamespace>
+    <PackageId>AvaAdwaita.Fonts</PackageId>
+    <Description>Adwaita fonts for Avalonia applications.</Description>
+    <PackageLicenseExpression>LGPL-2.1-or-later AND OFL-1.1</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\*.ttf" />
+    <None Include="OFL.txt" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

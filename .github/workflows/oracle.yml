@@ -1,0 +1,42 @@
+name: Oracle
+
+# Regenerates the parity corpus, GTK's expected render nodes and the pixel goldens with
+# the real GTK and libadwaita. On main it fails when the checked-in data is stale.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - tools/adw-oracle/**
+      - tests/Data/parity/**
+      - tests/Data/goldens/**
+      - external/**
+
+jobs:
+  oracle:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install packages
+        run: |
+          grep -q '^DisableSandbox' /etc/pacman.conf || sed -i '/^\[options\]/a DisableSandbox' /etc/pacman.conf
+          pacman -Syu --noconfirm --needed git base-devel pkgconf gtk4 libadwaita weston python adwaita-fonts json-glib
+      - uses: actions/checkout@v4
+      - name: Versions
+        run: pkg-config --modversion gtk4 libadwaita-1
+      - name: Regenerate
+        env:
+          XDG_RUNTIME_DIR: /tmp/xdg
+          # On main, compare with the checked-in data; spinner goldens are left out, since a spinner turns.
+          CHECK: ${{ github.ref == 'refs/heads/main' && '--check' || '' }}
+        run: |
+          mkdir -p -m 700 /tmp/xdg
+          tools/regenerate-data.sh $CHECK
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: parity-data
+          path: |
+            artifacts/adw-oracle/data/parity
+            artifacts/adw-oracle/data/goldens

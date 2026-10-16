@@ -1,0 +1,6 @@
+[submodule "external/libadwaita"]
+	path = external/libadwaita
+	url = https://github.com/GNOME/libadwaita.git
+[submodule "external/gtk"]
+	path = external/gtk
+	url = https://gitlab.gnome.org/GNOME/gtk.git

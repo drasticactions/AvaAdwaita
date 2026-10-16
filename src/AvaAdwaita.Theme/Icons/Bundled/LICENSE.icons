@@ -1,0 +1,17 @@
+Bundled icons
+=============
+
+The adw-*-symbolic.svg icons come from libadwaita 1.10.0 (src/icons) and are
+CC0-1.0.
+
+The other icons come from adwaita-icon-theme 51.0
+(https://gitlab.gnome.org/GNOME/adwaita-icon-theme) and are used under the
+Creative Commons Attribution-ShareAlike 3.0 Unported license (CC-BY-SA-3.0),
+one of the two licenses adwaita-icon-theme is offered under. They are
+unmodified. Copyright: the GNOME Project.
+
+https://creativecommons.org/licenses/by-sa/3.0/
+
+switch-on-symbolic.svg and switch-off-symbolic.svg come from GTK 4.24.1's
+built-in icons (gtk/icons), which GTK falls back to when a theme lacks them.
+They are LGPL-2.1-or-later, the license of GTK and of AvaAdwaita.

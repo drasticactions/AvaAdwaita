@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- image; color is the foreground. -->
+  <ControlTheme x:Key="{x:Type PathIcon}" TargetType="PathIcon">
+    <Setter Property="adw:Css.Node" Value="image" />
+    <Setter Property="Foreground" Value="{adw:Css Color}" />
+    <Setter Property="Width" Value="{adw:Css IconSize}" />
+    <Setter Property="Height" Value="{adw:Css IconSize}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Viewbox>
+          <Path Fill="{TemplateBinding Foreground}" Data="{TemplateBinding Data}" Stretch="Uniform" />
+        </Viewbox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

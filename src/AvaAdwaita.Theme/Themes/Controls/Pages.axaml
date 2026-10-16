@@ -1,0 +1,345 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- AdwNavigationPage: navigation-view-page > content, with command bars docked above and below. -->
+  <ControlTheme x:Key="{x:Type ContentPage}" TargetType="ContentPage">
+    <Setter Property="adw:Css.Node" Value="navigation-view-page" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <DockPanel>
+            <ContentPresenter Name="PART_TopCommandBar" DockPanel.Dock="Top" HorizontalContentAlignment="Stretch" IsVisible="False" />
+            <ContentPresenter Name="PART_BottomCommandBar" DockPanel.Dock="Bottom" HorizontalContentAlignment="Stretch" IsVisible="False" />
+            <ContentPresenter Name="PART_ContentPresenter"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+          </DockPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- AdwCarousel of pages. -->
+  <ControlTheme x:Key="{x:Type CarouselPage}" TargetType="CarouselPage">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Carousel Name="PART_Carousel"
+                  ItemTemplate="{TemplateBinding PageTemplate}"
+                  PageTransition="{TemplateBinding PageTransition}"
+                  ItemsPanel="{TemplateBinding ItemsPanel}" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- AdwNavigationView: navigation-view > headerbar (back button, title, end commands) + the current page. -->
+  <ControlTheme x:Key="{x:Type NavigationPage}" TargetType="NavigationPage">
+    <Setter Property="adw:Css.Node" Value="navigation-view" />
+    <!-- adw_spring_params_new (1, 1, 1000), as AdwNavigationView. -->
+    <Setter Property="PageTransition">
+      <Setter.Value>
+        <adw:AdwSpringSlide DampingRatio="1" Mass="1" Stiffness="1000" Mode="Cover" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="ModalTransition">
+      <Setter.Value>
+        <PageSlide Duration="0:0:0.25" Orientation="Vertical" FillMode="Forward" />
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <Panel ClipToBounds="True">
+            <DockPanel>
+              <Border Name="PART_NavBarSpacer" Height="{TemplateBinding EffectiveBarHeight}" IsVisible="False" DockPanel.Dock="Top" />
+              <ContentPresenter Name="PART_BottomCommandBar" DockPanel.Dock="Bottom" HorizontalContentAlignment="Stretch"
+                                Content="{Binding CurrentPage?.(NavigationPage.BottomCommandBar), RelativeSource={RelativeSource TemplatedParent}, FallbackValue={x:Null}}" />
+              <Grid Name="PART_ContentHost" ClipToBounds="True">
+                <ContentPresenter Name="PART_PageBackPresenter" />
+                <ContentPresenter Name="PART_PagePresenter" />
+              </Grid>
+            </DockPanel>
+            <Border Name="PART_NavigationBar" ZIndex="1" VerticalAlignment="Top" ClipToBounds="False" Height="{TemplateBinding EffectiveBarHeight}">
+              <adw:AdwBox adw:Css.Node="headerbar">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <Button Name="PART_BackButton" Classes="flat" IsVisible="{TemplateBinding IsBackButtonEffectivelyVisible}" VerticalAlignment="Center" ToolTip.Tip="{x:Null}">
+                    <Panel>
+                      <adw:AdwIcon Name="PART_BackButtonDefaultIcon" IconName="go-previous-symbolic" />
+                      <ContentPresenter Name="PART_BackButtonContentPresenter" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Panel>
+                  </Button>
+                  <ContentPresenter Name="PART_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                    Content="{Binding CurrentPage?.Header, RelativeSource={RelativeSource TemplatedParent}, FallbackValue={x:Null}}"
+                                    ContentTemplate="{Binding CurrentPage?.HeaderTemplate, RelativeSource={RelativeSource TemplatedParent}, FallbackValue={x:Null}}">
+                    <ContentPresenter.DataTemplates>
+                      <adw:LabelTemplate Classes="title" />
+                    </ContentPresenter.DataTemplates>
+                  </ContentPresenter>
+                  <ContentPresenter Name="PART_TopCommandBar" Grid.Column="2" HorizontalAlignment="Right" VerticalContentAlignment="Stretch"
+                                    Content="{Binding CurrentPage?.(NavigationPage.TopCommandBar), RelativeSource={RelativeSource TemplatedParent}, FallbackValue={x:Null}}" />
+                </Grid>
+              </adw:AdwBox>
+            </Border>
+            <Border Name="PART_NavBarShadow" ZIndex="1" VerticalAlignment="Top" IsVisible="False" Height="0" IsHitTestVisible="False" />
+            <ContentPresenter Name="PART_ModalBackPresenter" ZIndex="99" IsVisible="False" />
+            <ContentPresenter Name="PART_ModalPresenter" ZIndex="100" IsVisible="False" />
+          </Panel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:nav-bar-inset /template/ Border#PART_NavBarSpacer">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+
+  <!-- AdwToolbarView with an AdwViewSwitcherBar: toolbarview > viewswitcherbar > viewswitcher > toggle-group. -->
+  <ControlTheme x:Key="AdwTabbedPageTabs" TargetType="TabControl">
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal" />
+      </ItemsPanelTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DockPanel>
+          <adw:AdwBox DockPanel.Dock="{TemplateBinding TabStripPlacement}" adw:Css.Node="viewswitcherbar">
+            <adw:AdwBox adw:Css.Node="viewswitcher" HorizontalAlignment="Center">
+              <adw:AdwBox adw:Css.Node="toggle-group">
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </adw:AdwBox>
+            </adw:AdwBox>
+          </adw:AdwBox>
+          <Panel ClipToBounds="True">
+            <ContentPresenter Name="PART_SelectedContentHost2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsVisible="False" />
+            <ContentPresenter Name="PART_SelectedContentHost" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+          </Panel>
+        </DockPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TabbedPage}" TargetType="TabbedPage">
+    <Setter Property="adw:Css.Node" Value="toolbarview" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <TabControl Name="PART_TabControl" Theme="{StaticResource AdwTabbedPageTabs}" ItemContainerTheme="{StaticResource AdwViewSwitcherToggle}" />
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- An AdwOverlaySplitView with header bars: the layout and behavior follow Avalonia's Simple theme. -->
+  <ControlTheme x:Key="{x:Type DrawerPage}" TargetType="DrawerPage">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <SplitView Name="PART_SplitView"
+                   DisplayMode="{TemplateBinding DisplayMode}"
+                   OpenPaneLength="{TemplateBinding DrawerLength}"
+                   CompactPaneLength="{TemplateBinding CompactDrawerLength}"
+                   PaneBackground="{Binding DrawerBackground, RelativeSource={RelativeSource TemplatedParent}}"
+                   IsPaneOpen="{Binding IsOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+          <SplitView.Pane>
+            <DockPanel Background="{TemplateBinding DrawerBackground}">
+              <!-- Compact-mode toggle: visible only in CompactOverlay/CompactInline. -->
+              <ToggleButton Name="PART_CompactPaneToggle"
+                            DockPanel.Dock="Top"
+                            IsChecked="{Binding #PART_SplitView.IsPaneOpen, Mode=TwoWay}"
+                            Classes="flat"
+                            IsVisible="False"
+                            HorizontalAlignment="Left"
+                            Width="{TemplateBinding CompactDrawerLength}"
+                            Height="{TemplateBinding CompactDrawerLength}"
+                            AutomationProperties.Name="Toggle navigation drawer"
+                            ToolTip.Tip="Toggle navigation drawer">
+                <Panel>
+                  <adw:AdwIcon IconName="sidebar-show-symbolic" IsVisible="{Binding DrawerIcon, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNull}}" />
+                  <ContentPresenter
+                    Name="PART_CompactPaneIconPresenter"
+                    Content="{TemplateBinding DrawerIcon}"
+                    ContentTemplate="{TemplateBinding DrawerIconTemplate}"
+                    IsVisible="{Binding DrawerIcon, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+                </Panel>
+              </ToggleButton>
+              <ContentPresenter Name="PART_DrawerHeader"
+                                DockPanel.Dock="Top"
+                                Content="{TemplateBinding DrawerHeader}"
+                                ContentTemplate="{TemplateBinding DrawerHeaderTemplate}"
+                                Background="{TemplateBinding DrawerHeaderBackground}"
+                                IsVisible="{TemplateBinding DrawerHeader, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <ContentPresenter Name="PART_DrawerFooter"
+                                DockPanel.Dock="Bottom"
+                                Content="{TemplateBinding DrawerFooter}"
+                                ContentTemplate="{TemplateBinding DrawerFooterTemplate}"
+                                Background="{TemplateBinding DrawerFooterBackground}"
+                                IsVisible="{TemplateBinding DrawerFooter, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <ContentPresenter Name="PART_DrawerPresenter"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                Content="{TemplateBinding Drawer}"
+                                ContentTemplate="{TemplateBinding DrawerTemplate}" />
+            </DockPanel>
+          </SplitView.Pane>
+          <Grid HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <DockPanel Name="PART_ContentDock">
+              <Border
+                Name="PART_TopBar"
+                DockPanel.Dock="Top">
+                <adw:AdwBox adw:Css.Node="headerbar">
+                <DockPanel HorizontalAlignment="Stretch">
+                  <ToggleButton x:Name="PART_PaneButton"
+                                IsChecked="{Binding #PART_SplitView.IsPaneOpen, Mode=TwoWay}"
+                                Classes="flat"
+                                DockPanel.Dock="Left"
+                                AutomationProperties.Name="Toggle navigation drawer"
+                                ToolTip.Tip="Toggle navigation drawer">
+                    <Panel>
+                      <adw:AdwIcon IconName="sidebar-show-symbolic" IsVisible="{Binding DrawerIcon, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNull}}" />
+                      <ContentPresenter
+                        Name="PART_PaneIconPresenter"
+                        Content="{TemplateBinding DrawerIcon}"
+                        ContentTemplate="{TemplateBinding DrawerIconTemplate}"
+                        IsVisible="{Binding DrawerIcon, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+                    </Panel>
+                  </ToggleButton>
+                  <ContentPresenter x:Name="PART_TitlePresenter"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                    VerticalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    IsVisible="{TemplateBinding Header, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <ContentPresenter.DataTemplates>
+                      <adw:LabelTemplate Classes="title" />
+                    </ContentPresenter.DataTemplates>
+                  </ContentPresenter>
+                </DockPanel>
+                </adw:AdwBox>
+              </Border>
+              <Border
+                Name="PART_BottomBar"
+                DockPanel.Dock="Bottom"
+                IsVisible="False">
+                <adw:AdwBox adw:Css.Node="headerbar">
+                <DockPanel HorizontalAlignment="Stretch">
+                  <ToggleButton x:Name="PART_BottomPaneButton"
+                                IsChecked="{Binding #PART_SplitView.IsPaneOpen, Mode=TwoWay}"
+                                Classes="flat"
+                                DockPanel.Dock="Left"
+                                AutomationProperties.Name="Toggle navigation drawer"
+                                ToolTip.Tip="Toggle navigation drawer">
+                    <Panel>
+                      <adw:AdwIcon IconName="sidebar-show-symbolic" IsVisible="{Binding DrawerIcon, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNull}}" />
+                      <ContentPresenter
+                        Name="PART_BottomPaneIconPresenter"
+                        Content="{TemplateBinding DrawerIcon}"
+                        ContentTemplate="{TemplateBinding DrawerIconTemplate}"
+                        IsVisible="{Binding DrawerIcon, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+                    </Panel>
+                  </ToggleButton>
+                  <ContentPresenter x:Name="PART_BottomTitlePresenter"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                    VerticalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    IsVisible="{TemplateBinding Header, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <ContentPresenter.DataTemplates>
+                      <adw:LabelTemplate Classes="title" />
+                    </ContentPresenter.DataTemplates>
+                  </ContentPresenter>
+                </DockPanel>
+                </adw:AdwBox>
+              </Border>
+              <ContentPresenter Name="PART_ContentPresenter"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                CornerRadius="{TemplateBinding CornerRadius}" />
+            </DockPanel>
+            <Border Name="PART_Backdrop"
+                    Background="{TemplateBinding BackdropBrush}"
+                    IsVisible="False"
+                    IsHitTestVisible="False" />
+          </Grid>
+        </SplitView>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:placement-right /template/ ToggleButton#PART_PaneButton">
+      <Setter Property="DockPanel.Dock" Value="Right" />
+    </Style>
+
+    <!-- Bottom placement: swap top bar for bottom bar -->
+    <Style Selector="^:placement-bottom /template/ Border#PART_TopBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:placement-bottom /template/ Border#PART_BottomBar">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <!-- Bottom placement + compact modes: pane compact strip provides toggle, hide bottom bar -->
+    <Style Selector="^:placement-bottom[DisplayMode=CompactOverlay] /template/ Border#PART_BottomBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:placement-bottom[DisplayMode=CompactInline] /template/ Border#PART_BottomBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <!-- Horizontal pane (Bottom/Top): compact toggle must dock Left so drawer content can fill the rest -->
+    <Style Selector="^:placement-bottom /template/ ToggleButton#PART_CompactPaneToggle">
+      <Setter Property="DockPanel.Dock" Value="Left" />
+    </Style>
+    <Style Selector="^:placement-top /template/ ToggleButton#PART_CompactPaneToggle">
+      <Setter Property="DockPanel.Dock" Value="Left" />
+    </Style>
+
+    <Style Selector="^[DrawerBehavior=Locked] /template/ Border#PART_TopBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="^[DrawerBehavior=Disabled] /template/ Border#PART_TopBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="^:detail-is-navpage /template/ Border#PART_TopBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="^[DisplayMode=CompactOverlay] /template/ Border#PART_TopBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="^[DisplayMode=CompactOverlay] /template/ ToggleButton#PART_CompactPaneToggle">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="^[DisplayMode=CompactInline] /template/ Border#PART_TopBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="^[DisplayMode=CompactInline] /template/ ToggleButton#PART_CompactPaneToggle">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="^[IsInNavigationPage=True] /template/ Border#PART_TopBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <!-- NavigationPage already hosts a hamburger toggle — suppress the compact pane toggle. -->
+    <Style Selector="^:detail-is-navpage /template/ ToggleButton#PART_CompactPaneToggle">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

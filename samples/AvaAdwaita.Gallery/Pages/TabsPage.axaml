@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AvaAdwaita.Gallery.Pages.TabsPage">
+  <UserControl.Styles>
+    <Style Selector="TabControl">
+      <Setter Property="Height" Value="140" />
+    </Style>
+    <Style Selector="Label.centered">
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+  </UserControl.Styles>
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Tabs &amp; Pages" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Notebook" />
+      <TabControl TabStripPlacement="Top">
+        <TabItem Header="Inbox" Content="Inbox page" />
+        <TabItem Header="Starred" Content="Starred page" />
+        <TabItem Header="Sent" Content="Sent page" />
+      </TabControl>
+      <TabControl TabStripPlacement="Bottom">
+        <TabItem Header="Inbox" Content="Inbox page" />
+        <TabItem Header="Starred" Content="Starred page" />
+        <TabItem Header="Sent" Content="Sent page" />
+      </TabControl>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="View switcher" />
+      <TabControl Classes="view-switcher" TabStripPlacement="Top">
+        <TabItem Header="Inbox" Content="Inbox page" />
+        <TabItem Header="Starred" Content="Starred page" />
+        <TabItem Header="Sent" Content="Sent page" />
+      </TabControl>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Expander" />
+      <Expander Header="Details" Content="Hidden until expanded." />
+      <Expander Header="Expanded" Content="Shown." IsExpanded="True" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Frame" />
+      <GroupBox Header="Frame" Content="A frame around some content." Padding="12" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Paned" />
+      <Grid ColumnDefinitions="*,Auto,*" Height="80">
+        <Label Classes="centered" Content="Start" />
+        <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
+        <Label Classes="centered" Grid.Column="2" Content="End" />
+      </Grid>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Split view" />
+      <SplitView DisplayMode="Inline" IsPaneOpen="True" OpenPaneLength="180" Height="120">
+        <SplitView.Pane>
+          <Label Classes="centered" Content="Sidebar" />
+        </SplitView.Pane>
+        <Label Classes="centered" Content="Content" />
+      </SplitView>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Tabbed page" />
+      <TabbedPage Height="200">
+        <ContentPage Header="Music">
+          <Label Classes="centered" Content="Music" />
+        </ContentPage>
+        <ContentPage Header="Podcasts">
+          <Label Classes="centered" Content="Podcasts" />
+        </ContentPage>
+      </TabbedPage>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,86 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- GtkListView with GtkTreeExpander: listview.view > row.activatable > treeexpander > indent* + expander + label.
+       The indents are icon-sized, as GtkBuiltinIcons.
+       The rows are siblings at every depth, as in GTK; only the header of a TreeViewItem is its row. -->
+  <ControlTheme x:Key="{x:Type TreeView}" TargetType="TreeView">
+    <Setter Property="adw:Css.Node" Value="listview" />
+    <Setter Property="adw:Css.Classes" Value="view" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ScrollViewer Theme="{StaticResource AdwNodelessScrollViewer}"
+                        HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                        VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+          </ScrollViewer>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwPlainToggle" TargetType="ToggleButton">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Content="{TemplateBinding Content}" Background="Transparent" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TreeViewItem}" TargetType="TreeViewItem">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel>
+          <adw:AdwBox Name="PART_Row" adw:Css.Node="row" adw:Css.Classes="activatable" adw:Css.StateSource="TemplatedParent"
+                      Focusable="True" TemplatedControl.IsTemplateFocusTarget="True">
+            <adw:AdwBox adw:Css.Node="treeexpander">
+              <adw:AdwStack Orientation="Horizontal">
+                <ItemsControl ItemsSource="{TemplateBinding Level, Converter={x:Static adw:CssConverters.IndentLevels}}"
+                              IsVisible="{TemplateBinding Level, Converter={x:Static adw:CssConverters.IsPositive}}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <adw:AdwStack Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <adw:AdwIcon adw:Css.Node="indent" />
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ToggleButton Name="PART_ExpandCollapseChevron" Theme="{StaticResource AdwPlainToggle}"
+                              IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}">
+                  <adw:AdwIcon Name="PART_Expander" adw:Css.Node="expander" adw:Css.StateSource="TemplatedParent" />
+                </ToggleButton>
+                <adw:AdwIcon Name="PART_LeafIndent" adw:Css.Node="indent" IsVisible="False" />
+                <ContentPresenter Name="PART_HeaderPresenter"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                  VerticalContentAlignment="Stretch">
+                  <ContentPresenter.DataTemplates>
+                    <adw:LabelTemplate />
+                  </ContentPresenter.DataTemplates>
+                </ContentPresenter>
+              </adw:AdwStack>
+            </adw:AdwBox>
+          </adw:AdwBox>
+          <ItemsPresenter Name="PART_ItemsPresenter"
+                          IsVisible="{TemplateBinding IsExpanded}"
+                          ItemsPanel="{TemplateBinding ItemsPanel}" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:empty /template/ ToggleButton#PART_ExpandCollapseChevron">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:empty /template/ adw|AdwIcon#PART_LeafIndent">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^[IsExpanded=True] /template/ adw|AdwIcon#PART_Expander">
+      <Setter Property="adw:Css.States" Value="Checked" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

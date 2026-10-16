@@ -1,0 +1,20 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- A gallery page: a title and a column of sections. -->
+  <Style Selector="StackPanel.gallery-page">
+    <Setter Property="Spacing" Value="24" />
+    <Setter Property="Margin" Value="32,24" />
+    <Setter Property="MaxWidth" Value="720" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+  </Style>
+  <Style Selector="StackPanel.gallery-section">
+    <Setter Property="Spacing" Value="12" />
+  </Style>
+  <Style Selector="WrapPanel.gallery-row">
+    <Setter Property="ItemSpacing" Value="12" />
+    <Setter Property="LineSpacing" Value="12" />
+  </Style>
+  <Style Selector="WrapPanel.gallery-row > :is(Control)">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+</Styles>

@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AvaAdwaita.Gallery.Pages.RangesPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Ranges" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Slider" />
+      <Slider Name="Level" Minimum="0" Maximum="100" Value="40" />
+      <Slider Minimum="0" Maximum="100" Value="70" IsEnabled="False" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Vertical" />
+      <Slider Orientation="Vertical" Height="160" Value="30" HorizontalAlignment="Left" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Progress bar" />
+      <ProgressBar Minimum="0" Maximum="100" Value="{Binding #Level.Value}" />
+      <ProgressBar Classes="osd" Value="60" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

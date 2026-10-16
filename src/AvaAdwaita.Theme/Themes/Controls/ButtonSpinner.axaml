@@ -1,0 +1,128 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- spinbutton.horizontal > text + button.image-button.down > image + button.image-button.up > image -->
+  <ControlTheme x:Key="AdwSpinStep" TargetType="RepeatButton">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Content="{TemplateBinding Content}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwSpinTemplateless" TargetType="ButtonSpinner">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwStack Orientation="Horizontal">
+          <ContentPresenter Name="PART_ContentPresenter" adw:AdwStack.Expand="True"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+          <RepeatButton Name="PART_DecreaseButton" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down"
+                        IsVisible="{TemplateBinding ShowButtonSpinner}">
+            <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+          </RepeatButton>
+          <RepeatButton Name="PART_IncreaseButton" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up"
+                        IsVisible="{TemplateBinding ShowButtonSpinner}">
+            <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+          </RepeatButton>
+        </adw:AdwStack>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type ButtonSpinner}" TargetType="ButtonSpinner" BasedOn="{StaticResource AdwSpinTemplateless}">
+    <Setter Property="adw:Css.Node" Value="spinbutton" />
+    <Setter Property="adw:Css.Classes" Value="horizontal" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwStack Orientation="Horizontal">
+            <adw:AdwBox adw:Css.Node="text" adw:AdwStack.Expand="True">
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                VerticalContentAlignment="Center" />
+            </adw:AdwBox>
+            <RepeatButton Name="PART_DecreaseButton" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button down"
+                          IsVisible="{TemplateBinding ShowButtonSpinner}">
+              <adw:AdwIcon IconName="value-decrease-symbolic" VerticalAlignment="Center" />
+            </RepeatButton>
+            <RepeatButton Name="PART_IncreaseButton" Theme="{StaticResource AdwSpinStep}" adw:Css.Classes="image-button up"
+                          IsVisible="{TemplateBinding ShowButtonSpinner}">
+              <adw:AdwIcon IconName="value-increase-symbolic" VerticalAlignment="Center" />
+            </RepeatButton>
+          </adw:AdwStack>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- The entry inside a spin button is its text node; the spin button is the box. -->
+  <ControlTheme x:Key="AdwSpinText" TargetType="TextBox">
+    <Setter Property="adw:Css.Node" Value="text" />
+    <Setter Property="CaretBrush" Value="{adw:Css CaretColor}" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <Panel>
+            <Panel Name="PART_Selection" adw:Css.Node="selection" IsVisible="False" />
+            <ScrollViewer Name="PART_ScrollViewer" Theme="{StaticResource AdwPlainScrollViewer}"
+                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled"
+                          VerticalContentAlignment="Stretch">
+              <Panel>
+                <adw:AdwLabel Name="PART_Placeholder" adw:Css.Node="placeholder" Text="{TemplateBinding PlaceholderText}"
+                              IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                <TextPresenter Name="PART_TextPresenter"
+                               Text="{TemplateBinding Text, Mode=TwoWay}"
+                               CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                               CaretIndex="{TemplateBinding CaretIndex}"
+                               SelectionStart="{TemplateBinding SelectionStart}"
+                               SelectionEnd="{TemplateBinding SelectionEnd}"
+                               TextAlignment="{TemplateBinding TextAlignment}"
+                               TextWrapping="NoWrap"
+                               PasswordChar="{TemplateBinding PasswordChar}"
+                               SelectionBrush="{adw:Css BackgroundColor, Node=PART_Selection}"
+                               SelectionForegroundBrush="{adw:Css Color, Node=PART_Selection}"
+                               CaretBrush="{TemplateBinding CaretBrush}"
+                               VerticalAlignment="Center" />
+              </Panel>
+            </ScrollViewer>
+          </Panel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type NumericUpDown}" TargetType="NumericUpDown">
+    <Setter Property="adw:Css.Node" Value="spinbutton" />
+    <Setter Property="adw:Css.Classes" Value="horizontal" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <adw:AdwBox>
+            <ButtonSpinner Name="PART_Spinner" Theme="{StaticResource AdwSpinTemplateless}"
+                           IsTabStop="False"
+                           AllowSpin="{TemplateBinding AllowSpin}"
+                           ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}"
+                           ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}">
+              <TextBox Name="PART_TextBox" Theme="{StaticResource AdwSpinText}"
+                       AcceptsReturn="False"
+                       IsReadOnly="{TemplateBinding IsReadOnly}"
+                       Text="{TemplateBinding Text}"
+                       TextAlignment="{TemplateBinding TextAlignment}"
+                       PlaceholderText="{TemplateBinding PlaceholderText}" />
+            </ButtonSpinner>
+          </adw:AdwBox>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,31 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- popover.background > arrow + contents -->
+  <ControlTheme x:Key="{x:Type FlyoutPresenter}" TargetType="FlyoutPresenter">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <!-- The popover node sits inside, so the presenter (the popup's child) can hold the shadow as its margin. -->
+        <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="background">
+          <adw:PopoverFrame>
+            <adw:PopoverContents>
+            <ScrollViewer Theme="{StaticResource AdwNodelessScrollViewer}"
+                          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                          VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Padding="{TemplateBinding Padding}">
+                <ContentPresenter.DataTemplates>
+                  <adw:LabelTemplate />
+                </ContentPresenter.DataTemplates>
+              </ContentPresenter>
+            </ScrollViewer>
+            </adw:PopoverContents>
+          </adw:PopoverFrame>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

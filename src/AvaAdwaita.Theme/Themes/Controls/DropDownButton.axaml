@@ -1,0 +1,40 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- menubutton.popup > button.arrow-button.toggle (.text-button, .image-button) > box.horizontal > content + arrow.down -->
+  <ControlTheme x:Key="{x:Type DropDownButton}" TargetType="DropDownButton">
+    <Setter Property="adw:Css.Node" Value="menubutton" />
+    <Setter Property="adw:Css.Classes" Value="popup" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox Name="PART_Button" adw:Css.Node="button" adw:Css.StateSource="TemplatedParent"
+                      adw:Css.Classes="{TemplateBinding Content, Converter={x:Static adw:CssConverters.MenuButtonClasses}}">
+            <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal">
+              <adw:AdwStack Orientation="Horizontal">
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  adw:AdwStack.Expand="True"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  RecognizesAccessKey="True"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                  <ContentPresenter.DataTemplates>
+                    <adw:LabelTemplate RecognizesAccessKey="True" TextAlignment="Center" />
+                  </ContentPresenter.DataTemplates>
+                </ContentPresenter>
+                <adw:AdwIcon adw:Css.Node="arrow" adw:Css.Classes="down" adw:Css.StateSource="TemplatedParent" />
+              </adw:AdwStack>
+            </adw:AdwBox>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:flyout-open /template/ adw|AdwBox#PART_Button">
+      <Setter Property="adw:Css.States" Value="Checked" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

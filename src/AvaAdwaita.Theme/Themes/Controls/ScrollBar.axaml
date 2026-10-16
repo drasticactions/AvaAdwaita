@@ -1,0 +1,55 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <ControlTheme x:Key="AdwScrollBarPage" TargetType="RepeatButton">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="Transparent" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwScrollBarThumb" TargetType="Thumb">
+    <Setter Property="adw:Css.Node" Value="slider" />
+    <Setter Property="adw:Css.StateSource" Value="Self" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- scrollbar.vertical (.overlay-indicator, .hovering) > range.vertical > trough > slider -->
+  <ControlTheme x:Key="{x:Type ScrollBar}" TargetType="ScrollBar">
+    <Setter Property="adw:Css.Node" Value="scrollbar" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="range" adw:Css.StateSource="TemplatedParent"
+                      adw:Css.Classes="{TemplateBinding Orientation, Converter={x:Static adw:CssConverters.OrientationClass}}">
+            <adw:AdwBox adw:Css.Node="trough" adw:Css.StateSource="TemplatedParent">
+              <adw:AdwScrollTrack Name="PART_Track"
+                     Minimum="{TemplateBinding Minimum}"
+                     Maximum="{TemplateBinding Maximum}"
+                     Value="{TemplateBinding Value, Mode=TwoWay}"
+                     DeferThumbDrag="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
+                     ViewportSize="{TemplateBinding ViewportSize}"
+                     Orientation="{TemplateBinding Orientation}"
+                     IsDirectionReversed="{TemplateBinding Orientation, Converter={x:Static adw:CssConverters.IsVertical}}">
+                <adw:AdwScrollTrack.DecreaseButton>
+                  <RepeatButton Name="PART_PageUpButton" Theme="{StaticResource AdwScrollBarPage}" />
+                </adw:AdwScrollTrack.DecreaseButton>
+                <adw:AdwScrollTrack.IncreaseButton>
+                  <RepeatButton Name="PART_PageDownButton" Theme="{StaticResource AdwScrollBarPage}" />
+                </adw:AdwScrollTrack.IncreaseButton>
+                <Thumb Theme="{StaticResource AdwScrollBarThumb}" />
+              </adw:AdwScrollTrack>
+            </adw:AdwBox>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

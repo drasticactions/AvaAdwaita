@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install packages
+        run: |
+          grep -q '^DisableSandbox' /etc/pacman.conf || sed -i '/^\[options\]/a DisableSandbox' /etc/pacman.conf
+          pacman -Syu --noconfirm --needed git icu diffutils libadwaita gtk4 sassc adwaita-fonts fontconfig ttf-dejavu
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Build
+        run: dotnet build AvaAdwaita.slnx -c Release
+      - name: Tests (installed stylesheet)
+        run: dotnet run --project tests/AvaAdwaita.Theme.Tests -c Release --no-build
+      - name: Tests (bundled stylesheet)
+        env:
+          AVAADWAITA_CSS: bundled
+        run: dotnet run --project tests/AvaAdwaita.Theme.Tests -c Release --no-build
+      - name: Generated files are up to date
+        run: |
+          dotnet run tools/adw-css-props/adw-css-props.cs -- --check
+          tools/build-stylesheet.sh --check
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: reports-linux
+          path: |
+            artifacts/shots
+            artifacts/parity
+            artifacts/goldens
+
+  samples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Install wasm-tools workload
+        run: dotnet workload install wasm-tools
+      - name: Build the samples
+        run: dotnet build AvaAdwaita.Samples.slnx -c Release
+      - name: Publish the desktop gallery with NativeAOT
+        run: dotnet publish samples/AvaAdwaita.Gallery.Desktop -c Release -r linux-x64 -o artifacts/aot
+      - name: Shoot the NativeAOT gallery
+        run: artifacts/aot/AvaAdwaita.Gallery.Desktop --shoot artifacts/aot-shots
+
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Pack
+        run: |
+          for id in AvaAdwaita.Theme AvaAdwaita.Fonts AvaAdwaita.DataGrid; do
+            dotnet pack "src/$id/$id.csproj" -c Release -o artifacts/packages -p:AvaAdwaitaRevision=${{ github.run_number }}
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: artifacts/packages

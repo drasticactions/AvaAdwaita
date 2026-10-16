@@ -1,0 +1,11 @@
+# Scenes known to differ from GTK, one id per line; ParityTests keeps this list exact.
+# label-title-1-*: Pango sets Adwaita Sans's optical size from the font size; Avalonia cannot set a
+#   variable font's axes, so the bundled static instances keep the text optical size and run 4 px wider.
+label-title-1-light-blue
+label-title-1-dark-blue
+label-title-1-hc-blue
+label-title-1-hcdark-blue
+label-title-1-disabled-light-blue
+label-title-1-disabled-dark-blue
+label-title-1-disabled-hc-blue
+label-title-1-disabled-hcdark-blue

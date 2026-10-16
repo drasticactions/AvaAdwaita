@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- switch > image + image + slider. The slider moves as GtkSwitch's: 100 ms, ease-out cubic. -->
+  <ControlTheme x:Key="{x:Type ToggleSwitch}" TargetType="ToggleSwitch">
+    <Setter Property="adw:Css.Node" Value="switch" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="KnobTransitions">
+      <Transitions>
+        <DoubleTransition Property="Canvas.Left" Duration="0:0:0.1" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            VerticalAlignment="Center"
+                            IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+          <adw:AdwBox VerticalAlignment="Center">
+            <adw:SwitchLayout>
+              <adw:AdwIcon adw:Css.Node="image" adw:SwitchLayout.IsOnImage="True" IconName="switch-on-symbolic" />
+              <adw:AdwIcon adw:Css.Node="image" adw:SwitchLayout.IsOnImage="False" IconName="switch-off-symbolic" />
+              <adw:SwitchKnobCanvas Name="PART_SwitchKnob">
+                <Panel Name="PART_MovingKnobs" Background="Transparent">
+                  <adw:AdwBox adw:Css.Node="slider" />
+                </Panel>
+              </adw:SwitchKnobCanvas>
+            </adw:SwitchLayout>
+          </adw:AdwBox>
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

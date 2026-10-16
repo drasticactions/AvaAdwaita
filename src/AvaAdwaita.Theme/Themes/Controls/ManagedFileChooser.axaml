@@ -1,0 +1,142 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:dialogs="using:Avalonia.Dialogs"
+                    xmlns:internal="using:Avalonia.Dialogs.Internal"
+                    xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
+                    x:ClassModifier="internal">
+  <!-- GtkFileChooserWidget's layout: filechooser > places sidebar + a location row and the file list, with the
+       name entry, filter and buttons below. The parts are the stock controls' own themes. -->
+  <ControlTheme x:Key="{x:Type dialogs:ManagedFileChooser}" TargetType="dialogs:ManagedFileChooser">
+    <Setter Property="adw:Css.Node" Value="filechooser" />
+    <Setter Property="Template">
+      <ControlTemplate x:DataType="internal:ManagedFileChooserViewModel">
+        <adw:AdwBox>
+          <DockPanel>
+            <adw:AdwBox DockPanel.Dock="Bottom" adw:Css.Node="box" adw:Css.Classes="horizontal" Margin="12">
+              <DockPanel>
+                <CheckBox DockPanel.Dock="Left" IsChecked="{Binding ShowHiddenFiles}" Content="{DynamicResource StringManagedFileChooserShowHiddenFilesText}" />
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="12">
+                  <Button Command="{Binding Cancel}" Content="{DynamicResource StringManagedFileChooserCancelText}" />
+                  <Button Command="{Binding Ok}" Classes="suggested-action" Content="{DynamicResource StringManagedFileChooserOkText}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+                  <TextBox IsVisible="{Binding !SelectingFolder}" Text="{Binding FileName}" Width="240"
+                           PlaceholderText="{DynamicResource StringManagedFileChooserFileNamePlaceholder}" />
+                  <ComboBox IsVisible="{Binding ShowFilters}" ItemsSource="{Binding Filters}" SelectedItem="{Binding SelectedFilter}" />
+                </StackPanel>
+              </DockPanel>
+            </adw:AdwBox>
+            <adw:AdwBox DockPanel.Dock="Left" adw:Css.Node="widget" adw:Css.Classes="sidebar-pane" Width="200">
+              <ListBox Name="PART_QuickLinks" Classes="navigation-sidebar" Focusable="False"
+                       ItemsSource="{Binding QuickLinks}" SelectedIndex="{Binding QuickLinksSelectedIndex}">
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <adw:AdwIcon IconName="{Binding IconKey, Converter={x:Static adw:CssConverters.FileIcon}}" />
+                      <adw:AdwLabel Text="{Binding DisplayName}" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </adw:AdwBox>
+            <DockPanel Margin="12,12,12,0">
+              <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                <Button DockPanel.Dock="Right" Classes="flat" Command="{Binding Refresh}" ToolTip.Tip="Reload">
+                  <adw:AdwIcon IconName="view-refresh-symbolic" />
+                </Button>
+                <Button DockPanel.Dock="Right" Classes="flat" Command="{Binding GoUp}" ToolTip.Tip="Parent Folder">
+                  <adw:AdwIcon IconName="go-up-symbolic" />
+                </Button>
+                <TextBox Name="Location" Margin="0,0,6,0" Text="{Binding Location}">
+                  <TextBox.KeyBindings>
+                    <KeyBinding Command="{Binding EnterPressed}" Gesture="Enter" />
+                  </TextBox.KeyBindings>
+                </TextBox>
+              </DockPanel>
+              <adw:AdwBox adw:Css.Node="columnview" adw:Css.Classes="view">
+                <!-- The header and every row use the same columns; shared size groups would turn the star column into Auto. -->
+                <DockPanel>
+                  <adw:AdwBox DockPanel.Dock="Top" adw:Css.Node="header">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="32" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="180" />
+                        <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="80" />
+                      </Grid.ColumnDefinitions>
+                      <adw:AdwLabel Grid.Column="1" adw:Css.Node="label" adw:Css.Classes="caption-heading dim-label" Text="{DynamicResource StringManagedFileChooserNameColumn}" />
+                      <adw:AdwLabel Grid.Column="2" adw:Css.Node="label" adw:Css.Classes="caption-heading dim-label" Text="{DynamicResource StringManagedFileChooserDateModifiedColumn}" />
+                      <adw:AdwLabel Grid.Column="3" adw:Css.Node="label" adw:Css.Classes="caption-heading dim-label" Text="{DynamicResource StringManagedFileChooserTypeColumn}" />
+                      <adw:AdwLabel Grid.Column="4" HorizontalAlignment="Right" adw:Css.Node="label" adw:Css.Classes="caption-heading dim-label" Text="{DynamicResource StringManagedFileChooserSizeColumn}" />
+                    </Grid>
+                  </adw:AdwBox>
+                  <ListBox Name="PART_Files" adw:Css.Node="listview" adw:Css.Classes="view" ItemsSource="{Binding Items}"
+                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                           SelectedItems="{Binding SelectedItems}" SelectionMode="{Binding SelectionMode}">
+                    <ListBox.ItemTemplate>
+                      <DataTemplate>
+                        <Grid Background="Transparent" Height="32">
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="32" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="180" />
+                            <ColumnDefinition Width="110" />
+                            <ColumnDefinition Width="80" />
+                          </Grid.ColumnDefinitions>
+                          <adw:AdwIcon Grid.Column="0" IconName="{Binding IconKey, Converter={x:Static adw:CssConverters.FileIcon}}" />
+                          <adw:AdwLabel Grid.Column="1" Text="{Binding DisplayName}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                          <adw:AdwLabel Grid.Column="2" Text="{Binding Modified}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" adw:Css.Node="label" adw:Css.Classes="dim-label" />
+                          <adw:AdwLabel Grid.Column="3" Text="{Binding Type}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" adw:Css.Node="label" adw:Css.Classes="dim-label" />
+                          <adw:AdwLabel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right" adw:Css.Node="label" adw:Css.Classes="dim-label numeric">
+                            <adw:AdwLabel.Text>
+                              <Binding Path="Size">
+                                <Binding.Converter>
+                                  <internal:FileSizeStringConverter />
+                                </Binding.Converter>
+                              </Binding>
+                            </adw:AdwLabel.Text>
+                          </adw:AdwLabel>
+                        </Grid>
+                      </DataTemplate>
+                    </ListBox.ItemTemplate>
+                  </ListBox>
+                </DockPanel>
+              </adw:AdwBox>
+            </DockPanel>
+          </DockPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- A question with Replace (destructive) and Cancel, as GTK asks before replacing a file. -->
+  <ControlTheme x:Key="{x:Type dialogs:ManagedFileChooserOverwritePrompt}" TargetType="dialogs:ManagedFileChooserOverwritePrompt">
+    <Setter Property="MinWidth" Value="270" />
+    <Setter Property="MaxWidth" Value="400" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwStack Orientation="Vertical" Margin="24">
+          <adw:AdwLabel TextWrapping="Wrap">
+            <adw:AdwLabel.Text>
+              <MultiBinding>
+                <MultiBinding.Converter>
+                  <converters:StringFormatConverter />
+                </MultiBinding.Converter>
+                <DynamicResource ResourceKey="StringManagedFileChooserOverwritePromptFileAlreadyExistsText" />
+                <Binding Path="FileName" RelativeSource="{RelativeSource TemplatedParent}" />
+              </MultiBinding>
+            </adw:AdwLabel.Text>
+          </adw:AdwLabel>
+          <StackPanel HorizontalAlignment="Right" Spacing="12" Orientation="Horizontal" Margin="0,12,0,0">
+            <Button Content="{DynamicResource StringManagedFileChooserOverwritePromptCancelText}" IsCancel="True"
+                    Command="{Binding Cancel, RelativeSource={RelativeSource TemplatedParent}}" />
+            <Button Classes="destructive-action" Content="{DynamicResource StringManagedFileChooserOverwritePromptConfirmText}" IsDefault="True"
+                    Command="{Binding Confirm, RelativeSource={RelativeSource TemplatedParent}}" />
+          </StackPanel>
+        </adw:AdwStack>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

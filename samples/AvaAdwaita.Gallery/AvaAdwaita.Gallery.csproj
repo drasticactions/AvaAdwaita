@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>AvaAdwaita.Gallery</RootNamespace>
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AvaAdwaita.Theme\AvaAdwaita.Theme.csproj" />
+    <ProjectReference Include="..\..\src\AvaAdwaita.Fonts\AvaAdwaita.Fonts.csproj" />
+    <ProjectReference Include="..\..\src\AvaAdwaita.DataGrid\AvaAdwaita.DataGrid.csproj" />
+  </ItemGroup>
+
+</Project>

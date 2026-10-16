@@ -1,0 +1,48 @@
+name: Deploy the gallery to GitHub Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Install wasm-tools workload
+        run: dotnet workload install wasm-tools
+      - name: Publish the browser gallery
+        run: dotnet publish samples/AvaAdwaita.Gallery.Browser -c Release -o publish/gallery
+      - name: Prepare the site
+        run: |
+          mkdir site
+          cp -r publish/gallery/wwwroot/. site/
+          touch site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

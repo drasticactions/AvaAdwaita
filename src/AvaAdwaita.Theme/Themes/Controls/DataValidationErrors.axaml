@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- The owner's node gets .error; the message is label.error. -->
+  <ControlTheme x:Key="{x:Type DataValidationErrors}" TargetType="DataValidationErrors">
+    <Setter Property="Template">
+      <ControlTemplate TargetType="DataValidationErrors">
+        <DockPanel LastChildFill="True">
+          <ItemsControl DockPanel.Dock="Bottom"
+                        DataContext="{TemplateBinding Owner}"
+                        ItemsSource="{Binding (DataValidationErrors.Errors)}"
+                        IsVisible="{Binding (DataValidationErrors.HasErrors)}"
+                        x:DataType="Control">
+            <ItemsControl.DataTemplates>
+              <adw:LabelTemplate Classes="error caption" />
+            </ItemsControl.DataTemplates>
+          </ItemsControl>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" />
+        </DockPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

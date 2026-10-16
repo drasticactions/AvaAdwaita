@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
+             x:Class="AvaAdwaita.Gallery.Pages.ButtonsPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Buttons" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Text buttons" />
+      <WrapPanel Classes="gallery-row">
+        <Button Content="Regular" />
+        <Button Classes="suggested-action" Content="Suggested" />
+        <Button Classes="destructive-action" Content="Destructive" />
+        <Button Classes="flat" Content="Flat" />
+        <Button Content="Disabled" IsEnabled="False" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Shapes" />
+      <WrapPanel Classes="gallery-row">
+        <Button Classes="pill" Content="Pill" />
+        <Button Classes="pill suggested-action" Content="Suggested pill" />
+        <Button Classes="circular"><adw:AdwIcon IconName="list-add-symbolic" /></Button>
+        <Button Classes="circular flat"><adw:AdwIcon IconName="edit-find-symbolic" /></Button>
+        <Button Classes="circular suggested-action"><adw:AdwIcon IconName="go-next-symbolic" /></Button>
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Icon buttons" />
+      <WrapPanel Classes="gallery-row">
+        <Button><adw:AdwIcon IconName="document-open-symbolic" /></Button>
+        <Button Classes="flat"><adw:AdwIcon IconName="edit-copy-symbolic" /></Button>
+        <Button Classes="destructive-action"><adw:AdwIcon IconName="user-trash-symbolic" /></Button>
+        <Button Classes="flat"><adw:AdwIcon IconName="view-more-symbolic" /></Button>
+        <Button Classes="raised"><adw:AdwIcon IconName="open-menu-symbolic" /></Button>
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Opaque and osd" />
+      <WrapPanel Classes="gallery-row">
+        <Button Classes="opaque" Content="Opaque" />
+        <Button Classes="osd" Content="OSD" />
+        <Button Classes="osd circular"><adw:AdwIcon IconName="media-playback-start-symbolic" /></Button>
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Repeat and toggle" />
+      <WrapPanel Classes="gallery-row">
+        <RepeatButton Content="Repeat" />
+        <ToggleButton Content="Toggle" />
+        <ToggleButton Content="Checked" IsChecked="True" />
+        <ToggleButton Classes="flat" Content="Flat toggle" IsChecked="True" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Linked" />
+      <StackPanel Orientation="Horizontal" adw:Css.Node="box" adw:Css.Classes="linked horizontal">
+        <Button Content="Left" />
+        <Button Content="Middle" />
+        <Button Content="Right" />
+      </StackPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Menu and split buttons" />
+      <WrapPanel Classes="gallery-row">
+        <DropDownButton Content="Menu">
+          <DropDownButton.Flyout>
+            <MenuFlyout>
+              <MenuItem Header="New Window" />
+              <MenuItem Header="Preferences" />
+              <MenuItem Header="About" />
+            </MenuFlyout>
+          </DropDownButton.Flyout>
+        </DropDownButton>
+        <DropDownButton Classes="flat" Content="Flat menu">
+          <DropDownButton.Flyout>
+            <MenuFlyout>
+              <MenuItem Header="New Window" />
+              <MenuItem Header="Preferences" />
+              <MenuItem Header="About" />
+            </MenuFlyout>
+          </DropDownButton.Flyout>
+        </DropDownButton>
+        <DropDownButton>
+          <adw:AdwIcon IconName="open-menu-symbolic" />
+          <DropDownButton.Flyout>
+            <MenuFlyout>
+              <MenuItem Header="New Window" />
+              <MenuItem Header="Preferences" />
+              <MenuItem Header="About" />
+            </MenuFlyout>
+          </DropDownButton.Flyout>
+        </DropDownButton>
+        <SplitButton Content="Split">
+          <SplitButton.Flyout>
+            <MenuFlyout>
+              <MenuItem Header="New Window" />
+              <MenuItem Header="Preferences" />
+              <MenuItem Header="About" />
+            </MenuFlyout>
+          </SplitButton.Flyout>
+        </SplitButton>
+        <SplitButton Classes="suggested-action" Content="Suggested">
+          <SplitButton.Flyout>
+            <MenuFlyout>
+              <MenuItem Header="New Window" />
+              <MenuItem Header="Preferences" />
+              <MenuItem Header="About" />
+            </MenuFlyout>
+          </SplitButton.Flyout>
+        </SplitButton>
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Link" />
+      <WrapPanel Classes="gallery-row">
+        <HyperlinkButton Content="GNOME" NavigateUri="https://gnome.org" />
+      </WrapPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

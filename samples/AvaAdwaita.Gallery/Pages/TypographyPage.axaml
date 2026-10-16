@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AvaAdwaita.Gallery.Pages.TypographyPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Typography" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Label classes" />
+      <StackPanel Spacing="8">
+        <Label Classes="title-1" Content=".title-1 — The quick brown fox 0123456789" />
+        <Label Classes="title-2" Content=".title-2 — The quick brown fox 0123456789" />
+        <Label Classes="title-3" Content=".title-3 — The quick brown fox 0123456789" />
+        <Label Classes="title-4" Content=".title-4 — The quick brown fox 0123456789" />
+        <Label Classes="heading" Content=".heading — The quick brown fox 0123456789" />
+        <Label Classes="body" Content=".body — The quick brown fox 0123456789" />
+        <Label Classes="caption-heading" Content=".caption-heading — The quick brown fox 0123456789" />
+        <Label Classes="caption" Content=".caption — The quick brown fox 0123456789" />
+        <Label Classes="monospace" Content=".monospace — The quick brown fox 0123456789" />
+        <Label Classes="numeric" Content=".numeric — The quick brown fox 0123456789" />
+        <Label Classes="dim-label" Content=".dim-label — The quick brown fox 0123456789" />
+        <Label Classes="accent" Content=".accent — The quick brown fox 0123456789" />
+        <Label Classes="success" Content=".success — The quick brown fox 0123456789" />
+        <Label Classes="warning" Content=".warning — The quick brown fox 0123456789" />
+        <Label Classes="error" Content=".error — The quick brown fox 0123456789" />
+      </StackPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

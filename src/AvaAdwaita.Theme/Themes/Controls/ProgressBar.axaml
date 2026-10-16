@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- progressbar.horizontal > trough > progress.left (+ text) -->
+  <ControlTheme x:Key="{x:Type ProgressBar}" TargetType="ProgressBar">
+    <Setter Property="adw:Css.Node" Value="progressbar" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <StackPanel>
+            <adw:AdwLabel adw:Css.Node="text" Text="{TemplateBinding ProgressTextFormat}" HorizontalAlignment="Center"
+                          IsVisible="{TemplateBinding ShowProgressText}" />
+            <adw:AdwBox adw:Css.Node="trough" adw:Css.StateSource="TemplatedParent">
+              <adw:Css.Classes>
+                <MultiBinding Converter="{x:Static adw:CssConverters.ProgressTroughClasses}">
+                  <TemplateBinding Property="Value" />
+                  <TemplateBinding Property="Minimum" />
+                  <TemplateBinding Property="Maximum" />
+                </MultiBinding>
+              </adw:Css.Classes>
+              <adw:AdwProgressTrack>
+                <adw:AdwBorderBox Name="PART_Indicator" adw:Css.Node="progress" adw:Css.Classes="left" adw:Css.StateSource="TemplatedParent"
+                                  HorizontalAlignment="Left" VerticalAlignment="Stretch" />
+              </adw:AdwProgressTrack>
+            </adw:AdwBox>
+          </StackPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:vertical /template/ adw|AdwBorderBox#PART_Indicator">
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="VerticalAlignment" Value="Bottom" />
+      <Setter Property="adw:Css.Classes" Value="bottom" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,106 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- AdwToastOverlay: toastoverlay holds the toasts. -->
+  <ControlTheme x:Key="{x:Type WindowNotificationManager}" TargetType="WindowNotificationManager">
+    <Setter Property="adw:Css.Node" Value="toastoverlay" />
+    <Setter Property="Margin" Value="0,0,0,12" />
+    <Setter Property="Position" Value="BottomCenter" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <!-- The overlay lies over the whole window; only its toasts take input, as AdwToastOverlay's. -->
+        <Panel>
+          <ReversibleStackPanel Name="PART_Items" Spacing="6">
+            <ReversibleStackPanel.DataTemplates>
+              <DataTemplate DataType="INotification">
+                <adw:AdwStack Orientation="Vertical">
+                  <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="heading" adw:AdwStack.Expand="True" Text="{Binding Title}" />
+                  <adw:AdwLabel adw:Css.Node="label" Text="{Binding Message}" TextWrapping="Wrap" MaxHeight="80"
+                                IsVisible="{Binding Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </adw:AdwStack>
+              </DataTemplate>
+              <DataTemplate DataType="x:String">
+                <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="heading" VerticalAlignment="Stretch" Text="{Binding}" />
+              </DataTemplate>
+            </ReversibleStackPanel.DataTemplates>
+          </ReversibleStackPanel>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:topleft /template/ ReversibleStackPanel#PART_Items">
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+    </Style>
+    <Style Selector="^:topright /template/ ReversibleStackPanel#PART_Items">
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+    <Style Selector="^:topcenter /template/ ReversibleStackPanel#PART_Items">
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="^:bottomleft /template/ ReversibleStackPanel#PART_Items">
+      <Setter Property="ReverseOrder" Value="True" />
+      <Setter Property="VerticalAlignment" Value="Bottom" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+    </Style>
+    <Style Selector="^:bottomright /template/ ReversibleStackPanel#PART_Items">
+      <Setter Property="ReverseOrder" Value="True" />
+      <Setter Property="VerticalAlignment" Value="Bottom" />
+      <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+    <Style Selector="^:bottomcenter /template/ ReversibleStackPanel#PART_Items">
+      <Setter Property="ReverseOrder" Value="True" />
+      <Setter Property="VerticalAlignment" Value="Bottom" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+  </ControlTheme>
+
+  <!-- AdwToast: toast > widget > title, then the dismiss button.circular.flat. Error and warning cards add .error and
+       .warning. A closing toast fades out, then reports itself closed. -->
+  <ControlTheme x:Key="{x:Type NotificationCard}" TargetType="NotificationCard">
+    <Setter Property="adw:Css.Node" Value="toast" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwStack Orientation="Horizontal">
+            <!-- The title fills the toast's height, as AdwToast's, and centers its text. -->
+            <adw:AdwBox adw:Css.Node="widget" adw:AdwStack.Expand="True">
+              <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" VerticalContentAlignment="Stretch" />
+            </adw:AdwBox>
+            <Button Classes="circular flat" NotificationCard.CloseOnClick="True" VerticalAlignment="Center" ToolTip.Tip="Dismiss">
+              <adw:AdwIcon IconName="window-close-symbolic" />
+            </Button>
+          </adw:AdwStack>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^">
+      <Style.Animations>
+        <Animation Duration="0:0:0.2" Easing="CubicEaseOut" FillMode="Forward">
+          <KeyFrame Cue="0%">
+            <Setter Property="Opacity" Value="0" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Opacity" Value="1" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="^[IsClosing=true]">
+      <Style.Animations>
+        <Animation Duration="0:0:0.2" Easing="CubicEaseIn" FillMode="Forward">
+          <KeyFrame Cue="0%">
+            <Setter Property="Opacity" Value="1" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="IsClosed" Value="True" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

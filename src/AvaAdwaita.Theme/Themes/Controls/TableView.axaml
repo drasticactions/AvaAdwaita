@@ -1,0 +1,111 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- GtkColumnView: columnview.view > header.activatable > button > box > label + sort-indicator;
+       listview.view > row.activatable > cell > label. The scrolling follows Avalonia's Simple theme. -->
+  <ControlTheme x:Key="AdwTableViewScrollViewer" TargetType="ScrollViewer">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <DockPanel>
+            <adw:AdwBox DockPanel.Dock="Top" adw:Css.Node="header" adw:Css.Classes="activatable">
+              <TableViewColumnHeadersPresenter />
+            </adw:AdwBox>
+            <adw:AdwBox adw:Css.Node="listview" adw:Css.Classes="view">
+              <ScrollContentPresenter Name="PART_ContentPresenter"
+                                      Padding="{TemplateBinding Padding}"
+                                      ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}" />
+            </adw:AdwBox>
+          </DockPanel>
+          <ScrollBar Name="PART_HorizontalScrollBar" Orientation="Horizontal" VerticalAlignment="Bottom" adw:Css.Classes="bottom" />
+          <ScrollBar Name="PART_VerticalScrollBar" Orientation="Vertical" HorizontalAlignment="Right" adw:Css.Classes="right" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TableView}" TargetType="TableView">
+    <Setter Property="adw:Css.Node" Value="columnview" />
+    <Setter Property="adw:Css.Classes" Value="view" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="TextBlock.TextTrimming" Value="{x:Static TextTrimming.CharacterEllipsis}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ScrollViewer Name="PART_ScrollViewer" Theme="{StaticResource AdwTableViewScrollViewer}"
+                        HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                        VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                        AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Margin="{TemplateBinding Padding}" />
+          </ScrollViewer>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TableViewColumnHeader}" TargetType="TableViewColumnHeader">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <adw:AdwBox>
+            <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal">
+              <adw:AdwStack Orientation="Horizontal">
+                <ContentPresenter Name="PART_ContentPresenter" adw:AdwStack.Expand="True"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  VerticalContentAlignment="Stretch">
+                  <ContentPresenter.DataTemplates>
+                    <adw:LabelTemplate />
+                  </ContentPresenter.DataTemplates>
+                </ContentPresenter>
+                <adw:AdwIcon adw:Css.Node="sort-indicator" adw:Css.Classes="unsorted" />
+              </adw:AdwStack>
+            </adw:AdwBox>
+          </adw:AdwBox>
+          <Thumb Name="PART_Resizer" HorizontalAlignment="Right" Width="4" Background="Transparent" Cursor="SizeWestEast">
+            <Thumb.Template>
+              <ControlTemplate TargetType="Thumb">
+                <Panel Background="Transparent" />
+              </ControlTemplate>
+            </Thumb.Template>
+          </Thumb>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TableViewRow}" TargetType="TableViewRow">
+    <Setter Property="adw:Css.Node" Value="row" />
+    <Setter Property="adw:Css.Classes" Value="activatable" />
+    <Setter Property="adw:Css.Position" Value="Item" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <TableViewCellsPresenter Name="PART_CellsPresenter" />
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TableViewCell}" TargetType="TableViewCell">
+    <Setter Property="adw:Css.Node" Value="cell" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment, Converter={x:Static adw:CssConverters.LeftToStretch}}"
+                            VerticalContentAlignment="Stretch">
+            <ContentPresenter.DataTemplates>
+              <adw:LabelTemplate />
+            </ContentPresenter.DataTemplates>
+          </ContentPresenter>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

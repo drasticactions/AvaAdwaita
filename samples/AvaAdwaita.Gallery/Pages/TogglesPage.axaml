@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AvaAdwaita.Gallery.Pages.TogglesPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Toggles" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Check boxes" />
+      <WrapPanel Classes="gallery-row">
+        <CheckBox Content="Checked" IsChecked="True" />
+        <CheckBox Content="Unchecked" />
+        <CheckBox Content="Mixed" IsThreeState="True" IsChecked="{x:Null}" />
+        <CheckBox Content="Disabled" IsEnabled="False" IsChecked="True" />
+        <CheckBox Classes="selection-mode" Content="Selection mode" IsChecked="True" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Radio buttons" />
+      <WrapPanel Classes="gallery-row">
+        <RadioButton Content="First" GroupName="g" IsChecked="True" />
+        <RadioButton Content="Second" GroupName="g" />
+        <RadioButton Content="Disabled" GroupName="h" IsEnabled="False" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Switches" />
+      <WrapPanel Classes="gallery-row">
+        <ToggleSwitch IsChecked="True" />
+        <ToggleSwitch />
+        <ToggleSwitch IsChecked="True" IsEnabled="False" />
+      </WrapPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

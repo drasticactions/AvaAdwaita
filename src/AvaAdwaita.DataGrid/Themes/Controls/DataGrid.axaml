@@ -1,0 +1,202 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:dg="using:AvaAdwaita.DataGrid.Markup"
+                    xmlns:collections="using:Avalonia.Collections"
+                    x:ClassModifier="internal">
+  <!-- GtkColumnView: columnview.view > header.activatable > button > box > label + sort-indicator;
+       listview.view > row.activatable > cell > label. Vertical grid lines are .column-separators on the
+       column view and horizontal ones .separators on the list view, so the stylesheet draws them.
+       The grid finds its scroll bars over the cells by the presenters' spans, so the presenters carry them
+       although their node boxes sit in the grid. -->
+  <ControlTheme x:Key="{x:Type DataGrid}" TargetType="DataGrid">
+    <Setter Property="adw:Css.Node" Value="columnview" />
+    <Setter Property="adw:Css.Classes" Value="{Binding $self.GridLinesVisibility, Converter={x:Static dg:DataGridConverters.ColumnViewClasses}}" />
+    <Setter Property="HeadersVisibility" Value="Column" />
+    <Setter Property="GridLinesVisibility" Value="None" />
+    <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="SelectionMode" Value="Extended" />
+    <Setter Property="RowBackground" Value="{x:Null}" />
+    <Setter Property="DropLocationIndicatorTemplate">
+      <Template>
+        <Rectangle Width="2" Fill="{DynamicResource Adw.AccentBgColorBrush}" />
+      </Template>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" ClipToBounds="True">
+            <DataGridColumnHeader Name="PART_TopLeftCornerHeader" Theme="{StaticResource AdwDataGridCornerHeader}" />
+            <adw:AdwBox Grid.Column="1" adw:Css.Node="header" adw:Css.Classes="activatable">
+              <DataGridColumnHeadersPresenter Name="PART_ColumnHeadersPresenter" Grid.ColumnSpan="2" />
+            </adw:AdwBox>
+            <adw:AdwBox Grid.Row="1" Grid.ColumnSpan="2" adw:Css.Node="listview"
+                        adw:Css.Classes="{TemplateBinding GridLinesVisibility, Converter={x:Static dg:DataGridConverters.ListViewClasses}}">
+              <DataGridRowsPresenter Name="PART_RowsPresenter" Grid.RowSpan="2"
+                                     ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}">
+                <DataGridRowsPresenter.GestureRecognizers>
+                  <ScrollGestureRecognizer CanHorizontallyScroll="True" CanVerticallyScroll="True" />
+                </DataGridRowsPresenter.GestureRecognizers>
+              </DataGridRowsPresenter>
+            </adw:AdwBox>
+            <ScrollBar Name="PART_VerticalScrollbar" Grid.Row="1" Grid.Column="1" Orientation="Vertical"
+                       HorizontalAlignment="Right" adw:Css.Classes="right"
+                       AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}" />
+            <ScrollBar Name="PART_HorizontalScrollbar" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal"
+                       VerticalAlignment="Bottom" adw:Css.Classes="bottom"
+                       AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}" />
+          </Grid>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- GTK has no row headers, and no column after the last: the corner above the row headers and the header
+       of the column that fills the remaining width are empty space. -->
+  <ControlTheme x:Key="AdwDataGridCornerHeader" TargetType="DataGridColumnHeader">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwDataGridFillerCell" TargetType="DataGridCell">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type DataGridColumnHeader}" TargetType="DataGridColumnHeader">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal">
+            <adw:AdwStack Orientation="Horizontal">
+              <ContentPresenter Name="PART_ContentPresenter" adw:AdwStack.Expand="True"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                VerticalContentAlignment="Stretch">
+                <ContentPresenter.DataTemplates>
+                  <adw:LabelTemplate />
+                </ContentPresenter.DataTemplates>
+              </ContentPresenter>
+              <adw:AdwIcon Name="SortIcon" adw:Css.Node="sort-indicator" adw:Css.Classes="unsorted" />
+            </adw:AdwStack>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:sortascending /template/ adw|AdwIcon#SortIcon">
+      <Setter Property="adw:Css.Classes" Value="ascending" />
+    </Style>
+    <Style Selector="^:sortdescending /template/ adw|AdwIcon#SortIcon">
+      <Setter Property="adw:Css.Classes" Value="descending" />
+    </Style>
+    <Style Selector="^:dragIndicator">
+      <Setter Property="adw:Css.Classes" Value="dnd" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type DataGridRowHeader}" TargetType="DataGridRowHeader">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Name="PART_Root" Background="Transparent">
+          <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type DataGridRow}" TargetType="DataGridRow">
+    <Setter Property="adw:Css.Node" Value="row" />
+    <Setter Property="adw:Css.Classes" Value="activatable" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <DataGridFrozenGrid Name="PART_Root" ColumnDefinitions="Auto,*" RowDefinitions="*,Auto">
+            <DataGridRowHeader Name="PART_RowHeader" Grid.RowSpan="2" DataGridFrozenGrid.IsFrozen="True" />
+            <DataGridCellsPresenter Name="PART_CellsPresenter" Grid.Column="1" DataGridFrozenGrid.IsFrozen="True" />
+            <DataGridDetailsPresenter Name="PART_DetailsPresenter" Grid.Row="1" Grid.Column="1" />
+          </DataGridFrozenGrid>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- A check box column disables the boxes outside the current cell to make them read-only; GTK's look
+       follows the cell's own sensitivity. -->
+  <ControlTheme x:Key="{x:Type DataGridCell}" TargetType="DataGridCell">
+    <Setter Property="adw:Css.Node" Value="cell" />
+    <Setter Property="adw:Css.Sensitive" Value="{Binding $self.IsEffectivelyEnabled}" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+            <ContentPresenter.DataTemplates>
+              <adw:LabelTemplate />
+            </ContentPresenter.DataTemplates>
+          </ContentPresenter>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- A text column's cell shows a label node; the grid looks this theme up by name. -->
+  <ControlTheme x:Key="DataGridCellTextBlockTheme" TargetType="TextBlock">
+    <Setter Property="adw:Css.Node" Value="label" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwDataGridExpanderToggle" TargetType="ToggleButton">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Content="{TemplateBinding Content}" Background="Transparent" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- A group's header row: row > cell > treeexpander > indent + expander + labels, as a GtkTreeExpander row. -->
+  <ControlTheme x:Key="{x:Type DataGridRowGroupHeader}" TargetType="DataGridRowGroupHeader">
+    <Setter Property="adw:Css.Node" Value="row" />
+    <Setter Property="adw:Css.Classes" Value="activatable" />
+    <Setter Property="Template">
+      <ControlTemplate x:DataType="collections:DataGridCollectionViewGroup">
+        <adw:AdwBox>
+          <DataGridFrozenGrid Name="Root" ColumnDefinitions="Auto,*">
+            <DataGridRowHeader Name="RowHeader" DataGridFrozenGrid.IsFrozen="True" />
+            <adw:AdwBox Grid.Column="1" adw:Css.Node="cell">
+              <adw:AdwBox adw:Css.Node="treeexpander">
+                <adw:AdwStack Orientation="Horizontal">
+                  <Rectangle Name="PART_IndentSpacer" />
+                  <ToggleButton Name="PART_ExpanderButton" Theme="{StaticResource AdwDataGridExpanderToggle}">
+                    <adw:AdwIcon Name="PART_Expander" adw:Css.Node="expander" />
+                  </ToggleButton>
+                  <adw:AdwLabel Name="PART_PropertyNameElement" adw:Css.Node="label" IsVisible="{TemplateBinding IsPropertyNameVisible}" />
+                  <adw:AdwLabel adw:Css.Node="label" Text="{Binding Key}" />
+                  <adw:AdwLabel Name="PART_ItemCountElement" adw:Css.Node="label" adw:Css.Classes="dim-label" IsVisible="{TemplateBinding IsItemCountVisible}" />
+                </adw:AdwStack>
+              </adw:AdwBox>
+            </adw:AdwBox>
+          </DataGridFrozenGrid>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:expanded /template/ adw|AdwIcon#PART_Expander">
+      <Setter Property="adw:Css.States" Value="Checked" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

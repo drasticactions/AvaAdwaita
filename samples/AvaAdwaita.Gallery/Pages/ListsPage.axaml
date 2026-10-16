@@ -1,0 +1,87 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:AvaAdwaita.Gallery.Pages"
+             xmlns:col="clr-namespace:System.Collections;assembly=System.Runtime"
+             x:Class="AvaAdwaita.Gallery.Pages.ListsPage">
+  <UserControl.Resources>
+    <DataTemplate x:Key="Row" x:DataType="x:String">
+      <Label Content="{Binding}" Margin="12,0" MinHeight="50" VerticalContentAlignment="Center" />
+    </DataTemplate>
+  </UserControl.Resources>
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Lists" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Boxed list" />
+      <ListBox Classes="boxed-list" ItemTemplate="{StaticResource Row}" SelectedIndex="0">
+        <x:String>Wi-Fi</x:String>
+        <x:String>Bluetooth</x:String>
+        <x:String>Network</x:String>
+        <x:String>Displays</x:String>
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Separate boxed list" />
+      <ListBox Classes="boxed-list-separate" ItemTemplate="{StaticResource Row}">
+        <x:String>First</x:String>
+        <x:String>Second</x:String>
+        <x:String>Third</x:String>
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Navigation sidebar" />
+      <ListBox Classes="navigation-sidebar" SelectedIndex="1" Width="220" HorizontalAlignment="Left">
+        <x:String>Inbox</x:String>
+        <x:String>Starred</x:String>
+        <x:String>Sent</x:String>
+        <x:String>Drafts</x:String>
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Rich list" />
+      <ListBox Classes="rich-list boxed-list" ItemTemplate="{StaticResource Row}">
+        <x:String>Alice</x:String>
+        <x:String>Bob</x:String>
+        <x:String>Carol</x:String>
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Plain list" />
+      <ListBox Height="120">
+        <x:String>One</x:String>
+        <x:String>Two</x:String>
+        <x:String>Three</x:String>
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Tree" />
+      <TreeView Height="160">
+        <TreeViewItem Header="Documents" IsExpanded="True">
+          <TreeViewItem Header="Report.odt" />
+          <TreeViewItem Header="Notes">
+            <TreeViewItem Header="Ideas.md" />
+          </TreeViewItem>
+        </TreeViewItem>
+        <TreeViewItem Header="Pictures">
+          <TreeViewItem Header="Holiday.jpg" />
+        </TreeViewItem>
+        <TreeViewItem Header="Music" />
+      </TreeView>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Table" />
+      <TableView Height="160" x:DataType="local:FileRow">
+        <TableView.Columns>
+          <TableViewColumn Header="Name" Binding="{Binding Name}" />
+          <TableViewColumn Header="Size" Binding="{Binding Size}" Width="100" />
+        </TableView.Columns>
+        <TableView.ItemsSource>
+          <col:ArrayList>
+            <local:FileRow Name="Report.odt" Size="24 KB" />
+            <local:FileRow Name="Holiday.jpg" Size="3.1 MB" />
+            <local:FileRow Name="Ideas.md" Size="2 KB" />
+          </col:ArrayList>
+        </TableView.ItemsSource>
+      </TableView>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- GTK's touch handles: cursor-handle.top (selection start), .bottom (end) or .insertion-cursor > contents. -->
+  <ControlTheme x:Key="{x:Type TextSelectionHandle}" TargetType="TextSelectionHandle">
+    <Setter Property="adw:Css.Node" Value="cursor-handle" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid>
+          <adw:AdwBox>
+            <adw:AdwBox adw:Css.Node="contents" HorizontalAlignment="Center" VerticalAlignment="Top" />
+          </adw:AdwBox>
+          <Border Name="PART_Indicator" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="1" Height="5" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:end /template/ Border#PART_Indicator">
+      <Setter Property="HorizontalAlignment" Value="Left" />
+    </Style>
+    <Style Selector="^:start /template/ Border#PART_Indicator">
+      <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

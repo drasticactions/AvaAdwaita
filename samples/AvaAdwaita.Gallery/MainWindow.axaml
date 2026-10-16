@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:adw="https://github.com/avaadwaita"
+        xmlns:local="clr-namespace:AvaAdwaita.Gallery"
+        x:Class="AvaAdwaita.Gallery.MainWindow"
+        Title="AvaAdwaita Gallery"
+        Width="1000" Height="720" MinWidth="360" MinHeight="300">
+  <adw:HeaderBar.Start>
+    <ToggleButton Name="SidebarToggle" IsChecked="True" ToolTip.Tip="Toggle Sidebar">
+      <adw:AdwIcon IconName="sidebar-show-symbolic" />
+    </ToggleButton>
+  </adw:HeaderBar.Start>
+  <adw:HeaderBar.End>
+    <Button ToolTip.Tip="Style">
+      <adw:AdwIcon IconName="open-menu-symbolic" />
+      <Button.Flyout>
+        <Flyout Placement="Bottom">
+          <local:StylePanel />
+        </Flyout>
+      </Button.Flyout>
+    </Button>
+  </adw:HeaderBar.End>
+  <Panel>
+    <local:MainView Name="View" x:FieldModifier="public" />
+  </Panel>
+</Window>

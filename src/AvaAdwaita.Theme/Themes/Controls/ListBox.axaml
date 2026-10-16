@@ -1,0 +1,68 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- A scroll viewer with no node and overlay scroll bars, so rows stay direct children of list. -->
+  <ControlTheme x:Key="AdwNodelessScrollViewer" TargetType="ScrollViewer">
+    <!-- A scrolled window takes the wheel anywhere inside it, over empty space too, as GTK's does. -->
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <ScrollContentPresenter Name="PART_ContentPresenter" adw:ScrollClip.Auto="True" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
+          <ScrollBar Name="PART_HorizontalScrollBar" Orientation="Horizontal" VerticalAlignment="Bottom" adw:Css.Classes="bottom" />
+          <ScrollBar Name="PART_VerticalScrollBar" Orientation="Vertical" HorizontalAlignment="Right" adw:Css.Classes="right" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- list (.boxed-list, .navigation-sidebar, .rich-list) > row.activatable -->
+  <ControlTheme x:Key="{x:Type ListBox}" TargetType="ListBox">
+    <Setter Property="adw:Css.Node" Value="list" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ScrollViewer Name="PART_ScrollViewer"
+                        Theme="{StaticResource AdwNodelessScrollViewer}"
+                        HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                        VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                        AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+          </ScrollViewer>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <!-- These are GtkListBox's styles, and a GtkListBox realizes every row: a boxed list lies in a page, and
+         a virtualizing panel there keeps the viewport it measured before its rows took their style. -->
+    <Style Selector="^.boxed-list, ^.boxed-list-separate, ^.rich-list, ^.navigation-sidebar">
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <StackPanel />
+        </ItemsPanelTemplate>
+      </Setter>
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
+    <Setter Property="adw:Css.Node" Value="row" />
+    <Setter Property="adw:Css.Position" Value="Item" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+            <ContentPresenter.DataTemplates>
+              <adw:LabelTemplate />
+            </ContentPresenter.DataTemplates>
+          </ContentPresenter>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

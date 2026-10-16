@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AvaAdwaita.Theme/AvaAdwaita.Theme.csproj" />
+    <Project Path="src/AvaAdwaita.Fonts/AvaAdwaita.Fonts.csproj" />
+    <Project Path="src/AvaAdwaita.DataGrid/AvaAdwaita.DataGrid.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AvaAdwaita.Theme.Tests/AvaAdwaita.Theme.Tests.csproj" />
+  </Folder>
+  <Folder Name="/solution-items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="NOTICE.md" />
+  </Folder>
+</Solution>

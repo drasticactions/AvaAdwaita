@@ -1,0 +1,69 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- AdwSplitButton: splitbutton (.text-button, .image-button) > button > content, separator.vertical,
+       menubutton.popup > button.toggle > arrow.down -->
+  <ControlTheme x:Key="AdwSplitPrimary" TargetType="Button">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            RecognizesAccessKey="True"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch">
+            <ContentPresenter.DataTemplates>
+              <adw:LabelTemplate RecognizesAccessKey="True" TextAlignment="Center" />
+            </ContentPresenter.DataTemplates>
+          </ContentPresenter>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="AdwSplitArrow" TargetType="Button">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="adw:Css.Classes" Value="toggle" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwIcon adw:Css.Node="arrow" adw:Css.Classes="down" />
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type SplitButton}" TargetType="SplitButton">
+    <Setter Property="adw:Css.Node" Value="splitbutton" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwStack Orientation="Horizontal">
+            <Button Name="PART_PrimaryButton" Theme="{StaticResource AdwSplitPrimary}" Classes="adw-no-auto-class"
+                    adw:AdwStack.Expand="True"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                    Command="{TemplateBinding Command}"
+                    CommandParameter="{TemplateBinding CommandParameter}"
+                    Focusable="False" />
+            <adw:AdwBox adw:Css.Node="separator" adw:Css.Classes="vertical" />
+            <adw:AdwBox adw:Css.Node="menubutton" adw:Css.Classes="popup">
+              <Button Name="PART_SecondaryButton" Theme="{StaticResource AdwSplitArrow}" Classes="adw-no-auto-class" Focusable="False" />
+            </adw:AdwBox>
+          </adw:AdwStack>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:flyout-open /template/ Button#PART_SecondaryButton">
+      <Setter Property="adw:Css.States" Value="Checked" />
+    </Style>
+    <Style Selector="^:checked /template/ Button#PART_PrimaryButton">
+      <Setter Property="adw:Css.States" Value="Checked" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type ToggleSplitButton}" TargetType="ToggleSplitButton" BasedOn="{StaticResource {x:Type SplitButton}}" />
+</ResourceDictionary>

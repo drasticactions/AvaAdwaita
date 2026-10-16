@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:AvaAdwaita.Gallery.Pages"
+             x:Class="AvaAdwaita.Gallery.Pages.ColorsPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Colors" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Custom properties" />
+      <ItemsControl Name="Swatches">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel ItemSpacing="8" LineSpacing="8" />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="local:Swatch">
+            <StackPanel Width="216" Spacing="4">
+              <Border Height="40" CornerRadius="6" Background="{Binding Brush}" BorderBrush="#28000000" BorderThickness="1" />
+              <Label Classes="caption monospace" Content="{Binding Name}" HorizontalAlignment="Left" />
+            </StackPanel>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,37 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- GtkFrame: frame > label + child -->
+  <ControlTheme x:Key="{x:Type HeaderedContentControl}" TargetType="HeaderedContentControl">
+    <Setter Property="adw:Css.Node" Value="frame" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <DockPanel>
+            <ContentPresenter Name="PART_HeaderPresenter" DockPanel.Dock="Top" HorizontalAlignment="Left"
+                              Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              IsVisible="{TemplateBinding Header, Converter={x:Static ObjectConverters.IsNotNull}}">
+              <ContentPresenter.DataTemplates>
+                <adw:LabelTemplate />
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Padding="{TemplateBinding Padding}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+              <ContentPresenter.DataTemplates>
+                <adw:LabelTemplate />
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+          </DockPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type GroupBox}" TargetType="GroupBox" BasedOn="{StaticResource {x:Type HeaderedContentControl}}" />
+</ResourceDictionary>

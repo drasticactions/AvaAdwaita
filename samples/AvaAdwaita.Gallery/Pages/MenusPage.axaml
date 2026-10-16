@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AvaAdwaita.Gallery.Pages.MenusPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Menus &amp; Popovers" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Menu bar" />
+      <Menu>
+        <MenuItem Header="_File">
+          <MenuItem Header="_New" InputGesture="Ctrl+N" />
+          <MenuItem Header="_Open…" />
+          <Separator />
+          <MenuItem Header="Recent">
+            <MenuItem Header="notes.txt" />
+            <MenuItem Header="report.odt" />
+          </MenuItem>
+          <MenuItem Header="Show Hidden" ToggleType="CheckBox" IsChecked="True" />
+          <Separator />
+          <MenuItem Header="_Quit" />
+        </MenuItem>
+        <MenuItem Header="_Edit">
+          <MenuItem Header="Cu_t" />
+          <MenuItem Header="_Copy" />
+          <MenuItem Header="_Paste" IsEnabled="False" />
+        </MenuItem>
+      </Menu>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Context menu" />
+      <Border Height="80">
+        <Border.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="Rename" />
+            <MenuItem Header="Move to Trash" />
+          </ContextMenu>
+        </Border.ContextMenu>
+        <Label Content="Right-click here" />
+      </Border>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Popover" />
+      <Button Content="Open Popover">
+        <Button.Flyout>
+          <Flyout>
+            <StackPanel Spacing="12" Margin="6">
+              <Label Content="A popover" />
+              <TextBox PlaceholderText="Name" />
+              <Button Classes="suggested-action" Content="Done" />
+            </StackPanel>
+          </Flyout>
+        </Button.Flyout>
+      </Button>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Tooltip" />
+      <Button Content="Hover me" ToolTip.Tip="A tooltip" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

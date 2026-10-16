@@ -1,0 +1,102 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- modelbutton.flat > (check | radio) + label + accelerator + arrow; a "-" header is a separator. -->
+  <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
+    <Setter Property="adw:Css.Node" Value="modelbutton" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <adw:AdwBox>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemToggle" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <!-- GtkModelButton's start box holds the check or radio; a size group gives every item's the same width. The
+                   accelerator and the arrow are each row's own, after the label that takes the rest of the row. -->
+              <adw:AdwBox Grid.Column="0" Name="PART_StartBox" adw:Css.Node="box" adw:Css.Classes="horizontal">
+                <Panel>
+                  <adw:AdwIcon Name="PART_Check" adw:Css.Node="check" VerticalAlignment="Center"
+                               IsVisible="{TemplateBinding ToggleType, Converter={x:Static adw:CssConverters.IsCheckBoxToggle}}" />
+                  <adw:AdwIcon Name="PART_Radio" adw:Css.Node="radio" VerticalAlignment="Center"
+                               IsVisible="{TemplateBinding ToggleType, Converter={x:Static adw:CssConverters.IsRadioToggle}}" />
+                </Panel>
+              </adw:AdwBox>
+              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                <ContentPresenter Name="PART_IconPresenter" Content="{TemplateBinding Icon}" VerticalAlignment="Center"
+                                  IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <!-- The label fills the height, as GtkModelButton's, and centers its text. -->
+                <ContentPresenter Name="PART_HeaderPresenter"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                  RecognizesAccessKey="True"
+                                  VerticalAlignment="Stretch"
+                                  VerticalContentAlignment="Stretch">
+                  <ContentPresenter.DataTemplates>
+                    <adw:LabelTemplate RecognizesAccessKey="True" />
+                  </ContentPresenter.DataTemplates>
+                </ContentPresenter>
+              </StackPanel>
+              <adw:AdwLabel Grid.Column="2" adw:Css.Node="accelerator" VerticalAlignment="Center"
+                            Text="{TemplateBinding InputGesture, Converter={x:Static adw:CssConverters.GestureText}}"
+                            IsVisible="{TemplateBinding InputGesture, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <adw:AdwIcon Grid.Column="3" Name="PART_Arrow" adw:Css.Node="arrow" VerticalAlignment="Center"
+                           />
+            </Grid>
+          </adw:AdwBox>
+          <Popup Name="PART_Popup"
+                 WindowManagerAddShadowHint="False"
+                 Placement="RightEdgeAlignedTop"
+                 IsLightDismissEnabled="False"
+                 IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
+            <Decorator>
+              <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="menu background">
+                <adw:PopoverContents>
+                  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <adw:AdwBox adw:Css.Node="stack">
+                      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                        <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                          <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Grid.IsSharedSizeScope="True" />
+                        </adw:AdwBox>
+                      </adw:AdwBox>
+                    </adw:AdwBox>
+                  </ScrollViewer>
+                </adw:PopoverContents>
+              </adw:AdwBox>
+            </Decorator>
+          </Popup>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <!-- GtkModelButton names its indicators by the side they are on: the check .left and the arrow .right, swapped
+         right to left. -->
+    <Style Selector="^ /template/ adw|AdwIcon#PART_Check, ^ /template/ adw|AdwIcon#PART_Radio">
+      <Setter Property="adw:Css.Classes" Value="left" />
+    </Style>
+    <Style Selector="^ /template/ adw|AdwIcon#PART_Arrow">
+      <Setter Property="adw:Css.Classes" Value="right" />
+    </Style>
+    <Style Selector="^[FlowDirection=RightToLeft] /template/ adw|AdwIcon#PART_Check, ^[FlowDirection=RightToLeft] /template/ adw|AdwIcon#PART_Radio">
+      <Setter Property="adw:Css.Classes" Value="right" />
+    </Style>
+    <Style Selector="^[FlowDirection=RightToLeft] /template/ adw|AdwIcon#PART_Arrow">
+      <Setter Property="adw:Css.Classes" Value="left" />
+    </Style>
+    <Style Selector="^:empty /template/ adw|AdwIcon#PART_Arrow">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:separator">
+      <Setter Property="adw:Css.Node" Value="separator" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <adw:AdwBox />
+        </ControlTemplate>
+      </Setter>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>
