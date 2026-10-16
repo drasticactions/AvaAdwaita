@@ -1,12 +1,14 @@
 # AvaAdwaita
 
-[![NuGet Version](https://img.shields.io/nuget/v/AvaAdwaita.svg)](https://www.nuget.org/packages/AvaAdwaita/) ![License](https://img.shields.io/badge/License-LGPL2.1-015d93.svg)
+[![NuGet Version](https://img.shields.io/nuget/v/AvaAdwaita.Theme.svg)](https://www.nuget.org/packages/AvaAdwaita.Theme/) ![License](https://img.shields.io/badge/License-LGPL2.1-015d93.svg)
 
 AvaAdwaita is an experimental them for [Avalonia](https://avaloniaui.net) 12
 that binds [libadwaita](https://gnome.pages.gitlab.gnome.org/libadwaita/).
 Using libadwaita's stylesheet (`gtk.css`) through a managed GTK CSS engine, 
 it draws Avalonia's stock controls from its CSS node trees. Along with
 mapping from GTK, it helps Avalonia apps match to Adwaita designs.
+
+![Screenshot](./assets/screenshot.png)
 
 To see it live, go to [live gallery demo](https://drasticactions.github.io/AvaAdwaita),
 or download the [AppImage](https://github.com/drasticactions/AvaAdwaita/actions/workflows/appimage.yml).
