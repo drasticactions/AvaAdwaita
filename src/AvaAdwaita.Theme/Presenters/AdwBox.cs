@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Rendering;
 using AvaAdwaita.CssEngine.Computed;
+using AvaAdwaita.CssEngine.Values;
 using AvaAdwaita.Nodes;
 
 namespace AvaAdwaita.Presenters;
@@ -21,6 +22,7 @@ public class AdwBox : Decorator, ICustomHitTest
 {
     private NodeEffects? _effects;
     private ComputedStyle? _style;
+    private CssBoxSides _margin;
 
     static AdwBox()
     {
@@ -65,6 +67,9 @@ public class AdwBox : Decorator, ICustomHitTest
         {
             return;
         }
+
+        // Hit testing asks for the border box on every pointer move and every frame, so the margins are rounded once here.
+        _margin = CssBoxGeometry.Round(s.Margin);
 
         _effects?.Push(s);
         if (old is null || !ReferenceEquals(old.Size, s.Size) || old.Border.TopWidth != s.Border.TopWidth || old.Border.LeftWidth != s.Border.LeftWidth
@@ -134,7 +139,7 @@ public class AdwBox : Decorator, ICustomHitTest
     }
 
     /// <summary>The border box in local coordinates.</summary>
-    public Rect BorderBox => _style is { } s ? new CssBoxGeometry(s, Bounds.Size).BorderBox : new Rect(Bounds.Size);
+    public Rect BorderBox => _style is null ? new Rect(Bounds.Size) : CssBoxGeometry.BorderBoxOf(_margin, Bounds.Size);
 
     /// <inheritdoc/>
     public bool HitTest(Point point) => BorderBox.Contains(point);

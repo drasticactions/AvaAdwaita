@@ -1,0 +1,24 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <!-- dialog.floating > widget > floating-sheet > dimming + sheet.background > widget > the content, or dialog.bottom-sheet >
+       widget > bottom-sheet > widget + dimming + sheet.background > (stack > widget > widget > the content) + outline, as
+       AdwDialog in the window's dialog-host. -->
+  <ControlTheme x:Key="{x:Type adw:Dialog}" TargetType="adw:Dialog">
+    <Setter Property="adw:Css.Node" Value="dialog" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="widget">
+            <Panel>
+              <primitives:FloatingSheet Name="PART_Floating" />
+              <adw:BottomSheet Name="PART_Bottom" IsVisible="False" />
+            </Panel>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

@@ -81,6 +81,12 @@ internal static class NodeTree
                 return b;
             }
 
+            // A tooltip is a window of its own (GtkTooltipWindow): its node is a root, not a child of the widget.
+            if (v is PopupRoot or OverlayPopupHost && (v as StyledElement)?.Parent is Popup { Child: ToolTip })
+            {
+                return null;
+            }
+
             // GTK parents a popover to the widget it pops up from (dropdown > popover, menubutton > popover),
             // and stylesheet rules such as dropdown popover.menu depend on it.
             if (v is PopupRoot or OverlayPopupHost && PopupOwner(v) is { } popupOwner)

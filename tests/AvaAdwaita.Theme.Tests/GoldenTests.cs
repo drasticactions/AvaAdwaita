@@ -83,12 +83,13 @@ public class GoldenTests
 
             var mask = new bool[reference.Width * reference.Height];
 
-            // The window's own header bar reaches the window's edges, where the margin around it and the corners
-            // outside its rounding are outside the window: GTK renders nothing there and the screen shows the
-            // desktop. Only the window's own pixels compare.
-            if ((string?)entry["widget"]?["type"] == "headerbar")
+            // The window's own header bar reaches the window's edges, as a dialog's bottom sheet reaches its bottom, where
+            // the margin around it and the corners outside its rounding are outside the window: GTK renders nothing
+            // there and the screen shows the desktop. Only the window's own pixels compare, less the window's 1px
+            // outline (window.csd's outline, inset), which GTK draws over the scene's edge.
+            if ((string?)entry["widget"]?["type"] == "headerbar" || (bool?)entry["widget"]?["sheet"] == true)
             {
-                var inner = new Rect(Margin * scale, Margin * scale, reference.Width - (2 * Margin * scale), reference.Height - (2 * Margin * scale));
+                var inner = new Rect(Margin * scale, Margin * scale, reference.Width - (2 * Margin * scale), reference.Height - (2 * Margin * scale)).Deflate(scale);
                 for (var i = 0; i < mask.Length; i++)
                 {
                     mask[i] = !inner.Contains(new Point(i % reference.Width, i / reference.Width)) || !opaque[i];

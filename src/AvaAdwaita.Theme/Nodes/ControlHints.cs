@@ -141,6 +141,10 @@ internal static class ControlHints
         CssNodeProviders.MapPseudoClass<TreeViewItem>(":pointerover", CssStates.None, (_, owner) => owner is not Avalonia.Input.InputElement { IsPointerOver: true });
 
         CssNodeProviders.MapPseudoClass<TabItem>(":selected", CssStates.Checked);
+
+        // A button with a flyout is a GtkMenuButton, whose button is :checked while its popover is open; a drop-down
+        // button's template shows that on its own button.
+        CssNodeProviders.MapPseudoClass<Button>(":flyout-open", CssStates.Checked, (b, owner) => ReferenceEquals(b, owner) && b is not DropDownButton);
         CssNodeProviders.Register<CalendarDayButton>(b => DayClasses(b));
         CssNodeProviders.Register<CommandBarButton>(b => CommandClasses(b.Icon, b.Label), CommandBarButton.IconProperty, CommandBarButton.LabelProperty);
         CssNodeProviders.Register<CommandBarToggleButton>(b => CommandClasses(b.Icon, b.Label), CommandBarToggleButton.IconProperty, CommandBarToggleButton.LabelProperty);
@@ -174,7 +178,8 @@ internal static class ControlHints
             Avalonia.Controls.Primitives.RangeBase.MinimumProperty,
             Avalonia.Controls.Primitives.RangeBase.MaximumProperty);
         CssNodeProviders.Register<ProgressBar>(p => [Orientation(p.Orientation)], ProgressBar.OrientationProperty);
-        CssNodeProviders.Register<ListBoxItem>(i => i is ComboBoxItem ? [] : ["activatable"]);
+        // A row that says itself whether it is activatable (a libadwaita preference row) adds .activatable itself.
+        CssNodeProviders.Register<ListBoxItem>(i => i is ComboBoxItem or IOwnActivatable ? [] : ["activatable"]);
         CssNodeProviders.Register<Control>(c => DataValidationErrors.GetHasErrors(c) ? ["error"] : [], DataValidationErrors.HasErrorsProperty);
         CssNodeProviders.Register<MenuItem>(MenuItemClasses, MenuItem.ToggleTypeProperty);
         CssNodeProviders.MapPseudoClass<ComboBox>(":dropdownopen", CssStates.Checked, (_, owner) => Css.GetNode(owner) == "button");
@@ -253,9 +258,10 @@ internal static class ControlHints
             yield break;
         }
 
+        // gtk_button_set_child: a label child makes a text button, as a string does.
         switch (b.Content)
         {
-            case string:
+            case string or Label:
                 yield return "text-button";
                 break;
             case Avalonia.Controls.Shapes.Path or PathIcon or Image or AvaAdwaita.Presenters.AdwIcon:

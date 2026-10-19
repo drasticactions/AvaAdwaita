@@ -1,0 +1,42 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- statuspage > scrolledwindow > viewport > box.vertical > clamp > box.vertical > image.icon + box.vertical >
+       label.title + label.body.description, then the child, as adw-status-page.ui. -->
+  <ControlTheme x:Key="{x:Type adw:StatusPage}" TargetType="adw:StatusPage">
+    <Setter Property="adw:Css.Node" Value="statuspage" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+            <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical" VerticalAlignment="Center">
+              <adw:AdwStack Orientation="Vertical">
+                <adw:Clamp>
+                  <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical" VerticalAlignment="Center">
+                    <adw:AdwStack Orientation="Vertical">
+                      <adw:AdwIcon adw:Css.Classes="icon" IconName="{TemplateBinding IconName}" HorizontalAlignment="Center"
+                                   IsVisible="{TemplateBinding IconName, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                        <adw:AdwStack Orientation="Vertical">
+                          <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="title" Text="{TemplateBinding Title}"
+                                        TextWrapping="Wrap" TextAlignment="Center"
+                                        IsVisible="{TemplateBinding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                          <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="body description" Text="{TemplateBinding Description}"
+                                        TextWrapping="Wrap" TextAlignment="Center"
+                                        IsVisible="{TemplateBinding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        </adw:AdwStack>
+                      </adw:AdwBox>
+                    </adw:AdwStack>
+                  </adw:AdwBox>
+                </adw:Clamp>
+                <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              </adw:AdwStack>
+            </adw:AdwBox>
+          </ScrollViewer>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

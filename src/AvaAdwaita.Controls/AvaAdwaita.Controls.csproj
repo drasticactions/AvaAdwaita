@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>AvaAdwaita.Controls</RootNamespace>
+    <PackageId>AvaAdwaita.Controls</PackageId>
+    <Description>Controls that libadwaita and GTK have and Avalonia does not, drawn by AvaAdwaita.Theme's stylesheet engine from the same CSS nodes: preference rows and groups, status pages, banners, avatars, level bars, toolbar views, header bars, view switchers, navigation and split views, clamps, dialogs and bottom sheets, tab bars, search bars, action bars and shortcut labels.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AvaAdwaita.Theme\AvaAdwaita.Theme.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="AvaAdwaita.Theme.Tests" />
+  </ItemGroup>
+
+  <Import Project="..\SharedThemes.targets" />
+
+</Project>

@@ -72,7 +72,8 @@ public class ParityTests
             Render(control);
             AddEditableText(control, rec);
             var draws = rec.Draws.Select(d => d with { Rect = d.Rect.Translate(-(Vector)border.Position) }).ToList();
-            foreach (var p in ParityComparer.Compare(gtk["draws"]!.AsArray(), draws))
+            var sceneSize = new Size((double)gtk["size"]![0]!, (double)gtk["size"]![1]!);
+            foreach (var p in ParityComparer.Compare(gtk["draws"]!.AsArray(), draws, sceneSize))
             {
                 problems.Add("draw: " + p);
             }
@@ -127,7 +128,8 @@ public class ParityTests
         {
             // A control's node is drawn, with its transform, by the box at the root of its template.
             var drawn = v is Avalonia.Controls.Primitives.TemplatedControl && v.GetVisualChildren().FirstOrDefault() is AdwBox b && Css.GetCssNode(b) is null ? (Visual)b : v;
-            var box = new CssBoxGeometry(s, drawn.Bounds.Size).BorderBox;
+            // In a right-to-left subtree the box lays out with the mirrored style it draws.
+            var box = new CssBoxGeometry(Css.GetStyle(drawn) ?? s, drawn.Bounds.Size).BorderBox;
             bounds = box.TransformToAABB(DrawRecorder.ToRoot(drawn, root)).Translate(-(Vector)origin);
         }
 

@@ -1,0 +1,34 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- row.expander[.empty] > box.vertical > list > row.header.activatable (an action row whose suffixes end with the
+       switch and image.expander-row-arrow), then revealer > list.nested > the rows, as adw-expander-row.ui. The row is
+       :checked while expanded. -->
+  <ControlTheme x:Key="{x:Type adw:ExpanderRow}" TargetType="adw:ExpanderRow">
+    <Setter Property="adw:Css.Node" Value="row" />
+    <Setter Property="adw:Css.Position" Value="Item" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+            <adw:AdwStack Orientation="Vertical">
+              <adw:AdwBox adw:Css.Node="list">
+                <Decorator Name="PART_Header" />
+              </adw:AdwBox>
+              <adw:Revealer Transition="SlideUp" IsRevealed="{TemplateBinding IsExpanded}">
+                <ListBox Name="PART_Rows" Classes="nested" ItemsSource="{Binding Rows, RelativeSource={RelativeSource TemplatedParent}}">
+                  <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel />
+                    </ItemsPanelTemplate>
+                  </ListBox.ItemsPanel>
+                </ListBox>
+              </adw:Revealer>
+            </adw:AdwStack>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

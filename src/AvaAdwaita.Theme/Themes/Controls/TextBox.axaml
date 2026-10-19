@@ -36,10 +36,10 @@
       <ControlTemplate>
         <DataValidationErrors>
           <adw:AdwBox>
-            <DockPanel>
-              <ContentPresenter DockPanel.Dock="Left" Content="{TemplateBinding InnerLeftContent}" VerticalAlignment="Center" />
-              <ContentPresenter DockPanel.Dock="Right" Content="{TemplateBinding InnerRightContent}" VerticalAlignment="Center" />
-              <adw:AdwBox Name="PART_Text" adw:Css.Node="text" adw:Css.StateSource="TemplatedParent">
+            <!-- In GTK's order: the start icon, the text, the end icon. -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+              <ContentPresenter Grid.Column="0" Content="{TemplateBinding InnerLeftContent}" VerticalContentAlignment="Stretch" />
+              <adw:AdwBox Grid.Column="1" Name="PART_Text" adw:Css.Node="text" adw:Css.StateSource="TemplatedParent">
                 <Panel>
                   <Panel Name="PART_Selection" adw:Css.Node="selection" IsVisible="False" />
                   <adw:AdwEntryWidth Placeholder="{Binding #PART_Placeholder}">
@@ -83,7 +83,8 @@
                   </adw:AdwEntryWidth>
                 </Panel>
               </adw:AdwBox>
-            </DockPanel>
+              <ContentPresenter Grid.Column="2" Content="{TemplateBinding InnerRightContent}" VerticalContentAlignment="Stretch" />
+            </Grid>
           </adw:AdwBox>
         </DataValidationErrors>
       </ControlTemplate>

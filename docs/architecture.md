@@ -199,7 +199,7 @@ The Window ControlTheme reproduces `AdwApplicationWindow`'s tree
 > windowhandle > box > headerbar`). `WindowChrome` sets `.csd` (or `.ssd` when the system decorates the window, for libadwaita's `window.ssd` hairline),
 `.maximized` and `.fullscreen`, and computes the shadow space from the
 window node's `box-shadow` so the platform's drawn decorations put the
-shadow outside the window geometry. `HeaderBar.Start`/`End`/`Title` fill
+shadow outside the window geometry. `WindowHeaderBar.Start`/`End`/`Title` fill
 the header bar; `ButtonLayout` reads `org.gnome.desktop.wm.preferences
 button-layout`.
 

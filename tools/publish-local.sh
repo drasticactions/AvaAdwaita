@@ -33,7 +33,7 @@ lower() {
 }
 
 ids=()
-for id in AvaAdwaita.Fonts AvaAdwaita.Theme AvaAdwaita.DataGrid; do
+for id in AvaAdwaita.Fonts AvaAdwaita.Theme AvaAdwaita.DataGrid AvaAdwaita.Controls; do
     if [ -f "$root/src/$id/$id.csproj" ]; then
         ids+=("$id")
     fi

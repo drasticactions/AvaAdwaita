@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
+             x:Class="AvaAdwaita.Gallery.Pages.FeedbackPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Status &amp; Feedback" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Banner" />
+      <adw:Banner Name="Banner" Title="You are offline. Changes will sync later." ButtonLabel="_Retry" IsRevealed="True" />
+      <ToggleSwitch Name="ShowBanner" IsChecked="True" OnContent="Shown" OffContent="Hidden" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Status page" />
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="440">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:StatusPage IconName="system-search-symbolic" Title="No Results" Description="Try a different search">
+            <Button Classes="pill suggested-action" Content="Search Again" HorizontalAlignment="Center" />
+          </adw:StatusPage>
+        </Border>
+      </adw:AdwBox>
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="280">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:StatusPage Classes="compact" IconName="folder-symbolic" Title="Empty Folder" Description="Add files to see them here" />
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Avatars" />
+      <WrapPanel Classes="gallery-row">
+        <adw:Avatar Text="Ada Lovelace" ShowInitials="True" Size="96" />
+        <adw:Avatar Text="Grace Hopper" ShowInitials="True" Size="64" />
+        <adw:Avatar Text="Linus" ShowInitials="True" Size="48" />
+        <adw:Avatar Text="Émile Zola" ShowInitials="True" Size="32" />
+        <adw:Avatar Text="Margaret Hamilton" ShowInitials="True" Size="24" />
+        <adw:Avatar Text="Somebody" Size="48" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Level bars" />
+      <adw:LevelBar Name="Continuous" Value="0.6" />
+      <adw:LevelBar Name="Discrete" Mode="Discrete" Maximum="5" Value="3" />
+      <Slider Name="Level" Minimum="0" Maximum="1" Value="0.6" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

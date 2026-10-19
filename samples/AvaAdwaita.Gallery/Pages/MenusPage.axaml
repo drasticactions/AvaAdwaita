@@ -39,13 +39,13 @@
     </StackPanel>
     <StackPanel Classes="gallery-section">
       <Label Classes="heading" Content="Popover" />
-      <Button Content="Open Popover">
+      <Button Name="OpenPopover" Content="Open Popover">
         <Button.Flyout>
           <Flyout>
             <StackPanel Spacing="12" Margin="6">
               <Label Content="A popover" />
               <TextBox PlaceholderText="Name" />
-              <Button Classes="suggested-action" Content="Done" />
+              <Button Name="PopoverDone" Classes="suggested-action" Content="Done" />
             </StackPanel>
           </Flyout>
         </Button.Flyout>

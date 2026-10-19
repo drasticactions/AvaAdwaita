@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
@@ -11,13 +12,34 @@ namespace AvaAdwaita.Chrome;
 /// </summary>
 public class HeaderBarHandle : AdwBox
 {
+    /// <summary>
+    /// Whether the handles in an element move the window; inherited. Something that drags itself from them, as a bottom
+    /// sheet does (AdwSwipeTracker's allow-window-handle), turns it off.
+    /// </summary>
+    public static readonly AttachedProperty<bool> MovesWindowProperty =
+        AvaloniaProperty.RegisterAttached<HeaderBarHandle, Visual, bool>("MovesWindow", true, inherits: true);
+
+    static HeaderBarHandle()
+    {
+        MovesWindowProperty.Changed.AddClassHandler<HeaderBarHandle>((h, _) => h.UpdateRole());
+    }
+
     /// <summary>Creates the handle.</summary>
     public HeaderBarHandle()
     {
         Nodes.Css.SetNode(this, "windowhandle");
-        Avalonia.Controls.Chrome.WindowDecorationProperties.SetElementRole(this, WindowDecorationsElementRole.TitleBar);
+        UpdateRole();
         DoubleTapped += OnDoubleTapped;
     }
+
+    /// <summary>Gets <see cref="MovesWindowProperty"/>.</summary>
+    public static bool GetMovesWindow(Visual element) => element.GetValue(MovesWindowProperty);
+
+    /// <summary>Sets <see cref="MovesWindowProperty"/>.</summary>
+    public static void SetMovesWindow(Visual element, bool value) => element.SetValue(MovesWindowProperty, value);
+
+    private void UpdateRole() => Avalonia.Controls.Chrome.WindowDecorationProperties.SetElementRole(
+        this, GetMovesWindow(this) ? WindowDecorationsElementRole.TitleBar : WindowDecorationsElementRole.None);
 
     private void OnDoubleTapped(object? sender, TappedEventArgs e)
     {
@@ -26,7 +48,7 @@ public class HeaderBarHandle : AdwBox
             return;
         }
 
-        if (TopLevel.GetTopLevel(this) is Window w && w.CanResize && w.CanMaximize)
+        if (GetMovesWindow(this) && TopLevel.GetTopLevel(this) is Window w && w.CanResize && w.CanMaximize)
         {
             w.WindowState = w.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             e.Handled = true;

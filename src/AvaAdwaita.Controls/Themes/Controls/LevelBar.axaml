@@ -1,0 +1,19 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <!-- levelbar.horizontal.continuous|discrete > trough > block.filled[.low|.high|.full] … block.empty …, as GtkLevelBar. -->
+  <ControlTheme x:Key="{x:Type adw:LevelBar}" TargetType="adw:LevelBar">
+    <Setter Property="adw:Css.Node" Value="levelbar" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="trough">
+            <primitives:LevelBarTrough />
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

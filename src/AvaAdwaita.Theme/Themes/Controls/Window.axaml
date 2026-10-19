@@ -23,10 +23,10 @@
                 <Panel adw:Css.Node="widget">
                   <DockPanel adw:Css.Node="toolbarview">
                     <adw:AdwBox DockPanel.Dock="Top" adw:Css.Node="revealer" adw:Css.Classes="top-bar"
-                                IsVisible="{TemplateBinding adw:HeaderBar.IsVisible}">
+                                IsVisible="{TemplateBinding adw:WindowHeaderBar.IsVisible}">
                       <adw:HeaderBarHandle>
                         <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
-                          <adw:AdwBox Name="PART_HeaderBar" adw:Css.Node="headerbar" adw:Css.Classes="{TemplateBinding adw:HeaderBar.Classes}">
+                          <adw:AdwBox Name="PART_HeaderBar" adw:Css.Node="headerbar" adw:Css.Classes="{TemplateBinding adw:WindowHeaderBar.Classes}">
                             <adw:HeaderBarHandle>
                               <adw:AdwBox adw:Css.Node="box">
                                 <Grid ColumnDefinitions="*,Auto,*">
@@ -42,17 +42,17 @@
                                       <!-- AdwHeaderBar's start and end boxes: gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6). -->
                                       <adw:AdwStack Orientation="Horizontal" BoxSpacing="6">
                                         <adw:WindowControls Name="PART_StartControls" IsStart="True" VerticalAlignment="Center" />
-                                        <ContentPresenter Name="PART_StartContent" Content="{TemplateBinding adw:HeaderBar.Start}" VerticalAlignment="Center"
-                                                          IsVisible="{TemplateBinding adw:HeaderBar.Start, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                        <ContentPresenter Name="PART_StartContent" Content="{TemplateBinding adw:WindowHeaderBar.Start}" VerticalAlignment="Center"
+                                                          IsVisible="{TemplateBinding adw:WindowHeaderBar.Start, Converter={x:Static ObjectConverters.IsNotNull}}" />
                                       </adw:AdwStack>
                                     </adw:AdwBox>
                                   </adw:AdwBox>
                                   <adw:AdwBox Grid.Column="1" adw:Css.Node="widget">
                                     <Panel>
-                                      <ContentPresenter Content="{TemplateBinding adw:HeaderBar.Title}" VerticalAlignment="Center"
-                                                        IsVisible="{TemplateBinding adw:HeaderBar.Title, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                      <ContentPresenter Content="{TemplateBinding adw:WindowHeaderBar.Title}" VerticalAlignment="Center"
+                                                        IsVisible="{TemplateBinding adw:WindowHeaderBar.Title, Converter={x:Static ObjectConverters.IsNotNull}}" />
                                       <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="title" Text="{TemplateBinding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
-                                                    IsVisible="{TemplateBinding adw:HeaderBar.Title, Converter={x:Static ObjectConverters.IsNull}}" />
+                                                    IsVisible="{TemplateBinding adw:WindowHeaderBar.Title, Converter={x:Static ObjectConverters.IsNull}}" />
                                     </Panel>
                                   </adw:AdwBox>
                                   <adw:AdwBox Grid.Column="2" adw:Css.Node="widget" HorizontalAlignment="Right">
@@ -64,8 +64,8 @@
                                         </MultiBinding>
                                       </adw:AdwBox.IsVisible>
                                       <adw:AdwStack Orientation="Horizontal" BoxSpacing="6">
-                                        <ContentPresenter Name="PART_EndContent" Content="{TemplateBinding adw:HeaderBar.End}" VerticalAlignment="Center"
-                                                          IsVisible="{TemplateBinding adw:HeaderBar.End, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                        <ContentPresenter Name="PART_EndContent" Content="{TemplateBinding adw:WindowHeaderBar.End}" VerticalAlignment="Center"
+                                                          IsVisible="{TemplateBinding adw:WindowHeaderBar.End, Converter={x:Static ObjectConverters.IsNotNull}}" />
                                         <adw:WindowControls Name="PART_EndControls" IsStart="False" VerticalAlignment="Center" />
                                       </adw:AdwStack>
                                     </adw:AdwBox>

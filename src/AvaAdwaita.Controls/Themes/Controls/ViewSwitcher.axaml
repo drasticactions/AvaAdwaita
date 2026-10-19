@@ -1,0 +1,60 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <!-- viewswitcher.wide|narrow > a button per page, as wide as each other (a homogeneous GtkBoxLayout). -->
+  <ControlTheme x:Key="{x:Type adw:ViewSwitcher}" TargetType="adw:ViewSwitcher">
+    <Setter Property="adw:Css.Node" Value="viewswitcher" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <primitives:HomogeneousBox Name="PART_Buttons" />
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- button.flat.toggle.horizontal|vertical > stack > box.horizontal.wide | box.vertical.narrow > indicatorbin (mask,
+       indicator, image) + label, as adw-view-switcher-button.ui: the stack shows the box for the orientation. -->
+  <ControlTheme x:Key="{x:Type primitives:ViewSwitcherButton}" TargetType="primitives:ViewSwitcherButton">
+    <Setter Property="adw:Css.Node" Value="button" />
+    <Setter Property="adw:Css.Classes" Value="toggle" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="stack">
+            <Panel>
+              <adw:AdwBox Name="PART_Wide" adw:Css.Node="box" adw:Css.Classes="horizontal wide" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <adw:AdwStack Orientation="Horizontal">
+                  <primitives:IndicatorBin VerticalAlignment="Center" BadgeNumber="{Binding Page.BadgeNumber, RelativeSource={RelativeSource TemplatedParent}}"
+                                           NeedsAttention="{Binding Page.NeedsAttention, RelativeSource={RelativeSource TemplatedParent}}">
+                    <adw:AdwIcon IconName="{Binding Page.IconName, RelativeSource={RelativeSource TemplatedParent}}" />
+                  </primitives:IndicatorBin>
+                  <adw:AdwLabel adw:Css.Node="label" Text="{Binding Page.Title, RelativeSource={RelativeSource TemplatedParent}}" TextTrimming="CharacterEllipsis"
+                                RecognizesAccessKey="{Binding Page.UseUnderline, RelativeSource={RelativeSource TemplatedParent}}" />
+                </adw:AdwStack>
+              </adw:AdwBox>
+              <adw:AdwBox Name="PART_Narrow" adw:Css.Node="box" adw:Css.Classes="vertical narrow" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <adw:AdwStack Orientation="Vertical">
+                  <primitives:IndicatorBin HorizontalAlignment="Center" VerticalAlignment="Center" BadgeNumber="{Binding Page.BadgeNumber, RelativeSource={RelativeSource TemplatedParent}}"
+                                           NeedsAttention="{Binding Page.NeedsAttention, RelativeSource={RelativeSource TemplatedParent}}">
+                    <adw:AdwIcon IconName="{Binding Page.IconName, RelativeSource={RelativeSource TemplatedParent}}" />
+                  </primitives:IndicatorBin>
+                  <adw:AdwLabel adw:Css.Node="label" Text="{Binding Page.Title, RelativeSource={RelativeSource TemplatedParent}}" TextTrimming="CharacterEllipsis"
+                                TextAlignment="Center" RecognizesAccessKey="{Binding Page.UseUnderline, RelativeSource={RelativeSource TemplatedParent}}" />
+                </adw:AdwStack>
+              </adw:AdwBox>
+            </Panel>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^[Orientation=Horizontal] /template/ adw|AdwBox#PART_Narrow">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^[Orientation=Vertical] /template/ adw|AdwBox#PART_Wide">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

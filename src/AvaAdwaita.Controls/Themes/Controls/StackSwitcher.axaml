@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- stackswitcher.linked > button.text-button.toggle > label | button.image-button.toggle > image, as GtkStackSwitcher. -->
+  <ControlTheme x:Key="{x:Type adw:StackSwitcher}" TargetType="adw:StackSwitcher">
+    <Setter Property="adw:Css.Node" Value="stackswitcher" />
+    <Setter Property="adw:Css.Classes" Value="linked" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwStack Name="PART_Buttons" Orientation="Horizontal" />
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

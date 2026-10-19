@@ -1,0 +1,20 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- viewswitcherbar > actionbar > revealer > box > box.start + viewswitcher.narrow + box.end, as adw-view-switcher-bar.ui. -->
+  <ControlTheme x:Key="{x:Type adw:ViewSwitcherBar}" TargetType="adw:ViewSwitcherBar">
+    <Setter Property="adw:Css.Node" Value="viewswitcherbar" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:ActionBar IsRevealed="{TemplateBinding Reveal}">
+            <adw:ActionBar.CenterWidget>
+              <adw:ViewSwitcher Name="PART_Switcher" Policy="Narrow" />
+            </adw:ActionBar.CenterWidget>
+          </adw:ActionBar>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

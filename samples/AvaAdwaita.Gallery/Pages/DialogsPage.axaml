@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
+             x:Class="AvaAdwaita.Gallery.Pages.DialogsPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Dialogs" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Dialog" />
+      <WrapPanel Classes="gallery-row">
+        <Button Name="OpenDialog" Content="Open Dialog" />
+        <Button Name="OpenSheet" Content="Open as Bottom Sheet" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Alert Dialog" />
+      <WrapPanel Classes="gallery-row">
+        <Button Name="OpenAlert" Content="Save Changes?" />
+        <Button Name="OpenStackedAlert" Content="Three Responses" />
+        <Button Name="OpenEntryAlert" Content="With an Entry" />
+        <Label Name="AlertResult" VerticalAlignment="Center" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Preferences and About Dialogs" />
+      <WrapPanel Classes="gallery-row">
+        <Button Name="OpenPreferences" Content="Open Preferences" />
+        <Button Name="OpenAbout" Content="About" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Bottom Sheet" />
+      <WrapPanel Classes="gallery-row">
+        <CheckBox Content="Full width" IsChecked="{Binding #Sheet.FullWidth}" />
+        <CheckBox Content="Drag handle" IsChecked="{Binding #Sheet.ShowDragHandle}" />
+        <CheckBox Content="Reveal bottom bar" IsChecked="{Binding #Sheet.RevealBottomBar}" />
+      </WrapPanel>
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="320">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:BottomSheet Name="Sheet">
+            <adw:BottomSheet.Content>
+              <adw:StatusPage Classes="compact" IconName="audio-x-generic-symbolic" Title="Library"
+                              Description="Click the bar below to open the sheet" />
+            </adw:BottomSheet.Content>
+            <adw:BottomSheet.BottomBar>
+              <Label Content="Now Playing" Margin="12" HorizontalContentAlignment="Center" />
+            </adw:BottomSheet.BottomBar>
+            <adw:BottomSheet.Sheet>
+              <adw:ToolbarView>
+                <adw:ToolbarView.TopBars>
+                  <adw:HeaderBar />
+                </adw:ToolbarView.TopBars>
+                <adw:StatusPage Classes="compact" IconName="media-playback-start-symbolic" Title="Now Playing"
+                                Description="Escape, the close button, a click above or dragging it down closes it" />
+              </adw:ToolbarView>
+            </adw:BottomSheet.Sheet>
+          </adw:BottomSheet>
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

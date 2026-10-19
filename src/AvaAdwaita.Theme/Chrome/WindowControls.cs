@@ -20,11 +20,25 @@ public class WindowControls : StackPanel
     public static readonly StyledProperty<bool> IsStartProperty =
         AvaloniaProperty.Register<WindowControls, bool>(nameof(IsStart));
 
+    /// <summary>Defines <see cref="ShowButtons"/>.</summary>
+    public static readonly StyledProperty<bool> ShowButtonsProperty =
+        AvaloniaProperty.Register<WindowControls, bool>(nameof(ShowButtons), true);
+
+    /// <summary>Defines <see cref="IsDialog"/>.</summary>
+    public static readonly StyledProperty<bool> IsDialogProperty =
+        AvaloniaProperty.Register<WindowControls, bool>(nameof(IsDialog));
+
+    /// <summary>Defines the <see cref="CloseRequested"/> event.</summary>
+    public static readonly Avalonia.Interactivity.RoutedEvent<Avalonia.Interactivity.RoutedEventArgs> CloseRequestedEvent =
+        Avalonia.Interactivity.RoutedEvent.Register<WindowControls, Avalonia.Interactivity.RoutedEventArgs>(nameof(CloseRequested), Avalonia.Interactivity.RoutingStrategies.Bubble);
+
     private Window? _window;
 
     static WindowControls()
     {
         IsStartProperty.Changed.AddClassHandler<WindowControls>((c, _) => c.Rebuild());
+        ShowButtonsProperty.Changed.AddClassHandler<WindowControls>((c, _) => c.Rebuild());
+        IsDialogProperty.Changed.AddClassHandler<WindowControls>((c, _) => c.Rebuild());
         Nodes.Css.StyleProperty.Changed.AddClassHandler<WindowControls>((c, _) => c.OnStyleChanged());
     }
 
@@ -40,6 +54,30 @@ public class WindowControls : StackPanel
     {
         get => GetValue(IsStartProperty);
         set => SetValue(IsStartProperty, value);
+    }
+
+    /// <summary>False hides the buttons, as a header bar's show-start-title-buttons and show-end-title-buttons.</summary>
+    public bool ShowButtons
+    {
+        get => GetValue(ShowButtonsProperty);
+        set => SetValue(ShowButtonsProperty, value);
+    }
+
+    /// <summary>
+    /// The controls of a dialog's header bar: only the close button, where the layout puts it, which raises
+    /// <see cref="CloseRequested"/> rather than closing the window.
+    /// </summary>
+    public bool IsDialog
+    {
+        get => GetValue(IsDialogProperty);
+        set => SetValue(IsDialogProperty, value);
+    }
+
+    /// <summary>Raised when a dialog's close button is clicked.</summary>
+    public event System.EventHandler<Avalonia.Interactivity.RoutedEventArgs>? CloseRequested
+    {
+        add => AddHandler(CloseRequestedEvent, value);
+        remove => RemoveHandler(CloseRequestedEvent, value);
     }
 
     /// <inheritdoc/>
@@ -81,7 +119,7 @@ public class WindowControls : StackPanel
     {
         if (e.Property == Window.WindowStateProperty || e.Property == Window.CanResizeProperty || e.Property == Window.CanMinimizeProperty
             || e.Property == Window.CanMaximizeProperty || e.Property == WindowChrome.IsClientSideProperty
-            || e.Property == HeaderBar.ShowStartTitleButtonsProperty || e.Property == HeaderBar.ShowEndTitleButtonsProperty)
+            || e.Property == WindowHeaderBar.ShowStartTitleButtonsProperty || e.Property == WindowHeaderBar.ShowEndTitleButtonsProperty)
         {
             Rebuild();
         }
@@ -99,13 +137,26 @@ public class WindowControls : StackPanel
     {
         Children.Clear();
         var w = _window;
-        var show = w is not null && WindowChrome.GetIsClientSide(w) && (IsStart ? HeaderBar.GetShowStartTitleButtons(w) : HeaderBar.GetShowEndTitleButtons(w));
+        // A dialog's close button is the dialog's, drawn whatever the window's decorations.
+        var show = ShowButtons && w is not null && (IsDialog
+            || (WindowChrome.GetIsClientSide(w) && (IsStart ? WindowHeaderBar.GetShowStartTitleButtons(w) : WindowHeaderBar.GetShowEndTitleButtons(w))));
         var layout = ButtonLayout.Parse(AdwaitaEnvironment.IsInitialized ? AdwaitaEnvironment.State.ButtonLayout : null);
         var names = IsStart ? layout.Start : layout.End;
         if (show)
         {
             foreach (var name in names)
             {
+                if (IsDialog && name != "close")
+                {
+                    continue;
+                }
+
+                if (IsDialog)
+                {
+                    Children.Add(CreateDialogClose());
+                    continue;
+                }
+
                 if (name == "minimize" && !w!.CanMinimize)
                 {
                     continue;
@@ -124,6 +175,17 @@ public class WindowControls : StackPanel
 
         // GtkWindowControls hides itself when it has no buttons.
         IsVisible = Children.Count > 0;
+    }
+
+    // A dialog's close button closes the dialog, so it has no window decoration role.
+    private Button CreateDialogClose()
+    {
+        var image = new AdwIcon { IconName = "window-close-symbolic" };
+        Nodes.Css.SetNode(image, "image");
+        var b = new Button { Content = image, Focusable = false };
+        b.Classes.Add("close");
+        b.Click += (_, _) => RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(CloseRequestedEvent, this));
+        return b;
     }
 
     private static Button CreateButton(string name, Window w)

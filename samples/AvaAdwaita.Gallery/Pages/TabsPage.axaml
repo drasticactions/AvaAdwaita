@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
              x:Class="AvaAdwaita.Gallery.Pages.TabsPage">
   <UserControl.Styles>
     <Style Selector="TabControl">
@@ -12,6 +13,34 @@
   </UserControl.Styles>
   <StackPanel Classes="gallery-page">
     <Label Classes="title-1" Content="Tabs &amp; Pages" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Tab Bar" />
+      <WrapPanel Classes="gallery-row">
+        <CheckBox Content="Expand tabs" IsChecked="{Binding #Bar.ExpandTabs}" />
+        <CheckBox Content="Inverted" IsChecked="{Binding #Bar.IsInverted}" />
+        <CheckBox Content="Autohide" IsChecked="{Binding #Bar.Autohide}" />
+      </WrapPanel>
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="300">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:TabOverview Name="Overview" View="{Binding #Tabs}" EnableNewTab="True">
+            <DockPanel>
+              <adw:TabBar Name="Bar" DockPanel.Dock="Top" View="{Binding #Tabs}" Autohide="False">
+                <adw:TabBar.StartActionWidget>
+                  <adw:TabButton Name="Counter" View="{Binding #Tabs}" />
+                </adw:TabBar.StartActionWidget>
+                <adw:TabBar.EndActionWidget>
+                  <Button Name="NewTab" Classes="flat" ToolTip.Tip="New Tab">
+                    <adw:AdwIcon IconName="list-add-symbolic" />
+                  </Button>
+                </adw:TabBar.EndActionWidget>
+              </adw:TabBar>
+              <adw:TabView Name="Tabs" />
+            </DockPanel>
+          </adw:TabOverview>
+        </Border>
+      </adw:AdwBox>
+      <Label Classes="dimmed" Content="Drag tabs to move them; right-click for the menu; Ctrl+Tab switches; the count opens the overview." />
+    </StackPanel>
     <StackPanel Classes="gallery-section">
       <Label Classes="heading" Content="Notebook" />
       <TabControl TabStripPlacement="Top">

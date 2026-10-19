@@ -1,0 +1,34 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- widget > avatar.colorN[.contrasted][.image] > label | image, as AdwAvatar: the circle is centered at Size. -->
+  <ControlTheme x:Key="{x:Type adw:Avatar}" TargetType="adw:Avatar">
+    <Setter Property="adw:Css.Node" Value="widget" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox Name="PART_Circle" adw:Css.Node="avatar" Width="{TemplateBinding Size}" Height="{TemplateBinding Size}"
+                      HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Panel>
+              <adw:AdwLabel Name="PART_Initials" adw:Css.Node="label" Text="{TemplateBinding Initials}" TextAlignment="Center"
+                            IsVisible="{TemplateBinding Initials, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <adw:AdwIcon Name="PART_Icon" IconName="{TemplateBinding IconName, Converter={x:Static adw:AvatarConverters.IconName}}"
+                           PixelSize="{TemplateBinding Size, Converter={x:Static adw:AvatarConverters.Half}}">
+                <adw:AdwIcon.IsVisible>
+                  <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="Initials" RelativeSource="{RelativeSource TemplatedParent}" Converter="{x:Static ObjectConverters.IsNull}" />
+                    <Binding Path="Image" RelativeSource="{RelativeSource TemplatedParent}" Converter="{x:Static ObjectConverters.IsNull}" />
+                  </MultiBinding>
+                </adw:AdwIcon.IsVisible>
+              </adw:AdwIcon>
+              <Border CornerRadius="9999" ClipToBounds="True" IsVisible="{TemplateBinding Image, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Image Source="{TemplateBinding Image}" Stretch="UniformToFill" />
+              </Border>
+            </Panel>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

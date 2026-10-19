@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <!-- banner > revealer > widget > label.heading + button[.suggested-action], as adw-banner.ui. -->
+  <ControlTheme x:Key="{x:Type adw:Banner}" TargetType="adw:Banner">
+    <Setter Property="adw:Css.Node" Value="banner" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:Revealer Transition="SlideDown" IsRevealed="{TemplateBinding IsRevealed}">
+            <adw:AdwBox adw:Css.Node="widget">
+              <primitives:BannerLayout Title="{Binding #PART_Title}" Button="{Binding #PART_Button}">
+                <adw:AdwLabel Name="PART_Title" adw:Css.Node="label" adw:Css.Classes="heading" Text="{TemplateBinding Title}"
+                              TextWrapping="Wrap" TextAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="3" />
+                <Button Name="PART_Button" Focusable="True" VerticalAlignment="Center" Content="{TemplateBinding ButtonLabel}"
+                        IsVisible="{TemplateBinding ButtonLabel, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+              </primitives:BannerLayout>
+            </adw:AdwBox>
+          </adw:Revealer>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

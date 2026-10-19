@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
+             x:Class="AvaAdwaita.Gallery.Pages.SearchPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Search" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Search Entry" />
+      <WrapPanel Classes="gallery-row">
+        <adw:SearchEntry Name="Entry" PlaceholderText="Search" Width="240" />
+        <Label Name="EntryResult" VerticalAlignment="Center" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Search Bar" />
+      <WrapPanel Classes="gallery-row">
+        <ToggleButton Name="Toggle" Content="Search" IsChecked="{Binding #Bar.IsSearchMode}" />
+        <CheckBox Content="Close button" IsChecked="{Binding #Bar.ShowCloseButton}" />
+      </WrapPanel>
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <StackPanel Name="Results">
+            <adw:SearchBar Name="Bar">
+              <adw:SearchEntry Name="BarEntry" PlaceholderText="Search fruit" Width="280" />
+            </adw:SearchBar>
+            <ListBox Name="Fruit" Classes="navigation-sidebar" Height="200" />
+          </StackPanel>
+        </Border>
+      </adw:AdwBox>
+      <Label Classes="dimmed" Content="Typing in the list starts a search; Escape ends it." />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

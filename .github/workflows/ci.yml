@@ -70,7 +70,7 @@ jobs:
           global-json-file: global.json
       - name: Pack
         run: |
-          for id in AvaAdwaita.Theme AvaAdwaita.Fonts AvaAdwaita.DataGrid; do
+          for id in AvaAdwaita.Theme AvaAdwaita.Fonts AvaAdwaita.DataGrid AvaAdwaita.Controls; do
             dotnet pack "src/$id/$id.csproj" -c Release -o artifacts/packages -p:AvaAdwaitaRevision=${{ github.run_number }}
           done
       - uses: actions/upload-artifact@v4

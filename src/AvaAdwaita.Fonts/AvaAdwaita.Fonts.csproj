@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Assets\*.ttf" />
+    <AvaloniaResource Include="Assets\**\*.ttf" />
     <None Include="OFL.txt" Pack="true" PackagePath="\" />
   </ItemGroup>
 

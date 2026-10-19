@@ -20,6 +20,7 @@ or download the [AppImage](https://github.com/drasticactions/AvaAdwaita/actions/
 | `AvaAdwaita.Theme` | The theme, the CSS engine, settings, chrome and ControlThemes. |
 | `AvaAdwaita.Fonts` | Optional. Adwaita Sans and Adwaita Mono (OFL-1.1). |
 | `AvaAdwaita.DataGrid` | Optional. Avalonia's `DataGrid` as a GTK column view. |
+| `AvaAdwaita.Controls` | Optional. libadwaita and GTK widgets that Avalonia has no control for: preference rows, status pages, toolbar views, view switchers, dialogs, tab bars and more. |
 
 ## Getting started
 
@@ -46,13 +47,26 @@ public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()
 </Application.Styles>
 ```
 
-It also provides window decorations:
+`AvaAdwaita.Controls` includes custom-built GTK-styled controls that can extend
+or be used instead of the existing Avalonia implementations.
 
 ```xml
 <Window adw:HeaderBar.Title="Files">
   <adw:HeaderBar.End>
+<Application.Styles>
+  <adw:AdwaitaTheme />
+  <adw:AdwaitaControlsTheme />
+</Application.Styles>
+```
+
+Style classes are libadwaita's: `Classes="suggested-action"`,
+`Classes="pill"`, `Classes="boxed-list"`, `Classes="title-1"`, and so on.
+
+```xml
+<Window adw:WindowHeaderBar.Title="Files">
+  <adw:WindowHeaderBar.End>
     <Button><adw:AdwIcon IconName="open-menu-symbolic" /></Button>
-  </adw:HeaderBar.End>
+  </adw:WindowHeaderBar.End>
   …
 </Window>
 ```
@@ -110,6 +124,7 @@ Tools:
 
 - [Architecture](docs/architecture.md)
 - [Writing ControlThemes](docs/theme-authoring.md)
+- [Controls](docs/controls.md) in AvaAdwaita.Controls
 - [CSS support](docs/css-support.md) (generated)
 - [Moving to a new libadwaita](docs/libadwaita-releases.md)
 

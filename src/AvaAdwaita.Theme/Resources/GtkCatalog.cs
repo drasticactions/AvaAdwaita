@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace AvaAdwaita.Resources;
@@ -13,8 +14,22 @@ namespace AvaAdwaita.Resources;
 internal sealed class GtkCatalog
 {
     private readonly Dictionary<string, string> _messages;
+    private readonly Dictionary<string, string[]> _plurals;
+    private readonly Func<long, long> _plural;
 
-    private GtkCatalog(Dictionary<string, string> messages) => _messages = messages;
+    private GtkCatalog(Dictionary<string, string> messages, Dictionary<string, string[]> plurals)
+    {
+        _messages = messages;
+        _plurals = plurals;
+
+        // The header's Plural-Forms picks a variant for a count; without one, as English.
+        var rule = messages.TryGetValue(string.Empty, out var header)
+            ? header.Split('\n').FirstOrDefault(l => l.StartsWith("Plural-Forms:", StringComparison.OrdinalIgnoreCase))
+            : null;
+        _plural = rule is not null && rule.IndexOf("plural=", StringComparison.Ordinal) is var at and >= 0
+            ? PluralExpression.Parse(rule[(at + 7)..].TrimEnd().TrimEnd(';')) ?? (n => n == 1 ? 0 : 1)
+            : n => n == 1 ? 0 : 1;
+    }
 
     private static GtkCatalog? s_current;
     private static bool s_loaded;
@@ -40,6 +55,18 @@ internal sealed class GtkCatalog
     /// <summary>The translation of <paramref name="msgid"/> in <paramref name="context"/>, as C_() looks it up.</summary>
     public string? Translate(string context, string msgid) => Translate(context + "\u0004" + msgid);
 
+    /// <summary>The translation of <paramref name="msgid"/> for <paramref name="n"/> things (ngettext), or null.</summary>
+    public string? Translate(string msgid, string msgidPlural, long n)
+    {
+        if (!_plurals.TryGetValue(msgid, out var forms))
+        {
+            return null;
+        }
+
+        var index = _plural(n);
+        return index >= 0 && index < forms.Length && forms[index].Length > 0 ? forms[index] : null;
+    }
+
     /// <summary><paramref name="msgid"/> in the user's language: GTK's translation, or the English.</summary>
     public static string Gettext(string msgid) => Current?.Translate(msgid) ?? msgid;
 
@@ -64,9 +91,9 @@ internal sealed class GtkCatalog
                 var path = Path.Combine(dir, "locale", language, "LC_MESSAGES", domain + ".mo");
                 try
                 {
-                    if (File.Exists(path) && Parse(File.ReadAllBytes(path)) is { } messages)
+                    if (File.Exists(path) && Parse(File.ReadAllBytes(path), out var plurals) is { } messages)
                     {
-                        return new GtkCatalog(messages);
+                        return new GtkCatalog(messages, plurals);
                     }
                 }
                 catch (IOException)
@@ -105,8 +132,12 @@ internal sealed class GtkCatalog
     }
 
     /// <summary>The messages of a <c>.mo</c> file, keyed by message id; null when it is not one.</summary>
-    internal static Dictionary<string, string>? Parse(byte[] data)
+    internal static Dictionary<string, string>? Parse(byte[] data) => Parse(data, out _);
+
+    /// <summary>The messages of a <c>.mo</c> file, and its plural messages' variants keyed by the singular id.</summary>
+    internal static Dictionary<string, string>? Parse(byte[] data, out Dictionary<string, string[]> plurals)
     {
+        plurals = new Dictionary<string, string[]>(StringComparer.Ordinal);
         if (data.Length < 28)
         {
             return null;
@@ -151,8 +182,17 @@ internal sealed class GtkCatalog
         var messages = new Dictionary<string, string>(count, StringComparer.Ordinal);
         for (var i = 0; i < count; i++)
         {
-            // Plural forms hold their variants after a NUL; the theme's strings have none.
-            if (Text(originals, i) is { } id && id.IndexOf('\0') < 0 && Text(translations, i) is { } text)
+            if (Text(originals, i) is not { } id || Text(translations, i) is not { } text)
+            {
+                continue;
+            }
+
+            // A plural message's id and translation hold their variants after a NUL.
+            if (id.IndexOf('\0') is var nul and >= 0)
+            {
+                plurals[id[..nul]] = text.Split('\0');
+            }
+            else
             {
                 messages[id] = text;
             }

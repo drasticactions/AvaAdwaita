@@ -42,10 +42,13 @@ public partial class RepositoryTests
         Assert.True(offenders.Count == 0, string.Join("\n", offenders));
     }
 
-    [Fact]
-    public void Every_Public_Namespace_Is_Mapped()
+    [Theory]
+    [InlineData(typeof(AdwaitaTheme))]
+    [InlineData(typeof(DataGrid.AdwaitaDataGridTheme))]
+    [InlineData(typeof(Controls.AdwaitaControlsTheme))]
+    public void Every_Public_Namespace_Is_Mapped(System.Type theme)
     {
-        var assembly = typeof(AdwaitaTheme).Assembly;
+        var assembly = theme.Assembly;
         var mapped = assembly.GetCustomAttributes<XmlnsDefinitionAttribute>()
             .Where(a => a.XmlNamespace == "https://github.com/avaadwaita")
             .Select(a => a.ClrNamespace)
@@ -53,7 +56,10 @@ public partial class RepositoryTests
         var namespaces = assembly.GetExportedTypes().Select(t => t.Namespace!).Where(n => n != "CompiledAvaloniaXaml").Distinct();
         var unmapped = namespaces.Where(n => !mapped.Contains(n)).ToList();
         Assert.True(unmapped.Count == 0, string.Join(", ", unmapped));
-        Assert.Contains(assembly.GetCustomAttributes<XmlnsPrefixAttribute>(), a => a.Prefix == "adw");
+        if (theme == typeof(AdwaitaTheme))
+        {
+            Assert.Contains(assembly.GetCustomAttributes<XmlnsPrefixAttribute>(), a => a.Prefix == "adw");
+        }
     }
 
     // The sibling projects are models for this repository only and are never named in it.
@@ -86,11 +92,14 @@ public partial class RepositoryTests
         Assert.True(offenders.Count == 0, string.Join("\n", offenders));
     }
 
-    [Fact]
-    public void Every_Control_Theme_File_Is_Merged()
+    [Theory]
+    [InlineData("AvaAdwaita.Theme")]
+    [InlineData("AvaAdwaita.DataGrid")]
+    [InlineData("AvaAdwaita.Controls")]
+    public void Every_Control_Theme_File_Is_Merged(string project)
     {
-        var merged = File.ReadAllText(Path.Combine(Root, "src/AvaAdwaita.Theme/obj/ControlThemes/_Controls.axaml"));
-        var missing = Directory.EnumerateFiles(Path.Combine(Root, "src/AvaAdwaita.Theme/Themes/Controls"), "*.axaml")
+        var merged = File.ReadAllText(Path.Combine(Root, $"src/{project}/obj/ControlThemes/_Controls.axaml"));
+        var missing = Directory.EnumerateFiles(Path.Combine(Root, $"src/{project}/Themes/Controls"), "*.axaml")
             .Select(Path.GetFileName)
             .Where(n => !merged.Contains("/Themes/Controls/" + n, StringComparison.Ordinal))
             .ToList();

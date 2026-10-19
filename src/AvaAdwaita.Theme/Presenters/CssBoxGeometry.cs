@@ -14,7 +14,7 @@ internal readonly struct CssBoxGeometry
         Margin = Round(s.Margin);
         Border = Round(s.BorderWidths);
         Padding = Round(s.Padding);
-        BorderBox = new Rect(Margin.Left, Margin.Top, Math.Max(0, size.Width - Margin.Horizontal), Math.Max(0, size.Height - Margin.Vertical));
+        BorderBox = BorderBoxOf(Margin, size);
         PaddingBox = Deflate(BorderBox, Border);
         ContentBox = Deflate(PaddingBox, Padding);
         var w = BorderBox.Width;
@@ -54,7 +54,12 @@ internal readonly struct CssBoxGeometry
     // gtksizerequest.c get_number: values below 1 round up, others down.
     internal static double RoundLength(double d) => d < 1 ? Math.Ceiling(d) : Math.Floor(d);
 
-    private static CssBoxSides Round(CssBoxSides s) => new(RoundLength(s.Left), RoundLength(s.Top), RoundLength(s.Right), RoundLength(s.Bottom));
+    /// <summary>The border box of a box of <paramref name="size"/> with these margins, already rounded.</summary>
+    internal static Rect BorderBoxOf(CssBoxSides margin, Size size) =>
+        new(margin.Left, margin.Top, Math.Max(0, size.Width - margin.Horizontal), Math.Max(0, size.Height - margin.Vertical));
+
+    /// <summary>The sides as layout rounds them.</summary>
+    internal static CssBoxSides Round(CssBoxSides s) => new(RoundLength(s.Left), RoundLength(s.Top), RoundLength(s.Right), RoundLength(s.Bottom));
 
     private static Rect Deflate(Rect r, CssBoxSides s) =>
         new(r.X + s.Left, r.Y + s.Top, Math.Max(0, r.Width - s.Horizontal), Math.Max(0, r.Height - s.Vertical));

@@ -1,0 +1,70 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- row.combo.activatable > box.header > box.title, box.suffixes > listview.inline + box > image.dropdown-arrow,
+       as adw-combo-row.ui. -->
+  <ControlTheme x:Key="{x:Type adw:ComboRow}" TargetType="adw:ComboRow" BasedOn="{StaticResource {x:Type adw:ActionRow}}">
+    <Setter Property="adw:Css.Classes" Value="combo" />
+  </ControlTheme>
+
+  <!-- The combo row's combo box is no node: its parts are the suffixes' listview.inline > row > box > label, showing
+       the selected item, and box > image.dropdown-arrow, which the popover points at. The popover is GtkDropDown's
+       popover.menu > contents > box > scrolledwindow > listview.view > row.activatable, as a list view that activates
+       its rows with a single click. -->
+  <ControlTheme x:Key="AdwComboRowDropDown" TargetType="ComboBox">
+    <Setter Property="MaxDropDownHeight" Value="400" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="{TemplateBinding Background}">
+          <adw:AdwStack Orientation="Horizontal">
+            <adw:AdwBox Name="PART_Current" adw:Css.Node="listview" adw:Css.Classes="view inline" VerticalAlignment="Center"
+                        IsVisible="{TemplateBinding SelectionBoxItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+              <adw:AdwBox adw:Css.Node="row" adw:Css.Classes="activatable" adw:Css.StateSource="None">
+                <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal">
+                  <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
+                                    ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                    VerticalContentAlignment="Stretch">
+                    <ContentPresenter.DataTemplates>
+                      <adw:LabelTemplate />
+                    </ContentPresenter.DataTemplates>
+                  </ContentPresenter>
+                </adw:AdwBox>
+              </adw:AdwBox>
+            </adw:AdwBox>
+            <adw:AdwBox Name="PART_Arrow" adw:Css.Node="box" adw:Css.Classes="horizontal" VerticalAlignment="Center">
+              <adw:AdwIcon adw:Css.Classes="dropdown-arrow" IconName="pan-down-symbolic" />
+            </adw:AdwBox>
+          </adw:AdwStack>
+          <Popup Name="PART_Popup"
+                 WindowManagerAddShadowHint="False"
+                 IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                 PlacementTarget="PART_Arrow"
+                 Placement="Bottom"
+                 IsLightDismissEnabled="True"
+                 InheritsTransform="True">
+            <Decorator>
+              <adw:AdwBox adw:Css.Node="popover" adw:Css.Classes="menu background">
+                <adw:PopoverFrame>
+                  <adw:PopoverContents>
+                    <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                      <ScrollViewer Classes="adw-scrollable-child" MaxHeight="{TemplateBinding MaxDropDownHeight}" HorizontalScrollBarVisibility="Disabled">
+                        <adw:AdwBox adw:Css.Node="listview" adw:Css.Classes="view">
+                          <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                        </adw:AdwBox>
+                      </ScrollViewer>
+                    </adw:AdwBox>
+                  </adw:PopoverContents>
+                </adw:PopoverFrame>
+              </adw:AdwBox>
+            </Decorator>
+          </Popup>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^.adw-use-subtitle /template/ adw|AdwBox#PART_Current">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

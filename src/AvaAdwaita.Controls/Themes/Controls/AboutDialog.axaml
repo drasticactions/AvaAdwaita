@@ -1,0 +1,8 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- dialog.about, as a dialog: its content is toastoverlay > navigation-view > the main page (the application and its
+       rows in scrolledwindow.main-page) and the pages its rows open, as adw-about-dialog.ui. -->
+  <ControlTheme x:Key="{x:Type adw:AboutDialog}" TargetType="adw:AboutDialog" BasedOn="{StaticResource {x:Type adw:Dialog}}" />
+</ResourceDictionary>

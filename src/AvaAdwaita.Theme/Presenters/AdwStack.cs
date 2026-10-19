@@ -10,13 +10,18 @@ namespace AvaAdwaita.Presenters;
 /// A stack panel whose spacing is the nearest node's <c>border-spacing</c> plus <see cref="BoxSpacing"/>, as a GTK box
 /// lays out its children (gtk_box_layout's get_spacing).
 /// Space beyond the children's sizes goes to the children marked <see cref="ExpandProperty"/>, as GTK's
-/// <c>hexpand</c> and <c>vexpand</c>.
+/// <c>hexpand</c> and <c>vexpand</c>. When the children do not fit, those marked <see cref="ShrinkProperty"/> give up
+/// the space, as a wrapping label goes below its natural width toward its minimum in a GTK box.
 /// </summary>
 public class AdwStack : StackPanel
 {
     /// <summary>The child takes a share of the space left over along the stack.</summary>
     public static readonly AttachedProperty<bool> ExpandProperty =
         AvaloniaProperty.RegisterAttached<AdwStack, Control, bool>("Expand");
+
+    /// <summary>The child gives up space when the children do not fit, as a wrapping label; it is measured again with what is left.</summary>
+    public static readonly AttachedProperty<bool> ShrinkProperty =
+        AvaloniaProperty.RegisterAttached<AdwStack, Control, bool>("Shrink");
 
     /// <summary>Defines <see cref="BoxSpacing"/>.</summary>
     public static readonly StyledProperty<double> BoxSpacingProperty =
@@ -25,6 +30,7 @@ public class AdwStack : StackPanel
     static AdwStack()
     {
         AffectsParentArrange<AdwStack>(ExpandProperty);
+        AffectsParentMeasure<AdwStack>(ShrinkProperty);
         Nodes.Css.StyleProperty.Changed.AddClassHandler<AdwStack>((s, _) => s.UpdateSpacing());
         BoxSpacingProperty.Changed.AddClassHandler<AdwStack>((s, _) => s.UpdateSpacing());
     }
@@ -49,6 +55,46 @@ public class AdwStack : StackPanel
 
     /// <summary>Sets <see cref="ExpandProperty"/>.</summary>
     public static void SetExpand(Control c, bool v) => c.SetValue(ExpandProperty, v);
+
+    /// <summary>Gets <see cref="ShrinkProperty"/>.</summary>
+    public static bool GetShrink(Control c) => c.GetValue(ShrinkProperty);
+
+    /// <summary>Sets <see cref="ShrinkProperty"/>.</summary>
+    public static void SetShrink(Control c, bool v) => c.SetValue(ShrinkProperty, v);
+
+    /// <inheritdoc/>
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        var size = base.MeasureOverride(availableSize);
+        var horizontal = Orientation == Orientation.Horizontal;
+        var available = horizontal ? availableSize.Width : availableSize.Height;
+        var along = horizontal ? size.Width : size.Height;
+        if (double.IsInfinity(available) || along <= available)
+        {
+            return size;
+        }
+
+        var visible = Children.Where(c => c.IsVisible).ToList();
+        var shrinking = visible.Where(GetShrink).ToList();
+        if (shrinking.Count == 0)
+        {
+            return size;
+        }
+
+        // The others keep their natural sizes; the shrinking children share what is left.
+        double Along(Control c) => horizontal ? c.DesiredSize.Width : c.DesiredSize.Height;
+        var fixedLength = visible.Except(shrinking).Sum(Along) + (Spacing * Math.Max(0, visible.Count - 1));
+        var share = Math.Max(0, Math.Floor((available - fixedLength) / shrinking.Count));
+        foreach (var c in shrinking)
+        {
+            var length = Math.Min(Along(c), share);
+            c.Measure(horizontal ? new Size(length, availableSize.Height) : new Size(availableSize.Width, length));
+        }
+
+        var total = visible.Sum(Along) + (Spacing * Math.Max(0, visible.Count - 1));
+        var across = visible.Count == 0 ? 0 : visible.Max(c => horizontal ? c.DesiredSize.Height : c.DesiredSize.Width);
+        return horizontal ? new Size(total, across) : new Size(across, total);
+    }
 
     /// <inheritdoc/>
     protected override Size ArrangeOverride(Size finalSize)

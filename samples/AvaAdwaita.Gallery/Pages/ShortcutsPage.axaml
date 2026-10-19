@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
+             x:Class="AvaAdwaita.Gallery.Pages.ShortcutsPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Shortcuts" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Shortcuts Dialog" />
+      <WrapPanel Classes="gallery-row">
+        <Button Name="OpenShortcuts" Content="Keyboard Shortcuts" />
+        <Button Name="OpenManyShortcuts" Content="With Section Buttons" />
+      </WrapPanel>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Shortcut Label" />
+      <ListBox Classes="boxed-list" SelectionMode="Single">
+        <adw:ActionRow Title="Shortcut">
+          <adw:ShortcutLabel Accelerator="&lt;Control&gt;&lt;Shift&gt;t" VerticalAlignment="Center" />
+        </adw:ActionRow>
+        <adw:ActionRow Title="Alternatives">
+          <adw:ShortcutLabel Accelerator="&lt;Control&gt;y &lt;Control&gt;&lt;Shift&gt;z" VerticalAlignment="Center" />
+        </adw:ActionRow>
+        <adw:ActionRow Title="Range">
+          <adw:ShortcutLabel Accelerator="&lt;Alt&gt;1...9" VerticalAlignment="Center" />
+        </adw:ActionRow>
+        <adw:ActionRow Title="Sequence">
+          <adw:ShortcutLabel Accelerator="&lt;Control&gt;k+&lt;Control&gt;s" VerticalAlignment="Center" />
+        </adw:ActionRow>
+        <adw:ActionRow Title="Keys together">
+          <adw:ShortcutLabel Accelerator="Control_L&amp;Control_R" VerticalAlignment="Center" />
+        </adw:ActionRow>
+        <adw:ActionRow Title="Disabled">
+          <adw:ShortcutLabel DisabledText="Disabled" VerticalAlignment="Center" />
+        </adw:ActionRow>
+      </ListBox>
+      <WrapPanel Classes="gallery-row">
+        <TextBox Name="Accel" Text="&lt;Primary&gt;q" Width="240" />
+        <adw:ShortcutLabel Accelerator="{Binding #Accel.Text}" DisabledText="No Shortcut" VerticalAlignment="Center" />
+      </WrapPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

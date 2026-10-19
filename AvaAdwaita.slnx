@@ -3,6 +3,7 @@
     <Project Path="src/AvaAdwaita.Theme/AvaAdwaita.Theme.csproj" />
     <Project Path="src/AvaAdwaita.Fonts/AvaAdwaita.Fonts.csproj" />
     <Project Path="src/AvaAdwaita.DataGrid/AvaAdwaita.DataGrid.csproj" />
+    <Project Path="src/AvaAdwaita.Controls/AvaAdwaita.Controls.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/AvaAdwaita.Theme.Tests/AvaAdwaita.Theme.Tests.csproj" />

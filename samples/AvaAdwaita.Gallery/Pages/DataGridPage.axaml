@@ -17,7 +17,7 @@
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
           <DataGridTextColumn Header="Kind" Binding="{Binding Kind}" />
-          <DataGridTextColumn Header="Size" Binding="{Binding Size}" IsReadOnly="True" />
+          <DataGridTextColumn Header="Size" Binding="{Binding Size}" SortMemberPath="Bytes" IsReadOnly="True" />
           <DataGridCheckBoxColumn Header="Starred" Binding="{Binding Starred}" />
         </DataGrid.Columns>
       </DataGrid>
@@ -28,7 +28,7 @@
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
           <DataGridTextColumn Header="Kind" Binding="{Binding Kind}" />
-          <DataGridTextColumn Header="Size" Binding="{Binding Size}" IsReadOnly="True" />
+          <DataGridTextColumn Header="Size" Binding="{Binding Size}" SortMemberPath="Bytes" IsReadOnly="True" />
           <DataGridCheckBoxColumn Header="Starred" Binding="{Binding Starred}" />
         </DataGrid.Columns>
       </DataGrid>
@@ -39,7 +39,7 @@
         <DataGrid.Columns>
           <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
           <DataGridTextColumn Header="Kind" Binding="{Binding Kind}" />
-          <DataGridTextColumn Header="Size" Binding="{Binding Size}" IsReadOnly="True" />
+          <DataGridTextColumn Header="Size" Binding="{Binding Size}" SortMemberPath="Bytes" IsReadOnly="True" />
           <DataGridCheckBoxColumn Header="Starred" Binding="{Binding Starred}" />
         </DataGrid.Columns>
       </DataGrid>

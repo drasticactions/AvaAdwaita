@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <ItemsPanelTemplate x:Key="AdwToolbarBarsPanel">
+    <adw:AdwStack Orientation="Vertical" />
+  </ItemsPanelTemplate>
+
+  <!-- toolbarview[.undershoot-top][.undershoot-bottom] > the content, revealer.top-bar[.raised][.border] > windowhandle >
+       box.vertical[.collapse-spacing] > the top bars, revealer.bottom-bar … > the bottom bars, as AdwToolbarView. -->
+  <ControlTheme x:Key="{x:Type adw:ToolbarView}" TargetType="adw:ToolbarView">
+    <Setter Property="adw:Css.Node" Value="toolbarview" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <primitives:ToolbarViewLayout Name="PART_Layout" Content="{Binding #PART_Content}" TopBar="{Binding #PART_TopBar}" BottomBar="{Binding #PART_BottomBar}">
+            <ContentPresenter Name="PART_Content" Content="{TemplateBinding Content}" />
+            <adw:Revealer Name="PART_TopBar" adw:Css.Classes="top-bar" Transition="SlideDown" IsRevealed="{TemplateBinding RevealTopBars}">
+              <adw:HeaderBarHandle>
+                <adw:AdwBox Name="PART_TopBox" adw:Css.Node="box" adw:Css.Classes="vertical">
+                  <ItemsControl ItemsSource="{Binding TopBars, RelativeSource={RelativeSource TemplatedParent}}" ItemsPanel="{StaticResource AdwToolbarBarsPanel}" />
+                </adw:AdwBox>
+              </adw:HeaderBarHandle>
+            </adw:Revealer>
+            <adw:Revealer Name="PART_BottomBar" adw:Css.Classes="bottom-bar" Transition="SlideUp" IsRevealed="{TemplateBinding RevealBottomBars}">
+              <adw:HeaderBarHandle>
+                <adw:AdwBox Name="PART_BottomBox" adw:Css.Node="box" adw:Css.Classes="vertical">
+                  <ItemsControl ItemsSource="{Binding BottomBars, RelativeSource={RelativeSource TemplatedParent}}" ItemsPanel="{StaticResource AdwToolbarBarsPanel}" />
+                </adw:AdwBox>
+              </adw:HeaderBarHandle>
+            </adw:Revealer>
+          </primitives:ToolbarViewLayout>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

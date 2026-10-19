@@ -1,0 +1,55 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- The parts of a row's prefixes and suffixes boxes: the controls themselves, laid out as the box's children. -->
+  <ItemsPanelTemplate x:Key="AdwRowPartsPanel">
+    <adw:AdwStack Orientation="Horizontal" />
+  </ItemsPanelTemplate>
+
+  <!-- row[.activatable] > box.header > box.prefixes, box.title > label.title + label.subtitle, box.suffixes,
+       as adw-action-row.ui. -->
+  <ControlTheme x:Key="{x:Type adw:ActionRow}" TargetType="adw:ActionRow">
+    <Setter Property="adw:Css.Node" Value="row" />
+    <Setter Property="adw:Css.Position" Value="Item" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="header horizontal" VerticalAlignment="Center">
+            <adw:AdwStack Orientation="Horizontal">
+              <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal prefixes" IsVisible="{TemplateBinding HasPrefixes}">
+                <ItemsControl ItemsSource="{Binding Prefixes, RelativeSource={RelativeSource TemplatedParent}}" ItemsPanel="{StaticResource AdwRowPartsPanel}" />
+              </adw:AdwBox>
+              <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical title" VerticalAlignment="Center" adw:AdwStack.Shrink="True"
+                          adw:AdwStack.Expand="{TemplateBinding ExpandSuffixes, Converter={x:Static BoolConverters.Not}}">
+                <adw:AdwStack Orientation="Vertical">
+                  <adw:AdwLabel Name="PART_Title" adw:Css.Node="label" adw:Css.Classes="title"
+                                Text="{TemplateBinding Title}" RecognizesAccessKey="{TemplateBinding UseUnderline}"
+                                TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxLines="{TemplateBinding TitleLines}"
+                                IsVisible="{TemplateBinding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                  <adw:AdwLabel Name="PART_Subtitle" adw:Css.Node="label" adw:Css.Classes="subtitle"
+                                Text="{TemplateBinding Subtitle}"
+                                TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxLines="{TemplateBinding SubtitleLines}"
+                                IsVisible="{TemplateBinding Subtitle, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </adw:AdwStack>
+              </adw:AdwBox>
+              <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal suffixes" IsVisible="{TemplateBinding HasSuffixes}"
+                          adw:AdwStack.Expand="{TemplateBinding ExpandSuffixes}">
+                <adw:AdwStack Orientation="Horizontal">
+                  <ItemsControl ItemsSource="{Binding Suffixes, RelativeSource={RelativeSource TemplatedParent}}" ItemsPanel="{StaticResource AdwRowPartsPanel}"
+                                IsVisible="{TemplateBinding HasSuffixItems}" adw:AdwStack.Expand="{TemplateBinding ExpandSuffixes}" />
+                  <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <ContentPresenter.DataTemplates>
+                      <adw:LabelTemplate />
+                    </ContentPresenter.DataTemplates>
+                  </ContentPresenter>
+                </adw:AdwStack>
+              </adw:AdwBox>
+            </adw:AdwStack>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

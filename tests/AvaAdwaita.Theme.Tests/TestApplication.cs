@@ -25,6 +25,7 @@ public class TestApplication : Application
         Theme = new AdwaitaTheme();
         Styles.Add(Theme);
         Styles.Add(new DataGrid.AdwaitaDataGridTheme());
+        Styles.Add(new Controls.AdwaitaControlsTheme());
     }
 
     public AdwaitaTheme Theme { get; }

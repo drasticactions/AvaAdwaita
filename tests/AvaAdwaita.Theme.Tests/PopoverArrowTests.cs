@@ -48,7 +48,7 @@ public class PopoverArrowTests
         // AdwHeaderBar's end box is gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6), and GtkBox adds its CSS
         // border-spacing to that.
         var window = new Window { Width = 600, Height = 300 };
-        HeaderBar.SetEnd(window, new Button { Content = "Menu" });
+        WindowHeaderBar.SetEnd(window, new Button { Content = "Menu" });
         window.Show();
         Shots.Pump(window);
         var end = window.GetVisualDescendants().OfType<AdwStack>().Single(s => s.Children.OfType<WindowControls>().Any(c => !c.IsStart));

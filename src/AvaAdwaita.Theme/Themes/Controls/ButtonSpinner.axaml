@@ -89,9 +89,15 @@
                                TextWrapping="NoWrap"
                                PasswordChar="{TemplateBinding PasswordChar}"
                                SelectionBrush="{adw:Css BackgroundColor, Node=PART_Selection}"
-                               SelectionForegroundBrush="{adw:Css Color, Node=PART_Selection}"
                                CaretBrush="{TemplateBinding CaretBrush}"
-                               VerticalAlignment="Center" />
+                               VerticalAlignment="Center">
+                  <TextPresenter.SelectionForegroundBrush>
+                    <MultiBinding Converter="{x:Static adw:CssConverters.SelectedText}">
+                      <Binding Path="Foreground" RelativeSource="{RelativeSource Self}" />
+                      <Binding Path="(adw:Css.Style)" ElementName="PART_Selection" />
+                    </MultiBinding>
+                  </TextPresenter.SelectionForegroundBrush>
+                </TextPresenter>
               </Panel>
             </ScrollViewer>
           </Panel>

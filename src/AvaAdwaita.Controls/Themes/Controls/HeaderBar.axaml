@@ -1,0 +1,86 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <!-- headerbar > windowhandle > box > widget (box.horizontal.start > windowcontrols.start + start widgets), widget
+       (label.title or the title widget), widget (box.horizontal.end > end widgets + windowcontrols.end), as
+       AdwHeaderBar builds it; the same tree as the window's own header bar. -->
+  <ControlTheme x:Key="{x:Type adw:HeaderBar}" TargetType="adw:HeaderBar">
+    <Setter Property="adw:Css.Node" Value="headerbar" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:HeaderBarHandle>
+            <adw:AdwBox adw:Css.Node="box">
+              <primitives:CenterGrid IsStrict="{TemplateBinding StrictCentering}"
+                                     ExpandsCenter="{TemplateBinding ExpandsTitle}">
+                <adw:AdwBox Grid.Column="0" adw:Css.Node="widget">
+                  <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal start" HorizontalAlignment="Left">
+                    <adw:AdwBox.IsVisible>
+                      <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding ElementName="PART_StartControls" Path="IsVisible" />
+                        <Binding Path="HasBack" RelativeSource="{RelativeSource TemplatedParent}" />
+                        <Binding Path="HasStart" RelativeSource="{RelativeSource TemplatedParent}" />
+                      </MultiBinding>
+                    </adw:AdwBox.IsVisible>
+                    <adw:AdwStack Orientation="Horizontal" BoxSpacing="6">
+                      <adw:WindowControls Name="PART_StartControls" IsStart="True" VerticalAlignment="Center" IsDialog="{TemplateBinding InDialog}"
+                                          ShowButtons="{TemplateBinding StartButtonsShown}" />
+                      <!-- AdwBackButton: a bin around button.image-button.back. -->
+                      <adw:AdwBox adw:Css.Node="widget" VerticalAlignment="Center" IsVisible="{TemplateBinding HasBack}">
+                        <Button Name="PART_Back" Classes="back" ToolTip.Tip="{DynamicResource AdwStringBack}"
+                                AutomationProperties.Name="{DynamicResource AdwStringBack}">
+                          <adw:AdwIcon IconName="go-previous-symbolic" />
+                        </Button>
+                      </adw:AdwBox>
+                      <ItemsControl ItemsSource="{Binding Start, RelativeSource={RelativeSource TemplatedParent}}"
+                                    IsVisible="{TemplateBinding HasStart}" VerticalAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                          <ItemsPanelTemplate>
+                            <adw:AdwStack Orientation="Horizontal" BoxSpacing="6" />
+                          </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                      </ItemsControl>
+                    </adw:AdwStack>
+                  </adw:AdwBox>
+                </adw:AdwBox>
+                <adw:AdwBox Grid.Column="1" adw:Css.Node="widget" IsVisible="{TemplateBinding ShowTitle}">
+                  <Panel>
+                    <ContentPresenter Content="{TemplateBinding TitleWidget}" VerticalAlignment="Stretch"
+                                      IsVisible="{TemplateBinding TitleWidget, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="title" Text="{TemplateBinding WindowTitle}" TextTrimming="CharacterEllipsis"
+                                  VerticalAlignment="Center" WidthChars="5"
+                                  IsVisible="{TemplateBinding TitleWidget, Converter={x:Static ObjectConverters.IsNull}}" />
+                  </Panel>
+                </adw:AdwBox>
+                <adw:AdwBox Grid.Column="2" adw:Css.Node="widget">
+                  <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal end" HorizontalAlignment="Right">
+                    <adw:AdwBox.IsVisible>
+                      <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding ElementName="PART_EndControls" Path="IsVisible" />
+                        <Binding Path="HasEnd" RelativeSource="{RelativeSource TemplatedParent}" />
+                      </MultiBinding>
+                    </adw:AdwBox.IsVisible>
+                    <adw:AdwStack Orientation="Horizontal" BoxSpacing="6">
+                      <ItemsControl ItemsSource="{Binding EndShown, RelativeSource={RelativeSource TemplatedParent}}"
+                                    IsVisible="{TemplateBinding HasEnd}" VerticalAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                          <ItemsPanelTemplate>
+                            <adw:AdwStack Orientation="Horizontal" BoxSpacing="6" />
+                          </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                      </ItemsControl>
+                      <adw:WindowControls Name="PART_EndControls" IsStart="False" VerticalAlignment="Center" IsDialog="{TemplateBinding InDialog}"
+                                          ShowButtons="{TemplateBinding EndButtonsShown}" />
+                    </adw:AdwStack>
+                  </adw:AdwBox>
+                </adw:AdwBox>
+              </primitives:CenterGrid>
+            </adw:AdwBox>
+          </adw:HeaderBarHandle>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

@@ -237,4 +237,38 @@ public class ThemeTests
         NodeTree.RefreshSubtree(Css.GetCssNode(w)!);
         w.Close();
     }
+
+    [AvaloniaFact]
+    public void Tooltip_Is_A_Window_Of_Its_Own()
+    {
+        // GtkTooltipWindow is a root: the button's bold text does not reach the tooltip.
+        var button = new Button { Content = "Hover me" };
+        ToolTip.SetTip(button, "A tooltip");
+        var w = Shots.Show(new StackPanel { Children = { button } }, 400, 300);
+        ToolTip.SetIsOpen(button, true);
+        Shots.Pump(w);
+        var label = ((Avalonia.Visual?)w.GetVisualDescendants().OfType<ToolTip>().SingleOrDefault()
+            ?? Avalonia.Controls.Primitives.OverlayLayer.GetOverlayLayer(button))!.GetVisualDescendants().OfType<Presenters.AdwLabel>().Single(l => l.Text == "A tooltip");
+        var node = Css.GetCssNode(label)!;
+        Assert.Equal("tooltip", node.Parent!.Parent!.Name);
+        Assert.Null(node.Parent.Parent.Parent);
+        Assert.Equal(Avalonia.Media.FontWeight.Normal, label.FontWeight);
+        w.Close();
+    }
+
+    [AvaloniaFact]
+    public void Button_With_An_Open_Flyout_Is_Checked()
+    {
+        // A button with a flyout is a GtkMenuButton, :checked while its popover is open.
+        var button = new Button { Content = "Menu", Flyout = new Flyout { Content = "Popover" } };
+        var w = Shots.Show(new StackPanel { Children = { button } }, 400, 300);
+        Assert.False(Css.GetCssNode(button)!.States.HasFlag(CssStates.Checked));
+        button.Flyout.ShowAt(button);
+        Shots.Pump(w);
+        Assert.True(Css.GetCssNode(button)!.States.HasFlag(CssStates.Checked));
+        button.Flyout.Hide();
+        Shots.Pump(w);
+        Assert.False(Css.GetCssNode(button)!.States.HasFlag(CssStates.Checked));
+        w.Close();
+    }
 }

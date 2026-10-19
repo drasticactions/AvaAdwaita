@@ -1,0 +1,9 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- dialog.preferences, as a dialog: its content is toastoverlay > navigation-view > the main page, whose toolbar view
+       holds the header bar (the view switcher, the title or the search entry) over the pages or the search results, as
+       adw-preferences-dialog.ui. -->
+  <ControlTheme x:Key="{x:Type adw:PreferencesDialog}" TargetType="adw:PreferencesDialog" BasedOn="{StaticResource {x:Type adw:Dialog}}" />
+</ResourceDictionary>

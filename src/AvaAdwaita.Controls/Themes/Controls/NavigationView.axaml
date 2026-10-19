@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- navigation-view-page > the page's child, as AdwNavigationPage. -->
+  <ControlTheme x:Key="{x:Type adw:NavigationPage}" TargetType="adw:NavigationPage">
+    <Setter Property="adw:Css.Node" Value="navigation-view-page" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+            <ContentPresenter.DataTemplates>
+              <adw:LabelTemplate />
+            </ContentPresenter.DataTemplates>
+          </ContentPresenter>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

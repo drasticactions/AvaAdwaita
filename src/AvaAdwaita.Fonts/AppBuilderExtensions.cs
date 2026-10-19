@@ -17,7 +17,11 @@ public static class AppBuilderExtensions
     public static AppBuilder UseAdwaitaFonts(this AppBuilder builder)
     {
         AppContext.SetData(FallbackKey, AdwaitaFontCollection.Sans + "|" + AdwaitaFontCollection.Mono);
-        builder = builder.ConfigureFonts(m => m.AddFontCollection(new AdwaitaFontCollection()));
+        builder = builder.ConfigureFonts(m =>
+        {
+            m.AddFontCollection(new AdwaitaFontCollection());
+            m.AddFontCollection(new AdwaitaMonoFontCollection());
+        });
 
         // A browser has no fonts of its own, so the default family would be whichever face loaded first.
         return OperatingSystem.IsBrowser()

@@ -1,0 +1,208 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
+             x:Class="AvaAdwaita.Gallery.Pages.LayoutPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Layout &amp; Navigation" />
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Navigation split view" />
+      <ToggleSwitch Name="NavCollapsed" OnContent="Collapsed" OffContent="Expanded" />
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="280">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:NavigationSplitView Name="NavSplit">
+            <adw:NavigationSplitView.Sidebar>
+              <adw:NavigationPage Title="Folders">
+                <adw:ToolbarView>
+                  <adw:ToolbarView.TopBars>
+                    <adw:HeaderBar />
+                  </adw:ToolbarView.TopBars>
+                  <ListBox Name="Folders" Classes="navigation-sidebar">
+                    <x:String>Inbox</x:String>
+                    <x:String>Archive</x:String>
+                  </ListBox>
+                </adw:ToolbarView>
+              </adw:NavigationPage>
+            </adw:NavigationSplitView.Sidebar>
+            <adw:NavigationSplitView.Content>
+              <adw:NavigationPage Title="Messages">
+                <adw:ToolbarView>
+                  <adw:ToolbarView.TopBars>
+                    <adw:HeaderBar />
+                  </adw:ToolbarView.TopBars>
+                  <adw:NavigationView Name="Nav">
+                    <adw:NavigationPage Title="Messages" NavigationTag="list">
+                      <Button Name="OpenMessage" Content="Open a Message" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </adw:NavigationPage>
+                    <adw:NavigationPage Title="Message" NavigationTag="message">
+                      <adw:StatusPage Classes="compact" IconName="mail-unread-symbolic" Title="A message" Description="Escape, Alt+Left or the mouse's back button goes back">
+                        <Button Classes="pill" Content="Mark as Unread" HorizontalAlignment="Center" />
+                      </adw:StatusPage>
+                    </adw:NavigationPage>
+                  </adw:NavigationView>
+                </adw:ToolbarView>
+              </adw:NavigationPage>
+            </adw:NavigationSplitView.Content>
+          </adw:NavigationSplitView>
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Overlay split view" />
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="260">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:OverlaySplitView Name="Split">
+            <adw:OverlaySplitView.Sidebar>
+              <ListBox Classes="navigation-sidebar" SelectedIndex="0">
+                <x:String>Inbox</x:String>
+                <x:String>Starred</x:String>
+                <x:String>Sent</x:String>
+              </ListBox>
+            </adw:OverlaySplitView.Sidebar>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+              <ToggleSwitch Name="Collapsed" OnContent="Collapsed" OffContent="Expanded" />
+              <ToggleButton Name="ShowSidebar" IsChecked="True" Content="Show Sidebar" />
+            </StackPanel>
+          </adw:OverlaySplitView>
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Toolbar view" />
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="260">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:ToolbarView TopBarStyle="Raised">
+            <adw:ToolbarView.TopBars>
+              <adw:HeaderBar ShowStartTitleButtons="False" ShowEndTitleButtons="False">
+                <adw:HeaderBar.TitleWidget>
+                  <adw:WindowTitle Title="Toolbar View" />
+                </adw:HeaderBar.TitleWidget>
+              </adw:HeaderBar>
+            </adw:ToolbarView.TopBars>
+            <adw:ToolbarView.BottomBars>
+              <adw:ActionBar>
+                <adw:ActionBar.Start>
+                  <Button Content="Action" />
+                </adw:ActionBar.Start>
+              </adw:ActionBar>
+            </adw:ToolbarView.BottomBars>
+            <adw:StatusPage Classes="compact" IconName="view-grid-symbolic" Title="Content" />
+          </adw:ToolbarView>
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="View switcher" />
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="300">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:ToolbarView>
+            <adw:ToolbarView.TopBars>
+              <adw:HeaderBar ShowStartTitleButtons="False" ShowEndTitleButtons="False">
+                <adw:HeaderBar.TitleWidget>
+                  <adw:ViewSwitcher Stack="{Binding #Views}" Policy="Wide" />
+                </adw:HeaderBar.TitleWidget>
+              </adw:HeaderBar>
+            </adw:ToolbarView.TopBars>
+            <adw:ToolbarView.BottomBars>
+              <adw:ViewSwitcherBar Stack="{Binding #Views}" Reveal="True" />
+            </adw:ToolbarView.BottomBars>
+            <adw:ViewStack Name="Views">
+              <adw:ViewStackPage Name="albums" Title="Albums" IconName="view-grid-symbolic">
+                <adw:StatusPage Classes="compact" IconName="view-grid-symbolic" Title="Albums" />
+              </adw:ViewStackPage>
+              <adw:ViewStackPage Name="artists" Title="Artists" IconName="view-list-symbolic" BadgeNumber="3">
+                <adw:StatusPage Classes="compact" IconName="view-list-symbolic" Title="Artists" />
+              </adw:ViewStackPage>
+              <adw:ViewStackPage Name="songs" Title="Songs" IconName="audio-volume-high-symbolic" NeedsAttention="True">
+                <adw:StatusPage Classes="compact" IconName="audio-volume-high-symbolic" Title="Songs" />
+              </adw:ViewStackPage>
+            </adw:ViewStack>
+          </adw:ToolbarView>
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Inline view switcher" />
+      <adw:InlineViewSwitcher Stack="{Binding #Views}" HorizontalAlignment="Center" />
+      <adw:InlineViewSwitcher Stack="{Binding #Views}" DisplayMode="Icons" HorizontalAlignment="Center" />
+      <adw:InlineViewSwitcher Stack="{Binding #Views}" DisplayMode="Both" HorizontalAlignment="Center" />
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Stack switcher" />
+      <adw:StackSwitcher Stack="{Binding #Plain}" HorizontalAlignment="Center" />
+      <adw:ViewStack Name="Plain" Height="40">
+        <adw:ViewStackPage Name="day" Title="Day" Content="Today's events" />
+        <adw:ViewStackPage Name="week" Title="Week" Content="This week's events" />
+        <adw:ViewStackPage Name="month" Title="Month" Content="This month's events" />
+      </adw:ViewStack>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Header bars" />
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:HeaderBar ShowStartTitleButtons="False" ShowEndTitleButtons="False">
+            <adw:HeaderBar.TitleWidget>
+              <adw:WindowTitle Title="Documents" Subtitle="~/Documents" />
+            </adw:HeaderBar.TitleWidget>
+            <adw:HeaderBar.Start>
+              <Button ToolTip.Tip="Back">
+                <adw:AdwIcon IconName="go-previous-symbolic" />
+              </Button>
+            </adw:HeaderBar.Start>
+            <adw:HeaderBar.End>
+              <Button ToolTip.Tip="Menu">
+                <adw:AdwIcon IconName="open-menu-symbolic" />
+              </Button>
+              <Button ToolTip.Tip="Search">
+                <adw:AdwIcon IconName="system-search-symbolic" />
+              </Button>
+            </adw:HeaderBar.End>
+          </adw:HeaderBar>
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Action bar" />
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:ActionBar>
+            <adw:ActionBar.Start>
+              <Button Content="Select All" />
+            </adw:ActionBar.Start>
+            <adw:ActionBar.CenterWidget>
+              <Label Content="3 items selected" VerticalAlignment="Center" />
+            </adw:ActionBar.CenterWidget>
+            <adw:ActionBar.End>
+              <Button Classes="destructive-action" Content="Delete" />
+            </adw:ActionBar.End>
+          </adw:ActionBar>
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Wrap box" />
+      <WrapPanel Classes="gallery-row">
+        <ComboBox Name="WrapJustify" SelectedIndex="0">
+          <ComboBoxItem Content="No justify" />
+          <ComboBoxItem Content="Fill" />
+          <ComboBoxItem Content="Spread" />
+        </ComboBox>
+        <CheckBox Content="Centered" Name="WrapCentered" />
+        <CheckBox Content="Justify last line" IsChecked="{Binding #Wrap.JustifyLastLine}" />
+        <CheckBox Content="Reverse" IsChecked="{Binding #Wrap.WrapReverse}" />
+      </WrapPanel>
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" MaxWidth="420" HorizontalAlignment="Left">
+        <adw:WrapBox Name="Wrap" ChildSpacing="6" LineSpacing="6" Margin="12">
+          <Button Content="Apple" />
+          <Button Content="Banana" />
+          <Button Content="Cherry" />
+          <Button Content="Dragon fruit" />
+          <Button Content="Elderberry" />
+          <Button Content="Fig" />
+          <Button Content="Grapefruit" />
+          <Button Content="Honeydew melon" />
+          <Button Content="Kiwi" />
+        </adw:WrapBox>
+      </adw:AdwBox>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

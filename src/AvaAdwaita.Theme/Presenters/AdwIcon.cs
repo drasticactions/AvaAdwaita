@@ -21,6 +21,10 @@ public class AdwIcon : Control
     public static readonly StyledProperty<string?> IconNameProperty =
         AvaloniaProperty.Register<AdwIcon, string?>(nameof(IconName));
 
+    /// <summary>Defines <see cref="PixelSize"/>.</summary>
+    public static readonly StyledProperty<double> PixelSizeProperty =
+        AvaloniaProperty.Register<AdwIcon, double>(nameof(PixelSize), -1);
+
     private NodeEffects? _effects;
     private ComputedStyle? _style;
     private IconData? _icon;
@@ -28,9 +32,10 @@ public class AdwIcon : Control
 
     static AdwIcon()
     {
-        AffectsRender<AdwIcon>(IconNameProperty);
-        AffectsMeasure<AdwIcon>(IconNameProperty);
+        AffectsRender<AdwIcon>(IconNameProperty, PixelSizeProperty);
+        AffectsMeasure<AdwIcon>(IconNameProperty, PixelSizeProperty);
         IconNameProperty.Changed.AddClassHandler<AdwIcon>((i, _) => i._iconDirty = true);
+        PixelSizeProperty.Changed.AddClassHandler<AdwIcon>((i, _) => i._iconDirty = true);
         Nodes.Css.StyleProperty.Changed.AddClassHandler<AdwIcon>((i, _) => i.OnStyleChanged());
         FlowDirectionProperty.Changed.AddClassHandler<AdwIcon>((i, _) =>
         {
@@ -52,8 +57,15 @@ public class AdwIcon : Control
         set => SetValue(IconNameProperty, value);
     }
 
-    /// <summary>The icon size in px, from <c>-gtk-icon-size</c>.</summary>
-    public double IconSize => _style?.Icon.Size ?? 16;
+    /// <summary>A size in px that replaces <c>-gtk-icon-size</c>, as GtkImage's pixel-size; -1 uses the style's.</summary>
+    public double PixelSize
+    {
+        get => GetValue(PixelSizeProperty);
+        set => SetValue(PixelSizeProperty, value);
+    }
+
+    /// <summary>The icon size in px: <see cref="PixelSize"/>, or <c>-gtk-icon-size</c>.</summary>
+    public double IconSize => PixelSize > 0 ? PixelSize : _style?.Icon.Size ?? 16;
 
     /// <summary>The icon that was found, for diagnostics.</summary>
     public IconData? Icon

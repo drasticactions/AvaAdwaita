@@ -1,0 +1,37 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- stack > the visible page's child, as AdwViewStack's GtkStack. -->
+  <ControlTheme x:Key="{x:Type adw:ViewStack}" TargetType="adw:ViewStack">
+    <Setter Property="adw:Css.Node" Value="stack" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <ItemsControl ItemsSource="{Binding Pages, RelativeSource={RelativeSource TemplatedParent}}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <Panel />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+          </ItemsControl>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- A page is no node: its content is the stack's child. -->
+  <ControlTheme x:Key="{x:Type adw:ViewStackPage}" TargetType="adw:ViewStackPage">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+          <ContentPresenter.DataTemplates>
+            <adw:LabelTemplate />
+          </ContentPresenter.DataTemplates>
+        </ContentPresenter>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

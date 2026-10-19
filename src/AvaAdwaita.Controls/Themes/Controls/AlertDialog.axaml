@@ -1,0 +1,9 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- dialog.alert, as a dialog: its content is widget > windowhandle > box.vertical > scrolledwindow.body-scrolled-window
+       > viewport > box.vertical.message-area > widget.heading-bin + label.body + widget.child, then widget.response-area >
+       the buttons, as adw-alert-dialog.ui. -->
+  <ControlTheme x:Key="{x:Type adw:AlertDialog}" TargetType="adw:AlertDialog" BasedOn="{StaticResource {x:Type adw:Dialog}}" />
+</ResourceDictionary>

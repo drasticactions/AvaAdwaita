@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <ItemsPanelTemplate x:Key="AdwVerticalBoxPanel">
+    <adw:AdwStack Orientation="Vertical" />
+  </ItemsPanelTemplate>
+
+  <!-- preferencespage > [banner] scrolledwindow > viewport > clamp > box.vertical > label.description.body.dimmed +
+       preferencesgroup …, as adw-preferences-page.ui. -->
+  <ControlTheme x:Key="{x:Type adw:PreferencesPage}" TargetType="adw:PreferencesPage">
+    <Setter Property="adw:Css.Node" Value="preferencespage" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <DockPanel>
+            <ContentPresenter DockPanel.Dock="Top" Content="{TemplateBinding Banner}"
+                              IsVisible="{TemplateBinding Banner, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <!-- At its natural height, as the page box does not expand it. -->
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Top">
+              <adw:Clamp>
+                <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                  <adw:AdwStack Orientation="Vertical">
+                    <adw:AdwLabel Name="PART_Description" adw:Css.Node="label" adw:Css.Classes="body dimmed description" TextWrapping="Wrap"
+                                  Text="{TemplateBinding Description}"
+                                  IsVisible="{TemplateBinding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    <ItemsControl ItemsSource="{Binding Children, RelativeSource={RelativeSource TemplatedParent}}"
+                                  ItemsPanel="{StaticResource AdwVerticalBoxPanel}" />
+                  </adw:AdwStack>
+                </adw:AdwBox>
+              </adw:Clamp>
+            </ScrollViewer>
+          </DockPanel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

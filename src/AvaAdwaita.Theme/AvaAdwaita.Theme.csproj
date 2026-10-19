@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="AvaAdwaita.DataGrid" />
+    <InternalsVisibleTo Include="AvaAdwaita.Controls" />
     <InternalsVisibleTo Include="AvaAdwaita.Theme.Tests" />
     <InternalsVisibleTo Include="AvaAdwaita.Gallery" />
   </ItemGroup>

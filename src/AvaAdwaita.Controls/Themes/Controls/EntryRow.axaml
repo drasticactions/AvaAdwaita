@@ -1,0 +1,88 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <!-- An entry row's text: GtkText, a text node with no frame. Its padding places the line under the title. -->
+  <ControlTheme x:Key="AdwEntryRowText" TargetType="TextBox">
+    <Setter Property="adw:Css.Node" Value="text" />
+    <Setter Property="CaretBrush" Value="{adw:Css CaretColor}" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <Panel>
+            <Panel Name="PART_Selection" adw:Css.Node="selection" IsVisible="False" />
+            <ScrollViewer Name="PART_ScrollViewer" Theme="{DynamicResource AdwPlainScrollViewer}"
+                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled"
+                          VerticalContentAlignment="Stretch">
+              <TextPresenter Name="PART_TextPresenter"
+                             Margin="{TemplateBinding Padding}"
+                             Text="{TemplateBinding Text, Mode=TwoWay}"
+                             CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                             CaretIndex="{TemplateBinding CaretIndex}"
+                             SelectionStart="{TemplateBinding SelectionStart}"
+                             SelectionEnd="{TemplateBinding SelectionEnd}"
+                             TextAlignment="{TemplateBinding TextAlignment}"
+                             TextWrapping="NoWrap"
+                             PasswordChar="{TemplateBinding PasswordChar}"
+                             RevealPassword="{TemplateBinding RevealPassword}"
+                             SelectionBrush="{adw:Css BackgroundColor, Node=PART_Selection}"
+                             SelectionForegroundBrush="{adw:Css Color, Node=PART_Selection}"
+                             CaretBrush="{TemplateBinding CaretBrush}"
+                             VerticalAlignment="Center" />
+            </ScrollViewer>
+          </Panel>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- row.entry.activatable[.focused] > box.header > box.prefixes, widget.editable-area > label.title.dimmed +
+       label.subtitle + text + image.indicator + button.apply-button + image.edit-icon, box.suffixes, as
+       adw-entry-row.ui. The title shows twice: large and dimmed while empty, small above the text otherwise. -->
+  <ControlTheme x:Key="{x:Type adw:EntryRow}" TargetType="adw:EntryRow">
+    <Setter Property="adw:Css.Node" Value="row" />
+    <Setter Property="adw:Css.Classes" Value="entry" />
+    <Setter Property="adw:Css.Position" Value="Item" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="header horizontal" VerticalAlignment="Center">
+            <adw:AdwStack Orientation="Horizontal">
+              <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal prefixes" IsVisible="{TemplateBinding HasPrefixes}">
+                <ItemsControl ItemsSource="{Binding Prefixes, RelativeSource={RelativeSource TemplatedParent}}" ItemsPanel="{StaticResource AdwRowPartsPanel}" />
+              </adw:AdwBox>
+              <adw:AdwBox adw:Css.Node="widget" adw:Css.Classes="editable-area" adw:AdwStack.Expand="True" ClipToBounds="True">
+                <primitives:EntryRowArea Name="PART_Area" EmptyTitle="{Binding #PART_EmptyTitle}" Title="{Binding #PART_Title}" Text="{Binding #PART_Text}">
+                  <adw:AdwLabel Name="PART_EmptyTitle" adw:Css.Node="label" adw:Css.Classes="title dimmed" IsHitTestVisible="False"
+                                Text="{TemplateBinding Title}" RecognizesAccessKey="{TemplateBinding UseUnderline}" TextTrimming="CharacterEllipsis" />
+                  <adw:AdwLabel Name="PART_Title" adw:Css.Node="label" adw:Css.Classes="subtitle" IsHitTestVisible="False"
+                                Text="{TemplateBinding Title}" RecognizesAccessKey="{TemplateBinding UseUnderline}" TextTrimming="CharacterEllipsis" />
+                  <TextBox Name="PART_Text" Theme="{StaticResource AdwEntryRowText}"
+                           Text="{TemplateBinding Text, Mode=TwoWay}"
+                           IsReadOnly="{TemplateBinding IsEditable, Converter={x:Static BoolConverters.Not}}"
+                           MaxLength="{TemplateBinding MaxLength}" />
+                  <adw:AdwIcon Name="PART_Indicator" adw:Css.Classes="indicator" IconName="caps-lock-symbolic" VerticalAlignment="Center" IsVisible="False" />
+                  <Button Name="PART_Apply" Classes="suggested-action circular apply-button" VerticalAlignment="Center" Focusable="False" IsVisible="False"
+                          ToolTip.Tip="{DynamicResource AdwStringApply}">
+                    <adw:AdwIcon IconName="adw-entry-apply-symbolic" />
+                  </Button>
+                  <adw:AdwIcon Name="PART_EditIcon" adw:Css.Classes="edit-icon" IconName="adw-entry-edit-symbolic" VerticalAlignment="Center" IsHitTestVisible="False" />
+                </primitives:EntryRowArea>
+              </adw:AdwBox>
+              <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal suffixes" IsVisible="{TemplateBinding HasSuffixes}">
+                <ItemsControl ItemsSource="{Binding Suffixes, RelativeSource={RelativeSource TemplatedParent}}" ItemsPanel="{StaticResource AdwRowPartsPanel}" />
+              </adw:AdwBox>
+            </adw:AdwStack>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- row.entry.password: the peek button is the first suffix. -->
+  <ControlTheme x:Key="{x:Type adw:PasswordEntryRow}" TargetType="adw:PasswordEntryRow" BasedOn="{StaticResource {x:Type adw:EntryRow}}">
+    <Setter Property="adw:Css.Classes" Value="entry password" />
+  </ControlTheme>
+</ResourceDictionary>

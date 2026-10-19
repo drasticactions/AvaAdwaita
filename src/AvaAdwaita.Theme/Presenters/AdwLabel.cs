@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Data;
 using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
 using AvaAdwaita.CssEngine.Computed;
 using AvaAdwaita.Markup;
 using AvaAdwaita.Nodes;
@@ -19,6 +22,15 @@ public class AdwLabel : TextBlock
     /// <summary>Defines <see cref="RecognizesAccessKey"/>.</summary>
     public static readonly StyledProperty<bool> RecognizesAccessKeyProperty =
         AvaloniaProperty.Register<AdwLabel, bool>(nameof(RecognizesAccessKey));
+
+    /// <summary>Defines <see cref="WidthChars"/>.</summary>
+    public static readonly StyledProperty<int> WidthCharsProperty =
+        AvaloniaProperty.Register<AdwLabel, int>(nameof(WidthChars), -1);
+
+    // pango_language_get_sample_string for English, whose average width is Pango's approximate character width.
+    private const string SampleString = "The quick brown fox jumps over the lazy dog.";
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<(Typeface Typeface, double Size), (double Char, double Digit)> s_charWidths = new();
 
     private Avalonia.Controls.Primitives.AccessText? _accessText;
     private int _accessKeyIndex = -1;
@@ -39,7 +51,7 @@ public class AdwLabel : TextBlock
     static AdwLabel()
     {
         AffectsRender<AdwLabel>(Avalonia.Controls.Primitives.AccessText.ShowAccessKeyProperty);
-        AffectsMeasure<AdwLabel>(RecognizesAccessKeyProperty);
+        AffectsMeasure<AdwLabel>(RecognizesAccessKeyProperty, WidthCharsProperty);
         TextProperty.Changed.AddClassHandler<AdwLabel>((l, _) => l.UpdateAccessKey());
         RecognizesAccessKeyProperty.Changed.AddClassHandler<AdwLabel>((l, _) => l.UpdateAccessKey());
         ClipToBoundsProperty.OverrideDefaultValue<AdwLabel>(false);
@@ -48,6 +60,49 @@ public class AdwLabel : TextBlock
 
     /// <inheritdoc/>
     protected override Type StyleKeyOverride => typeof(TextBlock);
+
+    /// <summary>
+    /// The width the label takes at least, in characters, as GtkLabel's width-chars: Pango's approximate character or
+    /// digit width, whichever is wider, times this. -1 for none.
+    /// </summary>
+    public int WidthChars
+    {
+        get => GetValue(WidthCharsProperty);
+        set => SetValue(WidthCharsProperty, value);
+    }
+
+    /// <summary>The width of <see cref="WidthChars"/> characters in the label's font.</summary>
+    private double CharsWidth()
+    {
+        var typeface = new Typeface(FontFamily, FontStyle, FontWeight);
+        var (charWidth, digitWidth) = s_charWidths.GetOrAdd((typeface, FontSize), static k => CharWidths(k.Typeface, k.Size));
+        return Math.Ceiling(Math.Max(charWidth, digitWidth) * WidthChars);
+    }
+
+    // pango_font_get_metrics with hinted metrics: each glyph's advance is rounded to whole pixels; the character width
+    // is the sample string's average and the digit width the widest digit.
+    private static (double Char, double Digit) CharWidths(Typeface typeface, double size)
+    {
+        double Advance(char c)
+        {
+            using var layout = new TextLayout(c.ToString(), typeface, size, null);
+            return Math.Round(layout.WidthIncludingTrailingWhitespace);
+        }
+
+        var sample = 0.0;
+        foreach (var c in SampleString)
+        {
+            sample += Advance(c);
+        }
+
+        var digit = 0.0;
+        for (var c = '0'; c <= '9'; c++)
+        {
+            digit = Math.Max(digit, Advance(c));
+        }
+
+        return (sample / SampleString.Length, digit);
+    }
 
     /// <summary>
     /// Treats the first single <c>_</c> as a mnemonic, as GtkLabel's use-underline: the marker is not shown, the next
@@ -124,7 +179,15 @@ public class AdwLabel : TextBlock
     /// <inheritdoc/>
     protected override Size ArrangeOverride(Size finalSize)
     {
+        // TextBlock lays its text out again for the arranged width without redrawing: a drawing made while the text
+        // was laid out for the width it was measured at (a centered line far to the side) would otherwise stay.
+        var before = _constraint;
         var size = base.ArrangeOverride(finalSize);
+        if (before != _constraint)
+        {
+            InvalidateVisual();
+        }
+
         _accessText?.Arrange(default);
         return size;
     }
@@ -207,6 +270,38 @@ public class AdwLabel : TextBlock
         }
     }
 
+    // The family, weight and size of each run of the shaped text with different ones, whitespace aside; the family is
+    // the face that drew it, a fallback one included.
+    private List<(string Family, FontWeight Weight, double Size)> Runs(string family)
+    {
+        var runs = new List<(string Family, FontWeight Weight, double Size)>();
+        foreach (var line in TextLayout.TextLines)
+        {
+            foreach (var run in line.TextRuns.OfType<ShapedTextRun>())
+            {
+                if (run.Text.Span.IsWhiteSpace())
+                {
+                    continue;
+                }
+
+                var face = run.GlyphRun.GlyphTypeface.FamilyName;
+                var key = (run.Properties.Typeface.FontFamily.FamilyNames.FirstOrDefault(n => face.StartsWith(n, StringComparison.Ordinal)) ?? face,
+                    run.Properties.Typeface.Weight, run.Properties.FontRenderingEmSize);
+                if (runs.Count == 0 || runs[^1] != key)
+                {
+                    runs.Add(key);
+                }
+            }
+        }
+
+        if (runs.Count == 0)
+        {
+            runs.Add((family, FontWeight, FontSize));
+        }
+
+        return runs;
+    }
+
     /// <inheritdoc/>
     protected override void RenderTextLayout(DrawingContext context, Point origin)
     {
@@ -229,22 +324,27 @@ public class AdwLabel : TextBlock
         }
 
         DrawTextShadows(context, origin);
-        if (DrawRecorder.For(this) is { } rec && !string.IsNullOrEmpty(Text) && Foreground is ISolidColorBrush fg)
+        if (DrawRecorder.For(this) is { } rec && (!string.IsNullOrEmpty(Text) || Inlines is { Count: > 0 }) && Foreground is ISolidColorBrush fg)
         {
             var typeface = new Typeface(FontFamily, FontStyle, FontWeight);
             var family = FontManager.Current.TryGetGlyphTypeface(typeface, out var face)
                 ? FontFamily.FamilyNames.FirstOrDefault(n => face.FamilyName.StartsWith(n, StringComparison.Ordinal)) ?? face.FamilyName
                 : FontFamily.Name;
-            rec.Add(this, new DrawRecord("text", new Rect(origin, new Size(TextLayout.WidthIncludingTrailingWhitespace, TextLayout.Height)))
+            // Pango draws a run per change of attributes: markup's bold and small text are draws of their own.
+            var alpha = GetValue(Nodes.Css.StyleProperty) is { } ts && CssConvert.Color(ts.Drawn(ts.Core.Color)) == fg.Color && fg.Opacity >= 1 ? ts.Drawn(ts.Core.Color).Alpha : (float?)null;
+            foreach (var (runFamily, weight, size) in Runs(family))
             {
-                Color = Color.FromArgb((byte)Math.Round(fg.Color.A * fg.Opacity), fg.Color.R, fg.Color.G, fg.Color.B),
+                rec.Add(this, new DrawRecord("text", new Rect(origin, new Size(TextLayout.WidthIncludingTrailingWhitespace, TextLayout.Height)))
+                {
+                    Color = Color.FromArgb((byte)Math.Round(fg.Color.A * fg.Opacity), fg.Color.R, fg.Color.G, fg.Color.B),
 
-                // The text's color is the node's; its unrounded alpha fades as GTK's float color does.
-                Alpha = GetValue(Nodes.Css.StyleProperty) is { } ts && CssConvert.Color(ts.Drawn(ts.Core.Color)) == fg.Color && fg.Opacity >= 1 ? ts.Drawn(ts.Core.Color).Alpha : null,
-                Family = family,
-                Weight = (int)FontWeight,
-                Size = FontSize,
-            });
+                    // The text's color is the node's; its unrounded alpha fades as GTK's float color does.
+                    Alpha = alpha,
+                    Family = runFamily,
+                    Weight = (int)weight,
+                    Size = size,
+                });
+            }
         }
 
         base.RenderTextLayout(context, origin);
@@ -315,7 +415,9 @@ public class AdwLabel : TextBlock
         if (Nodes.Css.GetCssNode(this) is not null && GetValue(Nodes.Css.StyleProperty) is { } s)
         {
             var p = Padding;
-            size = new Size(Math.Max(size.Width, Math.Ceiling(s.Size.MinWidth) + p.Left + p.Right), Math.Max(size.Height, Math.Ceiling(s.Size.MinHeight) + p.Top + p.Bottom));
+            var chars = WidthChars > 0 ? CharsWidth() : 0;
+            var minWidth = Math.Max(Math.Ceiling(s.Size.MinWidth), chars);
+            size = new Size(Math.Max(size.Width, minWidth + p.Left + p.Right), Math.Max(size.Height, Math.Ceiling(s.Size.MinHeight) + p.Top + p.Bottom));
         }
 
         return size;

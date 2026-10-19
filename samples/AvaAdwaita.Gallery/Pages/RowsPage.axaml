@@ -1,0 +1,123 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:adw="https://github.com/avaadwaita"
+             xmlns:col="clr-namespace:System.Collections;assembly=System.Runtime"
+             x:Class="AvaAdwaita.Gallery.Pages.RowsPage">
+  <StackPanel Classes="gallery-page">
+    <Label Classes="title-1" Content="Rows &amp; Preferences" />
+    <adw:PreferencesGroup Title="Preferences group" Description="A titled group of rows, with a button for the whole group">
+      <adw:PreferencesGroup.HeaderSuffix>
+        <Button Classes="flat" ToolTip.Tip="Add">
+          <adw:AdwIcon IconName="list-add-symbolic" />
+        </Button>
+      </adw:PreferencesGroup.HeaderSuffix>
+      <adw:ActionRow Title="Appearance" IsActivatable="True">
+        <adw:AdwIcon IconName="go-next-symbolic" />
+      </adw:ActionRow>
+      <adw:SwitchRow Title="Notifications" IsChecked="True" />
+    </adw:PreferencesGroup>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Action rows" />
+      <ListBox Classes="boxed-list">
+        <adw:ActionRow Title="Title only" />
+        <adw:ActionRow Title="With a subtitle" Subtitle="The subtitle is in smaller text" />
+        <adw:ActionRow Title="Prefix and suffix" Subtitle="An icon before, a button after">
+          <adw:ActionRow.Prefixes>
+            <adw:AdwIcon IconName="folder-symbolic" />
+          </adw:ActionRow.Prefixes>
+          <Button Classes="flat" VerticalAlignment="Center" ToolTip.Tip="Copy">
+            <adw:AdwIcon IconName="edit-copy-symbolic" />
+          </Button>
+        </adw:ActionRow>
+        <adw:ActionRow Name="Activatable" Title="Activatable" Subtitle="Click or press Enter" IsActivatable="True">
+          <adw:AdwIcon IconName="go-next-symbolic" />
+        </adw:ActionRow>
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Switch rows" />
+      <ListBox Classes="boxed-list">
+        <adw:SwitchRow Title="Wi-Fi" IsChecked="True" />
+        <adw:SwitchRow Title="Bluetooth" Subtitle="Click anywhere on the row" />
+        <adw:SwitchRow Title="Airplane mode" IsEnabled="False" />
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Entry rows" />
+      <ListBox Classes="boxed-list">
+        <adw:EntryRow Title="Name" />
+        <adw:EntryRow Title="Email" Text="ada@example.com" ShowApplyButton="True" />
+        <adw:PasswordEntryRow Title="Password" />
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Spin rows" />
+      <ListBox Classes="boxed-list">
+        <adw:SpinRow Title="Copies" Minimum="1" Maximum="99" Increment="1" Value="1" />
+        <adw:SpinRow Title="Scale" Subtitle="Percent of the original size" Minimum="25" Maximum="400" Increment="25" Value="100" />
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Combo rows" />
+      <ListBox Classes="boxed-list">
+        <adw:ComboRow Title="Theme" SelectedIndex="0">
+          <adw:ComboRow.ItemsSource>
+            <col:ArrayList>
+              <x:String>Follow System</x:String>
+              <x:String>Light</x:String>
+              <x:String>Dark</x:String>
+            </col:ArrayList>
+          </adw:ComboRow.ItemsSource>
+        </adw:ComboRow>
+        <adw:ComboRow Title="Paper size" UseSubtitle="True" SelectedIndex="1">
+          <adw:ComboRow.ItemsSource>
+            <col:ArrayList>
+              <x:String>Letter</x:String>
+              <x:String>A4</x:String>
+              <x:String>A5</x:String>
+            </col:ArrayList>
+          </adw:ComboRow.ItemsSource>
+        </adw:ComboRow>
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Expander rows" />
+      <ListBox Classes="boxed-list">
+        <adw:ExpanderRow Title="Advanced" Subtitle="Click to show more rows">
+          <adw:ActionRow Title="Cache size" Subtitle="120 MB" />
+          <adw:SwitchRow Title="Developer tools" />
+        </adw:ExpanderRow>
+        <adw:ExpanderRow Title="Proxy" ShowEnableSwitch="True" EnableExpansion="False">
+          <adw:ActionRow Title="Host" Subtitle="proxy.example.com" />
+          <adw:SpinRow Title="Port" Minimum="1" Maximum="65535" Increment="1" Value="8080" />
+        </adw:ExpanderRow>
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Button rows" />
+      <ListBox Classes="boxed-list">
+        <adw:ButtonRow Title="Add Account" StartIconName="list-add-symbolic" />
+        <adw:ButtonRow Title="Continue" EndIconName="go-next-symbolic" Classes="suggested-action" />
+      </ListBox>
+      <ListBox Classes="boxed-list">
+        <adw:ButtonRow Title="Remove Account" Classes="destructive-action" />
+      </ListBox>
+    </StackPanel>
+    <StackPanel Classes="gallery-section">
+      <Label Classes="heading" Content="Preferences page" />
+      <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="card" Height="260">
+        <Border CornerRadius="12" ClipToBounds="True">
+          <adw:PreferencesPage Description="A page scrolls its groups in a clamped column." DescriptionCentered="True">
+            <adw:PreferencesGroup Title="Behavior">
+              <adw:SwitchRow Title="Open links in new windows" />
+              <adw:SwitchRow Title="Restore session" IsChecked="True" />
+            </adw:PreferencesGroup>
+            <adw:PreferencesGroup Title="Privacy">
+              <adw:SwitchRow Title="Send usage statistics" />
+            </adw:PreferencesGroup>
+          </adw:PreferencesPage>
+        </Border>
+      </adw:AdwBox>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

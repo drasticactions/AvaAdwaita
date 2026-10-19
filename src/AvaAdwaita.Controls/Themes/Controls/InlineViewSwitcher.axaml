@@ -1,0 +1,46 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <!-- A toggle of the group: its separator, then toggle.toggle > the page's widget. The item itself is no node. -->
+  <ControlTheme x:Key="AdwInlineToggle" TargetType="TabItem">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal">
+          <adw:AdwToggleSeparator />
+          <adw:AdwBox adw:Css.Node="toggle" adw:Css.Classes="toggle" adw:Css.StateSource="TemplatedParent">
+            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+          </adw:AdwBox>
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- inline-view-switcher > toggle-group.labels|icons|both > toggle.toggle > widget > indicatorbin > mask + indicator +
+       label | image, with separators between the toggles, as AdwInlineViewSwitcher builds its AdwToggleGroup. -->
+  <ControlTheme x:Key="{x:Type adw:InlineViewSwitcher}" TargetType="adw:InlineViewSwitcher">
+    <Setter Property="adw:Css.Node" Value="inline-view-switcher" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <primitives:InlineToggleList Name="PART_Toggles" adw:Css.Node="toggle-group" ItemContainerTheme="{StaticResource AdwInlineToggle}">
+            <primitives:InlineToggleList.Template>
+              <ControlTemplate>
+                <adw:AdwBox>
+                  <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                </adw:AdwBox>
+              </ControlTemplate>
+            </primitives:InlineToggleList.Template>
+            <primitives:InlineToggleList.ItemsPanel>
+              <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </primitives:InlineToggleList.ItemsPanel>
+          </primitives:InlineToggleList>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

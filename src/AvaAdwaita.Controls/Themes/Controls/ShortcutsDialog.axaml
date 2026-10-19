@@ -1,0 +1,8 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- dialog.shortcuts, as a dialog: its content is a toolbar view with the search entry in its header bar, over the
+       sections, the search results or no results, as adw-shortcuts-dialog.ui. -->
+  <ControlTheme x:Key="{x:Type adw:ShortcutsDialog}" TargetType="adw:ShortcutsDialog" BasedOn="{StaticResource {x:Type adw:Dialog}}" />
+</ResourceDictionary>

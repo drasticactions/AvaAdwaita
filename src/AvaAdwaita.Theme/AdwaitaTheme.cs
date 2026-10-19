@@ -48,6 +48,15 @@ public class AdwaitaTheme : Styles
                 new Setter(Avalonia.Controls.Chrome.WindowDecorationProperties.ElementRoleProperty, Avalonia.Input.WindowDecorationsElementRole.DecorationsElement),
             },
         });
+
+        // A button takes its press even when it takes no focus, as a dialog's close button.
+        Add(new Style(x => x.Is<Avalonia.Controls.Button>())
+        {
+            Setters =
+            {
+                new Setter(Avalonia.Controls.Chrome.WindowDecorationProperties.ElementRoleProperty, Avalonia.Input.WindowDecorationsElementRole.DecorationsElement),
+            },
+        });
         _provider.OwnerChanged += (_, _) => Attach();
         StyleSheets.CollectionChanged += (_, _) => LoadStyleSheets();
     }

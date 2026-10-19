@@ -19,13 +19,25 @@ internal static class ParityComparer
 {
     private const double Geometry = 0.5;
 
-    public static List<string> Compare(JsonArray expected, IReadOnlyList<DrawRecord> actual)
+    /// <param name="expected">GTK's draws.</param>
+    /// <param name="actual">AvaAdwaita's draws.</param>
+    /// <param name="scene">The scene's size: a draw wholly outside it shows in neither (GTK records what a scrolled
+    /// window's viewport clips, where Avalonia does not render it).</param>
+    /// <returns>The differences.</returns>
+    public static List<string> Compare(JsonArray expected, IReadOnlyList<DrawRecord> actual, Size? scene = null)
     {
         var problems = new List<string>();
-        var left = actual.Where(Relevant).ToList();
+        var bounds = scene is { } sz ? new Rect(sz) : (Rect?)null;
+        bool Shows(Rect r) => bounds is not { } b || r.Intersects(b);
+        var left = actual.Where(Relevant).Where(a => Shows(a.Rect)).ToList();
         foreach (var e in expected.Select(x => x!.AsObject()))
         {
             var kind = (string)e["k"]!;
+            // A draw wholly outside the scene, or of no area (GTK records a zero-width color node), shows nothing.
+            if (e["r"] is not null && (!Shows(Rect(e)) || Rect(e).Width <= 0 || Rect(e).Height <= 0))
+            {
+                continue;
+            }
 
             // The oracle does not walk into a rotated or scaled subtree (libadwaita's diamond slider beside marks);
             // the pixel goldens compare it. Its draws here are the ones within its bounds.

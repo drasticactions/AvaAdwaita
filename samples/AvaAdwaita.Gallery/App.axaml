@@ -6,6 +6,7 @@
   <Application.Styles>
     <adw:AdwaitaTheme />
     <adw:AdwaitaDataGridTheme />
+    <adw:AdwaitaControlsTheme />
     <StyleInclude Source="avares://AvaAdwaita.Gallery/Pages/PageStyles.axaml" />
   </Application.Styles>
 </Application>

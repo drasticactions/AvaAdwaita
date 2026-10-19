@@ -9,5 +9,8 @@ public sealed class FileRow
 
     public string Size { get; set; } = string.Empty;
 
+    /// <summary>The size in bytes, which the size column sorts by.</summary>
+    public long Bytes { get; set; }
+
     public bool Starred { get; set; }
 }

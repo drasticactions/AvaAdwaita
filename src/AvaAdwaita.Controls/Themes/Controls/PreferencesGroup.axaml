@@ -1,0 +1,41 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    x:ClassModifier="internal">
+  <!-- preferencesgroup > box.vertical > box.header.horizontal[.single-line] > box.vertical.labels >
+       label.heading.h4 + label.body.dimmed, then the header suffix; box.vertical > list.boxed-list > rows, then
+       anything else, as adw-preferences-group.ui. -->
+  <ControlTheme x:Key="{x:Type adw:PreferencesGroup}" TargetType="adw:PreferencesGroup">
+    <Setter Property="adw:Css.Node" Value="preferencesgroup" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+            <adw:AdwStack Orientation="Vertical">
+              <adw:AdwBox Name="PART_Header" adw:Css.Node="box" adw:Css.Classes="header horizontal">
+                <adw:AdwStack Orientation="Horizontal">
+                  <adw:AdwBox Name="PART_Labels" adw:Css.Node="box" adw:Css.Classes="vertical labels" VerticalAlignment="Center"
+                              adw:AdwStack.Expand="True" adw:AdwStack.Shrink="True">
+                    <adw:AdwStack Orientation="Vertical">
+                      <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="heading h4" Text="{TemplateBinding Title}" TextTrimming="CharacterEllipsis"
+                                    IsVisible="{TemplateBinding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                      <adw:AdwLabel adw:Css.Node="label" adw:Css.Classes="body dimmed" Text="{TemplateBinding Description}" TextWrapping="Wrap"
+                                    IsVisible="{TemplateBinding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    </adw:AdwStack>
+                  </adw:AdwBox>
+                  <ContentPresenter Content="{TemplateBinding HeaderSuffix}" VerticalAlignment="Center"
+                                    IsVisible="{TemplateBinding HeaderSuffix, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </adw:AdwStack>
+              </adw:AdwBox>
+              <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="vertical">
+                <adw:AdwStack Name="PART_Others" Orientation="Vertical">
+                  <ListBox Name="PART_List" Classes="boxed-list" />
+                </adw:AdwStack>
+              </adw:AdwBox>
+            </adw:AdwStack>
+          </adw:AdwBox>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

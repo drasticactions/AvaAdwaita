@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\src\AvaAdwaita.Theme\AvaAdwaita.Theme.csproj" />
     <ProjectReference Include="..\..\src\AvaAdwaita.Fonts\AvaAdwaita.Fonts.csproj" />
     <ProjectReference Include="..\..\src\AvaAdwaita.DataGrid\AvaAdwaita.DataGrid.csproj" />
+    <ProjectReference Include="..\..\src\AvaAdwaita.Controls\AvaAdwaita.Controls.csproj" />
   </ItemGroup>
 
 </Project>

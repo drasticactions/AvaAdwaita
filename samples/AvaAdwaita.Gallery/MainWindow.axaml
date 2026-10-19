@@ -5,12 +5,12 @@
         x:Class="AvaAdwaita.Gallery.MainWindow"
         Title="AvaAdwaita Gallery"
         Width="1000" Height="720" MinWidth="360" MinHeight="300">
-  <adw:HeaderBar.Start>
+  <adw:WindowHeaderBar.Start>
     <ToggleButton Name="SidebarToggle" IsChecked="True" ToolTip.Tip="Toggle Sidebar">
       <adw:AdwIcon IconName="sidebar-show-symbolic" />
     </ToggleButton>
-  </adw:HeaderBar.Start>
-  <adw:HeaderBar.End>
+  </adw:WindowHeaderBar.Start>
+  <adw:WindowHeaderBar.End>
     <Button ToolTip.Tip="Style">
       <adw:AdwIcon IconName="open-menu-symbolic" />
       <Button.Flyout>
@@ -19,7 +19,7 @@
         </Flyout>
       </Button.Flyout>
     </Button>
-  </adw:HeaderBar.End>
+  </adw:WindowHeaderBar.End>
   <Panel>
     <local:MainView Name="View" x:FieldModifier="public" />
   </Panel>

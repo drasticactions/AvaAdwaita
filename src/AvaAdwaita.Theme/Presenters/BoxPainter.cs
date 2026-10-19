@@ -65,7 +65,7 @@ internal static class BoxPainter
     private static void Record(DrawRecorder rec, Visual owner, ComputedStyle s, CssBoxGeometry g)
     {
         var shadows = s.Background.BoxShadow;
-        for (var i = shadows.Count - 1; i >= 0; i--)
+        for (var i = 0; i < shadows.Count; i++)
         {
             var sh = shadows[i];
             if (!sh.Inset && !sh.Color.IsTransparent)
@@ -94,7 +94,7 @@ internal static class BoxPainter
             }
         }
 
-        for (var i = shadows.Count - 1; i >= 0; i--)
+        for (var i = 0; i < shadows.Count; i++)
         {
             var sh = shadows[i];
             if (sh.Inset && !sh.Color.IsTransparent && sh.Spread == 0 && sh.Blur == 0 && Radii(g.PaddingRounded).All(r => r == 0))
@@ -157,9 +157,11 @@ internal static class BoxPainter
     /// <summary>The Avalonia blur radius whose Skia sigma equals GTK's σ = r / 2.</summary>
     public static double AvaloniaBlur(double gtkBlur) => gtkBlur <= 1 ? gtkBlur / 2 : ((gtkBlur / 2) - 0.5) / 0.288675;
 
+    // GTK draws the shadows in the order they are listed, so the first is at the bottom
+    // (gtk_css_shadow_value_snapshot_outset and _inset), the reverse of the CSS specification.
     public static void PaintOutsetShadows(DrawingContext ctx, CssList<CssShadow> shadows, RoundedRect box)
     {
-        for (var i = shadows.Count - 1; i >= 0; i--)
+        for (var i = 0; i < shadows.Count; i++)
         {
             var sh = shadows[i];
             if (sh.Inset || sh.Color.IsTransparent)
@@ -181,7 +183,7 @@ internal static class BoxPainter
 
     public static void PaintInsetShadows(DrawingContext ctx, CssList<CssShadow> shadows, RoundedRect padding)
     {
-        for (var i = shadows.Count - 1; i >= 0; i--)
+        for (var i = 0; i < shadows.Count; i++)
         {
             var sh = shadows[i];
             if (!sh.Inset || sh.Color.IsTransparent)

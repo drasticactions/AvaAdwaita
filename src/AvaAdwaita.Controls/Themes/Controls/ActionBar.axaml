@@ -1,0 +1,31 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adw="https://github.com/avaadwaita"
+                    xmlns:primitives="using:AvaAdwaita.Controls.Primitives"
+                    x:ClassModifier="internal">
+  <!-- actionbar > revealer > box > box.horizontal.start + the center widget + box.horizontal.end, as GtkActionBar: its
+       revealer holds a GtkCenterBox. -->
+  <ControlTheme x:Key="{x:Type adw:ActionBar}" TargetType="adw:ActionBar">
+    <Setter Property="adw:Css.Node" Value="actionbar" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <adw:AdwBox>
+          <adw:Revealer Transition="SlideUp" IsRevealed="{TemplateBinding IsRevealed}">
+            <adw:AdwBox adw:Css.Node="box">
+              <primitives:CenterGrid>
+                <adw:AdwBox adw:Css.Node="box" adw:Css.Classes="horizontal start" HorizontalAlignment="Left">
+                  <ItemsControl ItemsSource="{Binding Start, RelativeSource={RelativeSource TemplatedParent}}" ItemsPanel="{StaticResource AdwRowPartsPanel}" />
+                </adw:AdwBox>
+                <ContentPresenter Grid.Column="1" Content="{TemplateBinding CenterWidget}"
+                                  IsVisible="{TemplateBinding CenterWidget, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <adw:AdwBox Grid.Column="2" adw:Css.Node="box" adw:Css.Classes="horizontal end" HorizontalAlignment="Right">
+                  <ItemsControl ItemsSource="{Binding EndShown, RelativeSource={RelativeSource TemplatedParent}}" ItemsPanel="{StaticResource AdwRowPartsPanel}" />
+                </adw:AdwBox>
+              </primitives:CenterGrid>
+            </adw:AdwBox>
+          </adw:Revealer>
+        </adw:AdwBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

@@ -200,6 +200,15 @@ internal sealed class NodeBinder
         if (e.Property == Visual.IsVisibleProperty)
         {
             Node.Visible = _owner is not Visual v || v.IsVisible;
+
+            // The other items' places among the visible ones change too.
+            if ((_itemsOwner ?? (_owner is Control oc ? ItemsControl.ItemsControlFromItemContainer(oc) : null)) is { } items)
+            {
+                for (var i = 0; i < items.ItemCount; i++)
+                {
+                    Container(items, i)?.GetValue(Css.BinderProperty)?.UpdateItemPosition();
+                }
+            }
         }
         else if (e.Property == Visual.FlowDirectionProperty)
         {
@@ -253,6 +262,10 @@ internal sealed class NodeBinder
         UpdateItemPosition();
     }
 
+    // An item's container: one the items control made, or the item, when it is a container itself.
+    private static Control? Container(ItemsControl items, int index) =>
+        items.ContainerFromIndex(index) ?? (index < items.Items.Count ? items.Items[index] as Control : null);
+
     private void UpdateItemPosition()
     {
         // A container can attach before its items control links it, so look again until it is found.
@@ -265,8 +278,32 @@ internal sealed class NodeBinder
 
         if (_itemsOwner is not null && _owner is Control c)
         {
+            // Its place among the visible items, as GTK's positional selectors count only visible siblings; an item
+            // without a container counts as visible.
             var index = _itemsOwner.IndexFromContainer(c);
-            Node.ItemPosition = index >= 0 ? (index, _itemsOwner.ItemCount) : null;
+            if (index < 0)
+            {
+                Node.ItemPosition = null;
+                return;
+            }
+
+            var (visibleIndex, count) = (0, 0);
+            for (var i = 0; i < _itemsOwner.ItemCount; i++)
+            {
+                if (Container(_itemsOwner, i) is { IsVisible: false })
+                {
+                    continue;
+                }
+
+                if (i < index)
+                {
+                    visibleIndex++;
+                }
+
+                count++;
+            }
+
+            Node.ItemPosition = (visibleIndex, Math.Max(count, visibleIndex + 1));
         }
         else
         {
