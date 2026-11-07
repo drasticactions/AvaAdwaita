@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -80,7 +81,7 @@ public static class WindowChrome
         {
             if (e.Property == Window.WindowStateProperty || e.Property == Window.WindowDecorationMarginProperty
                 || e.Property == Window.IsExtendedIntoWindowDecorationsProperty || e.Property == Nodes.Css.StyleProperty
-                || e.Property == Window.CanResizeProperty)
+                || e.Property == Window.CanResizeProperty || e.Property == Window.WindowDecorationsProperty)
             {
                 Update();
             }
@@ -112,7 +113,9 @@ public static class WindowChrome
                 Nodes.Css.SetClasses(_window, text);
             }
 
-            _window.SetValue(IsClientSideProperty, csd);
+            // Avalonia.Native never draws decorations, so without a system title bar the header bar draws the buttons.
+            var ownsTitleBar = csd || (OperatingSystem.IsMacOS() && _window.WindowDecorations != WindowDecorations.Full);
+            _window.SetValue(IsClientSideProperty, ownsTitleBar);
             var style = _window.GetValue(Nodes.Css.StyleProperty);
             var shadow = style is not null && csd && state == WindowState.Normal ? ShadowExtents.Of(style.Background.BoxShadow) : default;
             if (decorations is not null)

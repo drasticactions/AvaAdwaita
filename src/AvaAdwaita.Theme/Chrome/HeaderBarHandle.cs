@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -10,6 +11,7 @@ namespace AvaAdwaita.Chrome;
 /// The header bar's <c>windowhandle</c>: dragging it moves the window, as its <c>TitleBar</c> role tells the
 /// platform, and a double-click toggles maximize, which Avalonia does not do itself.
 /// </summary>
+/// <remarks>On macOS, Avalonia.Native ignores the role on ancestors of the hit element, so the handle moves the window itself.</remarks>
 public class HeaderBarHandle : AdwBox
 {
     /// <summary>
@@ -18,6 +20,8 @@ public class HeaderBarHandle : AdwBox
     /// </summary>
     public static readonly AttachedProperty<bool> MovesWindowProperty =
         AvaloniaProperty.RegisterAttached<HeaderBarHandle, Visual, bool>("MovesWindow", true, inherits: true);
+
+    private static readonly bool s_movesItself = OperatingSystem.IsMacOS();
 
     static HeaderBarHandle()
     {
@@ -29,7 +33,14 @@ public class HeaderBarHandle : AdwBox
     {
         Nodes.Css.SetNode(this, "windowhandle");
         UpdateRole();
-        DoubleTapped += OnDoubleTapped;
+        if (s_movesItself)
+        {
+            PointerPressed += OnPointerPressed;
+        }
+        else
+        {
+            DoubleTapped += OnDoubleTapped;
+        }
     }
 
     /// <summary>Gets <see cref="MovesWindowProperty"/>.</summary>
@@ -38,8 +49,9 @@ public class HeaderBarHandle : AdwBox
     /// <summary>Sets <see cref="MovesWindowProperty"/>.</summary>
     public static void SetMovesWindow(Visual element, bool value) => element.SetValue(MovesWindowProperty, value);
 
+    // Clear the role where the handle moves the window itself, so the platform doesn't act twice.
     private void UpdateRole() => Avalonia.Controls.Chrome.WindowDecorationProperties.SetElementRole(
-        this, GetMovesWindow(this) ? WindowDecorationsElementRole.TitleBar : WindowDecorationsElementRole.None);
+        this, GetMovesWindow(this) && !s_movesItself ? WindowDecorationsElementRole.TitleBar : WindowDecorationsElementRole.None);
 
     private void OnDoubleTapped(object? sender, TappedEventArgs e)
     {
@@ -48,10 +60,41 @@ public class HeaderBarHandle : AdwBox
             return;
         }
 
-        if (GetMovesWindow(this) && TopLevel.GetTopLevel(this) is Window w && w.CanResize && w.CanMaximize)
+        if (GetMovesWindow(this) && ToggleMaximize())
         {
-            w.WindowState = w.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             e.Handled = true;
         }
+    }
+
+    // The move loop swallows the release, so use the click count rather than DoubleTapped.
+    private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (!GetMovesWindow(this) || !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed
+            || TopLevel.GetTopLevel(this) is not Window w)
+        {
+            return;
+        }
+
+        if (e.ClickCount == 2)
+        {
+            ToggleMaximize();
+        }
+        else if (w.WindowState != WindowState.FullScreen)
+        {
+            w.BeginMoveDrag(e);
+        }
+
+        e.Handled = true;
+    }
+
+    private bool ToggleMaximize()
+    {
+        if (TopLevel.GetTopLevel(this) is Window w && w.CanResize && w.CanMaximize)
+        {
+            w.WindowState = w.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            return true;
+        }
+
+        return false;
     }
 }
